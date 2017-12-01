@@ -1,0 +1,31 @@
+@startuml
+
+title ELMO-2 - Use Case Diagram
+
+
+rectangle ELMO {
+    (Generate traces for code) as Generate
+    (Load coefficients from file) as Load
+    (Save generated traces to file) as Save
+}
+
+rectangle QEMU {
+rectangle "GDB Server" {
+    (Run code)
+    }
+}
+
+rectangle "GDB Client" {
+
+    (Record running of code) as Record
+}
+
+:User:
+
+User -> Generate : Request traces
+(Run code) ..> Record : <<include>>
+Record ..> Generate : <<include>>
+Load ..> Generate : <<include>>
+Save ..> Generate : <<include>>
+
+@enduml

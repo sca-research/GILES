@@ -1,0 +1,131 @@
+@startuml
+
+title ELMO - Class Diagram
+
+package ELMO {
+    class ELMO {
+    -IO io
+    -list<Model> models
+    -Interface interface
+    -Execution execution
+    +main()
+    -parseCommandLineOptions()
+    }
+
+    class "I/O" as IO {
+    +Coefficients LoadCoefficients(string coefficientsPath)
+    +Traces OutputTraces(string tracesPath, Traces traces)
+    }
+
+    class "GDB Interface" {
+        +GDBInterface(string address, uint8_t port, string programPath)
+        list<Register> parseRegisters(string registers)
+        AssemblyInstruction parseAssembly(string assembly)
+    }
+
+    abstract class "Model" {
+    +{abstract} Traces GenerateTraces(Execution execution, Coefficients coefficients)
+    -addNoise(&Traces traces)
+    }
+
+    class ModelPower {
+    +Traces GenerateTraces(Execution execution, Coefficients coefficients)
+    }
+
+    class Execution {
+        -list<Register> registersInitalState
+        -list<AssemblyInstruction> assembly
+        +Execution(list<Register> registersInitalState, AssemblyInstruction firstInstruction)
+        +list<Register> getRegistersInitalState()
+        +list<AssemblyInstruction> getAssembly()
+    }
+
+    class AssemblyInstruction {
+        -string opcode
+        -list<string> operands
+        list<Register> ChangedRegisters
+        +AssemblyInstruction(string opcode, list<Register> changedRegisters)
+        +string getOpcode()
+        +list<string> getOperands()
+        +list<Registers> getChangedRegisters()
+    }
+    note bottom of AssemblyInstruction
+        Do operands actually need to be stored
+        if register changes are recorded?
+    end note
+    note bottom of AssemblyInstruction
+        Assembly instructions <b>executed</b> should be
+        stored as programs don't always run sequentually
+    end note
+
+    class Register {
+        -string name
+        -string value
+        +Register(string name, string value)
+        +string getName()
+        +string getValue()
+    }
+
+    class "Traces" {
+    }
+    note bottom of Traces
+        See Riscure Inspector Manual for format.
+        Maybe optionally allow different formats.
+    end note
+
+    class "Coefficients" {
+    }
+    note bottom of Coefficients
+        Internal representation of the Coefficient files.
+        Should be able to represent multiple different kind of Coefficients
+    end note
+}
+
+package "GDB Client" {
+}
+
+package QEMU {
+    package "GDB Server" {
+    }
+}
+
+package "Coefficient Files" <<Database>> {
+}
+
+package "Generated Traces" <<Database>> {
+}
+
+Model <|-- ModelPower
+
+ELMO "1"*-- "1" IO
+ELMO "1"*-- "1" "GDB Interface"
+ELMO "1"*--"1...*" Model
+
+Model "1"*--"1" Coefficients : Uses >
+Model "1"*--"1" Execution : Uses >
+Model "1"*---"1" Traces : Generates >
+
+"GDB Interface" <--> "GDB Client" : Interacts with
+"GDB Client" <--> "GDB Server" : Interacts with
+
+"GDB Interface" "1"*--"1" Execution : Creates and Updates >
+"Execution" "1"*--"1...*" AssemblyInstruction
+
+AssemblyInstruction "1"*--"1...*" Register
+Execution ..> Register
+
+IO --> "Coefficient Files" : Loads <
+note on link
+    No need for validation it can be assumed
+    that the Coefficient files are correct
+end note
+IO --> "Generated Traces" : Saves >
+
+"Coefficient Files" <.. Coefficients : Maps to >
+"Generated Traces" <.. Traces : Maps to <
+
+"Generated Traces" -[hidden]- ELMO
+"Coefficient Files" -[hidden]- ELMO
+Traces -[hidden]- ELMO
+
+@enduml
