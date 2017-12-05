@@ -7,25 +7,16 @@ rectangle ELMO {
     (Generate traces for code) as Generate
     (Load coefficients from file) as Load
     (Save generated traces to file) as Save
-}
-
-rectangle QEMU {
-rectangle "GDB Server" {
-    (Run code)
+    rectangle Unicorn-Engine {
+        (Emulate running of code) as Emulate
     }
-}
-
-rectangle "GDB Client" {
-
-    (Record running of code) as Record
 }
 
 :User:
 
 User -> Generate : Request traces
-(Run code) ..> Record : <<include>>
-Record ..> Generate : <<include>>
+Emulate ..> Generate : <<include>>
 Load ..> Generate : <<include>>
-Save ..> Generate : <<include>>
+Save ..> Generate : <<extends>>
 
 @enduml

@@ -7,43 +7,26 @@ actor User
 User -> ELMO : Request traces for program
 activate ELMO
 
-ELMO -> "QEMU" : Run program in GDB
-activate QEMU
+par
+    ELMO -> "Assembly Re-orderer" : Re-order assembly
+    note right: To better emulate hardware optimisations
+    activate "Assembly Re-orderer"
+    ELMO <-- "Assembly Re-orderer" : Pass Re-ordered assembly
+    deactivate "Assembly Re-orderer"
 
-"QEMU" -> "GDB Server" : Debug program
-activate "GDB Server"
+    ELMO -> "Unicorn-Engine" : Run program in Unicorn Engine
+    activate "Unicorn-Engine"
+    ELMO <-- "Unicorn-Engine" : Pass execution information
+    deactivate "Unicorn-Engine"
+else
+    database "Coefficients" as Coefficients
+    database "Traces" as Traces
 
-ELMO -> "GDB Client" : Debug program
-activate "GDB Client"
-
-ELMO -> "GDB Client" : Request dissasmbly
-"GDB Client" -> "GDB Server" : Request dissasmbly
-"GDB Client" <-- "GDB Server" : Pass dissasmbly
-"ELMO" <-- "GDB Client" : Pass dissasmbly
-
-loop
-    ELMO -> "GDB Client" : Request Registers
-    "GDB Client" -> "GDB Server" : Request Registers
-    "GDB Client" <-- "GDB Server" : Pass Registers
-    ELMO <-- "GDB Client" : Pass Registers
-    ELMO -> "GDB Client" : Run next assembly instruction
-    "GDB Client" -> "GDB Server" : Run next assembly instruction
+    ELMO -> Coefficients : Load coefficients
+    activate Coefficients
+    ELMO <-- Coefficients : Load coefficients
+    deactivate Coefficients
 end
-
-"GDB Client" <-- "GDB Server" : Program finished
-deactivate "GDB Server"
-deactivate QEMU
-ELMO <-- "GDB Client" : Program finished
-deactivate "GDB Client"
-
-
-database "Coefficients" as Coefficients
-database "Traces" as Traces
-
-ELMO -> Coefficients : Load coefficients
-activate Coefficients
-ELMO <-- Coefficients : Load coefficients
-deactivate Coefficients
 
 ELMO -> ELMO : Generate traces
 

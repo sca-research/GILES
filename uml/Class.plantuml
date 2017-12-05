@@ -8,19 +8,30 @@ package ELMO {
     -list<Model> models
     -Interface interface
     -Execution execution
+    -Traces traces
+    -Coefficients coefficients
     +main()
     -parseCommandLineOptions()
+    -reOrderAssembly()
     }
 
     class "I/O" as IO {
     +Coefficients LoadCoefficients(string coefficientsPath)
-    +Traces OutputTraces(string tracesPath, Traces traces)
+    +Traces OutputTraces(string tracesPath, Traces traces, string format)
     }
 
-    class "GDB Interface" {
-        +GDBInterface(string address, uint8_t port, string programPath)
-        list<Register> parseRegisters(string registers)
-        AssemblyInstruction parseAssembly(string assembly)
+    abstract class "Emulator Interface" {
+        {abstract} +Interface(string programPath)
+        {abstract} +Execution RunCode()
+        {abstract} -list<Register> parseRegisters(string registers)
+        {abstract} -AssemblyInstruction parseAssembly(string assembly)
+    }
+
+    class "Unicorn Interface" {
+        +Interface(string programPath)
+        +Execution RunCode()
+        -list<Register> parseRegisters(string registers)
+        -AssemblyInstruction parseAssembly(string assembly)
     }
 
     abstract class "Model" {
@@ -81,12 +92,10 @@ package ELMO {
     end note
 }
 
-package "GDB Client" {
+package "Unicorn Engine" {
 }
 
-package QEMU {
-    package "GDB Server" {
-    }
+package "Assembly Re-orderer" {
 }
 
 package "Coefficient Files" <<Database>> {
@@ -96,19 +105,20 @@ package "Generated Traces" <<Database>> {
 }
 
 Model <|-- ModelPower
+"Emulator Interface" <|-- "Unicorn Interface"
 
 ELMO "1"*-- "1" IO
-ELMO "1"*-- "1" "GDB Interface"
+ELMO "1"*-- "1" "Emulator Interface"
+ELMO  <--> "Assembly Re-orderer" : Interacts with
 ELMO "1"*--"1...*" Model
 
 Model "1"*--"1" Coefficients : Uses >
 Model "1"*--"1" Execution : Uses >
-Model "1"*---"1" Traces : Generates >
+Model "1"*--"1" Traces : Generates >
 
-"GDB Interface" <--> "GDB Client" : Interacts with
-"GDB Client" <--> "GDB Server" : Interacts with
+"Unicorn Interface" <--> "Unicorn Engine" : Interacts with
 
-"GDB Interface" "1"*--"1" Execution : Creates and Updates >
+"Emulator Interface" "1"*--"1" Execution : Creates and Updates >
 "Execution" "1"*--"1...*" AssemblyInstruction
 
 AssemblyInstruction "1"*--"1...*" Register
@@ -124,8 +134,7 @@ IO --> "Generated Traces" : Saves >
 "Coefficient Files" <.. Coefficients : Maps to >
 "Generated Traces" <.. Traces : Maps to <
 
-"Generated Traces" -[hidden]- ELMO
-"Coefficient Files" -[hidden]- ELMO
-Traces -[hidden]- ELMO
+ModelPower -[hidden]- Coefficients
+ModelPower -[hidden]- Traces
 
 @enduml
