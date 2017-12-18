@@ -1,0 +1,11 @@
+AccessModifierOffset : -4
+AlignTrailingComments : true
+AllowShortFunctionsOnASingleLine : true
+BreakBeforeBraces : Allman
+ColumnLimit : 80
+FixNamespaceComments : true
+IndentWidth : 4
+PointerBindsToType : true
+SpacesBeforeTrailingComments : 1
+TabWidth : 8
+UseTab : Never
