@@ -1,4 +1,4 @@
-#[=[
+/*
     This file is part of ELMO-2.
 
     ELMO-2 is free software: you can redistribute it and/or modify
@@ -13,19 +13,29 @@
 
     You should have received a copy of the GNU General Public License
     along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
-#]=]
+*/
 
-#Add executable called "ELMO-2" that is built from the source files
-add_executable(ELMO-2
-    ELMO2.cpp
-    Assembly_Instruction.hpp
-    Coefficients.hpp
-    Emulator_Interface.hpp
-    Execution.hpp
-    IO.hpp
-    Model_Power.hpp
-    Model.hpp
-    Register.hpp
-    Traces.hpp
-    Unicorn_Interface.hpp
-)
+/*!
+    @file Traces.hpp
+    @brief Contains the internal representation of the genrated Traces.
+    @author Scott Egerton
+    @date 2017
+    @copyright GNU General Public License Version 2+
+*/
+
+#ifndef TRACES_HPP
+#define TRACES_HPP
+
+namespace ELMO2
+{
+//! @class Traces
+//! @brief The internal representation of the generated Traces for the target
+//! program.
+//! TODO: Learn more about traces to fill in a detailed description of what this
+//! is.
+class Traces
+{
+};
+} // namespace ELMO2
+
+#endif
