@@ -82,7 +82,7 @@ protected:
 public:
     //! @brief Virtual deconstructor to ensure proper memory cleanup.
     //! @see https://stackoverflow.com/a/461224
-    virtual ~Emulator_Interface();
+    virtual ~Emulator_Interface() {}
     // TODO: Should many functions everywhere be noexcept?
 
     //! @brief A function to start the process of invoking the emulator and
