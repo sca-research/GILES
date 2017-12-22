@@ -41,8 +41,8 @@
 namespace ELMO2
 {
 //! @class ELMO2
-//! @brief The starting point for the program. This reads the user specified
-//! options and invokes the corresponding components within the program.
+//! @brief This contains the operations that control the rest of the program
+//! passing data between them.
 //! TODO: Should this be static?
 class ELMO_2
 {
@@ -86,38 +86,3 @@ public:
     }
 };
 } // namespace ELMO2
-
-namespace // TODO: Add a Doxygen Comment explaining why this is in the anonymous
-          // namespace. (It's only needed for currently compilation. If ELMO2
-          // was a lib then this isn't needed) Also read more about anonymous
-          // namespace.
-{
-//! @brief Interprets the command line flags.
-//! @param p_options The options as contained within a string.
-//! @returns The options as contained within an unordered map. The
-//! key is the option and the value is what that option is set to.
-//! TODO: Change the return type? At least to bool i.e. successful or not?
-const std::unordered_map<std::string,
-                         std::string>& // TODO: Return by reference here?
-parse_command_line_flags(const char* p_options[])
-{
-    throw("Function not yet implemented");
-}
-} // namespace
-
-//! @brief The entry point of the program.
-int main(const int argc, const char* argv[])
-{
-    std::cout << "Hello World!\n";
-    std::string p_coefficients_path = "./"; // TODO: Change this
-    std::string p_traces_path = "./";       // TODO: Change this
-    std::string p_program_path = "./";      // TODO: Change this
-
-    parse_command_line_flags(argv); // TODO: Look into ways of having the
-                                    // program path passed correctly.
-
-    ELMO2::ELMO_2 elmo2 =
-        ELMO2::ELMO_2(parse_command_line_flags(argv), p_coefficients_path,
-                      p_program_path, p_traces_path);
-    return 0;
-}

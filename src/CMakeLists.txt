@@ -20,6 +20,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 #Add executable called "ELMO-2" that is built from the source files
 add_executable(ELMO-2
+    Main.cpp
     ELMO2.cpp
     Assembly_Instruction.hpp
     Coefficients.hpp
