@@ -33,6 +33,8 @@
 
 namespace ELMO2
 {
+namespace Internal
+{
 //! @class Assembly_Instruction
 //! @brief The internal representation of an individual assembly instruction.
 //! This contains the opcode and operands of the instruction as well as a list
@@ -59,7 +61,7 @@ public:
     //! registers?
     Assembly_Instruction(
         const std::string& p_opcode,
-        const std::vector<ELMO2::Register>& p_changed_registers)
+        const std::vector<ELMO2::Internal::Register>& p_changed_registers)
         : m_opcode(p_opcode), m_changed_registers(p_changed_registers)
     {
     }
@@ -77,10 +79,11 @@ public:
     //! @brief Gets a list of registers that were changed by this instrcution
     //! and their new values.
     //! @returns A vector of Registers.
-    const std::vector<ELMO2::Register>& get_changed_registers() const
+    const std::vector<ELMO2::Internal::Register>& get_changed_registers() const
     {
         return m_changed_registers;
     }
 };
+} // namespace Internal
 } // namespace ELMO2
 #endif

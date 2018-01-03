@@ -36,6 +36,8 @@
 
 namespace ELMO2
 {
+namespace Internal
+{
 //! @class Emulator_Interface
 //! @brief An abstract class that serves as a base class for the interface to a
 //! specific emulator. The emulator will record the Execution of the target
@@ -55,7 +57,7 @@ private:
     //! representation of a list of Register objects.
     //! @param p_registers The Register details as provided by the emulator.
     //! @returns The internal representation of a list of Registers.
-    virtual const std::vector<ELMO2::Register>&
+    virtual const std::vector<ELMO2::Internal::Register>&
     parse_registers(const std::string& p_registers) = 0;
 
     //! @brief Turns a string containing the information about an Assembly
@@ -65,7 +67,7 @@ private:
     //! @returns The internal representation of the assembly instruction.
     // TODO: Should this return a vector of Assembly_Instruction? Should there
     // be two functions for this?
-    virtual const ELMO2::Assembly_Instruction&
+    virtual const ELMO2::Internal::Assembly_Instruction&
     parse_assembly(const std::string& p_assembly) = 0;
 
     // TODO: ****** GO THROUGH EVERY CLASS WITH RULE OF FIVE *******************
@@ -88,8 +90,9 @@ public:
     //! @brief A function to start the process of invoking the emulator and
     //! recording the results.
     //! @returns The recorded Execution of the target program.
-    virtual const ELMO2::Execution& Run_Code() = 0;
+    virtual const ELMO2::Internal::Execution& Run_Code() = 0;
 };
+} // namespace Internal
 } // namespace ELMO2
 
 #endif

@@ -28,6 +28,8 @@
 
 namespace ELMO2
 {
+namespace Internal
+{
 //! @class Traces
 //! @brief The internal representation of the generated Traces for the target
 //! program.
@@ -36,6 +38,7 @@ namespace ELMO2
 class Traces
 {
 };
+} // namespace Internal
 } // namespace ELMO2
 
 #endif

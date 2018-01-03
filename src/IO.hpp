@@ -33,6 +33,8 @@
 
 namespace ELMO2
 {
+namespace Internal
+{
 //! @class IO
 //! @brief This contains all Input and Output functions for ELMO2. This includes
 //! loading the Coefficients file and saving generated Traces.
@@ -44,7 +46,7 @@ public:
     //! @param p_coefficients_path The path where the Coefficients should be
     //! loaded from.
     //! @returns The Coefficients using the internal representation.
-    const ELMO2::Coefficients&
+    const ELMO2::Internal::Coefficients&
     Load_Coefficients(const std::string& p_coefficients_path);
 
     //! @brief Saves the generated Traces to the file as specified by
@@ -55,9 +57,10 @@ public:
     //! @param p_traces The Traces to be saved.
     //! @param p_format The format in which the Traces are to be saved.
     const bool Output_Traces(const std::string& p_traces_path,
-                             const ELMO2::Traces& p_traces,
+                             const ELMO2::Internal::Traces& p_traces,
                              const std::string& p_format) const;
 };
+} // namespace Internal
 } // namespace ELMO2
 
 #endif

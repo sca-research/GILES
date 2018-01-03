@@ -33,6 +33,8 @@
 
 namespace ELMO2
 {
+namespace Internal
+{
 //! @class Model
 //! @brief An abstract class that serves as a base class for mathmatical models
 //! to be implemented, These models will generate the traces for the given
@@ -42,16 +44,16 @@ class Model
 {
 private:
     //! The execution of the traget program as recorded by the Emulator.
-    const ELMO2::Execution m_execution;
+    const ELMO2::Internal::Execution m_execution;
 
     //! The Coefficients created by measuring real hardware traces.
-    const ELMO2::Coefficients m_coefficients;
+    const ELMO2::Internal::Coefficients m_coefficients;
 
     //! @brief This function will add noise to the traces to simulate the
     //! background noise that would be picked up in real traces.
     //! @ param The Traces to have the noise added to.
     //! @returns The Traces with the added noise.
-    const ELMO2::Traces& addNoise(ELMO2::Traces& p_traces)
+    const ELMO2::Internal::Traces& addNoise(ELMO2::Internal::Traces& p_traces)
     {
         throw("Function not yet implemented"); // TODO: This shouls not be in a
                                                // header file. Change this
@@ -67,8 +69,8 @@ protected:
     //! @param p_execution The recorded Execution of the target program,
     //! provided by the Emulator.
     //! @param p_coefficients The loaded Coefficients from real hardware traces.
-    Model(const ELMO2::Execution& p_execution,
-          const ELMO2::Coefficients& p_coefficients)
+    Model(const ELMO2::Internal::Execution& p_execution,
+          const ELMO2::Internal::Coefficients& p_coefficients)
         : m_execution(p_execution), m_coefficients(p_coefficients)
     {
     } // TODO: Should this read Model() =
@@ -84,8 +86,9 @@ public:
     //! @brief In derived classes, this function should contain the mathematical
     //! calculations that generate the Traces.
     //! @returns The generted Traces for the target program.
-    virtual const ELMO2::Traces& GenerateTraces() = 0;
+    virtual const ELMO2::Internal::Traces& GenerateTraces() = 0;
 };
+} // namespace Internal
 } // namespace ELMO2
 
 #endif

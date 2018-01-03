@@ -33,18 +33,20 @@
 
 namespace ELMO2
 {
+namespace Internal
+{
 //! @class Model_Power
 //! @brief This derived class conatins a specific implementation of a
 //! mathematical model to calculate the power usage of a target program.
 //! TODO: Find out more about this to be more descriptive.
-class Model_Power : public virtual ELMO2::Model
+class Model_Power : public virtual ELMO2::Internal::Model
 {
 public:
     //! @brief The constructor makes use of the base Model constructor to assist
     //! with initilisation of private memeber variables.
-    Model_Power(const ELMO2::Execution& p_execution,
-                const ELMO2::Coefficients& p_coefficients)
-        : ELMO2::Model(p_execution, p_coefficients)
+    Model_Power(const ELMO2::Internal::Execution& p_execution,
+                const ELMO2::Internal::Coefficients& p_coefficients)
+        : ELMO2::Internal::Model(p_execution, p_coefficients)
     {
     }
 
@@ -52,8 +54,9 @@ public:
     //! generate the power Traces.
     //! TODO: Find out more in order to improve this description.
     //! @returns The generted Traces for the target program.
-    const ELMO2::Traces& GenerateTraces() override;
+    const ELMO2::Internal::Traces& GenerateTraces() override;
 };
+} // namespace Internal
 } // namespace ELMO2
 
 #endif

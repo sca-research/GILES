@@ -30,6 +30,8 @@
 
 namespace ELMO2
 {
+namespace Internal
+{
 //! @class Register
 //! @brief The internal representation of an individual register.
 //! This contains the opcode and operands of the instruction as well as a list
@@ -67,6 +69,7 @@ public:
     //!@brief Retives the value conatined within that register.
     const std::string& get_value() const { return m_value; }
 };
+} // namespace Internal
 } // namespace ELMO2
 
 #endif

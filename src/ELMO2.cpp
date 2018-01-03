@@ -47,10 +47,10 @@ namespace ELMO2
 class ELMO_2
 {
 private:
-    std::unique_ptr<ELMO2::Emulator_Interface> emulator_Interface;
-    std::vector<ELMO2::Model> models;
-    const ELMO2::IO io;
-    const ELMO2::Coefficients coefficients;
+    std::unique_ptr<ELMO2::Internal::Emulator_Interface> emulator_Interface;
+    std::vector<ELMO2::Internal::Model> models;
+    const ELMO2::Internal::IO io;
+    const ELMO2::Internal::Coefficients coefficients;
 
     //! @brief Re-orders the assembly instructions.
     //! Re-ordering of the instructions is necessary as the order they are
@@ -78,9 +78,9 @@ public:
         const std::string& p_progam_path,
         const std::string& p_traces_path) // TODO: Look into std::optional in
                                           // C++17 as saving should be optional.
-    : emulator_Interface(std::make_unique<ELMO2::Unicorn_Interface>(
-          ELMO2::Unicorn_Interface(p_progam_path))),
-      io(ELMO2::IO()), coefficients(ELMO2::Coefficients())
+    : emulator_Interface(std::make_unique<ELMO2::Internal::Unicorn_Interface>(
+          ELMO2::Internal::Unicorn_Interface(p_progam_path))),
+      io(ELMO2::Internal::IO()), coefficients(ELMO2::Internal::Coefficients())
     {
         parse_options(p_options);
     }

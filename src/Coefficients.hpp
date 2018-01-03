@@ -28,6 +28,8 @@
 
 namespace ELMO2
 {
+namespace Internal
+{
 //! @class Coefficients
 //! @brief The internal representation of the Coefficients file.
 //! The Coefficients file contains the coefficients that were created by
@@ -41,6 +43,7 @@ namespace ELMO2
 class Coefficients
 {
 };
+} // namespace Internal
 } // namespace ELMO2
 
 #endif
