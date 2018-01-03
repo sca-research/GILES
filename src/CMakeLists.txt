@@ -15,12 +15,16 @@
     along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
 #]=]
 
+option(BUILD_EXECUTABLE
+    "Build ELMO-2 as a command line executable. (libELMO-2 will be built regardless)"
+    ON
+)
+
 # C++14 is required for unique pointers
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
-#Add executable called "ELMO-2" that is built from the source files
-add_executable(ELMO-2
-    Main.cpp
+# Add library called "libELMO-2" that is built from the source files
+add_library(libELMO-2
     ELMO2.cpp
     Assembly_Instruction.hpp
     Coefficients.hpp
@@ -33,3 +37,12 @@ add_executable(ELMO-2
     Traces.hpp
     Unicorn_Interface.hpp
 )
+# Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
+SET_TARGET_PROPERTIES(libELMO-2 PROPERTIES PREFIX "")
+
+
+if(BUILD_EXECUTABLE)
+    # Add executable "ELMO-2" that is a command line wrapper around libELMO-2
+    add_executable(ELMO-2 Main.cpp)
+    target_link_libraries(ELMO-2 libELMO-2)
+endif(BUILD_EXECUTABLE)
