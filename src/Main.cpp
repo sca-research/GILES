@@ -17,7 +17,7 @@
 
 /*!
     @file Main.cpp
-    @brief This file contains the entry point for the program and invokes ELMO2
+    @brief This file contains a command line entry executable that invokes ELMO2
     with the correct options.
     @author Scott Egerton
     @date 2017
@@ -53,8 +53,9 @@ int main(const int argc, const char* argv[])
     std::string p_traces_path = "./";       // TODO: Change this
     std::string p_program_path = "./";      // TODO: Change this
 
-    parse_command_line_flags(argv); // TODO: Look into ways of having the
-                                    // program path passed correctly.
+    parse_command_line_flags(
+        argv); // TODO: Look into ways of having the
+               // program path passed correctly. - Boost::program_options
 
     ELMO2::ELMO_2 elmo2 =
         ELMO2::ELMO_2(parse_command_line_flags(argv), p_coefficients_path,

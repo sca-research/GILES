@@ -15,8 +15,6 @@
     along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// TODO: Add doxygen comments after modifying Emulator_Interface.hpp
-
 #ifndef UNICORN_INTERFACE_HPP
 #define UNICORN_INTERFACE_HPP
 
@@ -29,6 +27,7 @@ namespace ELMO2
 {
 namespace Internal
 {
+// Doxygen comments are inherited from Emulator_Interface.hpp
 class Unicorn_Interface : public virtual ELMO2::Internal::Emulator_Interface
 {
 private:

@@ -73,7 +73,9 @@ public:
     //! @brief Gets a list of the instructions operands.
     //! @return A vector of operands.
     // TODO: Should this get the operand at a specified index i.e.
-    // get_operand(1);
+    // get_operand(1); //TODO: Implement both after converting OPERANDS to
+    // ORDERED map. Opernads != Registers. A list of registers is better stored
+    // as a map.
     const std::vector<std::string>& get_operands() const { return m_operands; }
 
     //! @brief Gets a list of registers that were changed by this instrcution

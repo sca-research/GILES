@@ -17,8 +17,8 @@
 
 /*!
     @file ELMO2.cpp
-    @brief This file contains the entry point for the program and invokes other
-    operations. // TODO: Change this when main.cpp is created.
+    @brief This file contains the entry point for ELMO2 and invokes other
+    operations.
     @author Scott Egerton
     @date 2017
     @copyright GNU General Public License Version 2+
@@ -40,7 +40,7 @@
 
 namespace ELMO2
 {
-//! @class ELMO2
+//! @class ELMO_2
 //! @brief This contains the operations that control the rest of the program
 //! passing data between them.
 //! TODO: Should this be static?
@@ -55,11 +55,16 @@ private:
     //! @brief Re-orders the assembly instructions.
     //! Re-ordering of the instructions is necessary as the order they are
     //! executed in is not the order that they were written in/compiled into.
+    //! @note Out of order execution is supported by certain simulators making
+    //! this redundant.
     //! TODO: Maybe look into using a dissasembler e.g. capstone to work around
     //! this issue?
-    //! TODO: Should accept the target program (Using the decided upon format
-    //! (binary/assembly))
-    void re_order_assembly() { throw("Function not yet implemented"); }
+    //! TODO: Should optionally accept the target program (Using the decided
+    //! upon format (binary/assembly)) as overloaded function
+    void re_order_assembly(const std::string& p_program_path)
+    {
+        throw("Function not yet implemented");
+    }
 
     //! @brief Interprets options passed to ELMO2.
     //! @param p_options The options as contained within an unordered map. The

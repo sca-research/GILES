@@ -64,10 +64,6 @@ public:
           m_assembly({p_first_instruction})
     {
     }
-    //{
-    //    m_assembly.push_back(p_first_instruction);
-    //    throw("Function not yet implemented");
-    //}
 
     //! Get the state of the registers as they were when the program
     //! started to run.

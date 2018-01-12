@@ -53,12 +53,7 @@ private:
     //! background noise that would be picked up in real traces.
     //! @ param The Traces to have the noise added to.
     //! @returns The Traces with the added noise.
-    const ELMO2::Internal::Traces& addNoise(ELMO2::Internal::Traces& p_traces)
-    {
-        throw("Function not yet implemented"); // TODO: This shouls not be in a
-                                               // header file. Change this
-                                               // everywhere.
-    }
+    const ELMO2::Internal::Traces& addNoise(ELMO2::Internal::Traces& p_traces);
 
 protected:
     //! @brief The constructor needs to be provided with the recorded Execution

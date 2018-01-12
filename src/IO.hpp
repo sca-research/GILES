@@ -41,6 +41,12 @@ namespace Internal
 class IO
 {
 public:
+    //! All possible output formats for the generated traces to be saved as.
+    enum class Output_Format : uint8_t
+    {
+        Riscure
+    };
+
     //! @brief Loads the Coefficients from a file as specified by
     //! p_coefficients_path.
     //! @param p_coefficients_path The path where the Coefficients should be
@@ -51,14 +57,13 @@ public:
 
     //! @brief Saves the generated Traces to the file as specified by
     //! p_traces_path. The p_format parameter specifies which format the Traces
-    //! should be saved in. TODO: Should the format be an enum instead of a
-    //! string to prevent typos? - Yes
+    //! should be saved in.
     //! @param p_traces_path The destination to save the Traces to.
     //! @param p_traces The Traces to be saved.
     //! @param p_format The format in which the Traces are to be saved.
-    const bool Output_Traces(const std::string& p_traces_path,
-                             const ELMO2::Internal::Traces& p_traces,
-                             const std::string& p_format) const;
+    bool Output_Traces(const std::string& p_traces_path,
+                       const ELMO2::Internal::Traces& p_traces,
+                       const Output_Format p_format) const;
 };
 } // namespace Internal
 } // namespace ELMO2

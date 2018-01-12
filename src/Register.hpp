@@ -36,12 +36,11 @@ namespace Internal
 //! @brief The internal representation of an individual register.
 //! This contains the opcode and operands of the instruction as well as a list
 //! of registers that have been changed making use of the Register class.
-//! TODO:
-//! ***************************************************************************************
 //! @see https://en.wikipedia.org/wiki/Processor_register
 //! TODO: Maybe this sin't a good way to store registers as it makes it
 //! difficult store in a data structure such as a map. Actually maybe a map
-//! would be great?
+//! would be great? (unordered map?) A list of registers is better stored as a
+//! map
 class Register
 {
 private:
