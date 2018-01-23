@@ -20,8 +20,11 @@ option(BUILD_EXECUTABLE
     ON
 )
 
-# C++14 is required for unique pointers
+# C++14 is required for unique pointers, C++11 is required for nlohmann_json
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+
+hunter_add_package(nlohmann_json)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 # Add library called "libELMO-2" that is built from the source files
 add_library(libELMO-2
@@ -37,6 +40,9 @@ add_library(libELMO-2
     Traces.hpp
     Unicorn_Interface.hpp
 )
+
+target_link_libraries(libELMO-2 PUBLIC nlohmann_json)
+
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 SET_TARGET_PROPERTIES(libELMO-2 PROPERTIES PREFIX "")
 

@@ -16,7 +16,24 @@
 #]=]
 
 # Specify the minimum version for CMake
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
+
+# Download the HunterGate CMake file, if it is not already downloaded.
+# See https://github.com/hunter-packages/gate
+if(NOT EXISTS "${CMAKE_SOURCE_DIR}/cmake/HunterGate.cmake")
+    file(
+        DOWNLOAD
+        "https://raw.githubusercontent.com/hunter-packages/gate/master/cmake/HunterGate.cmake"
+        "${CMAKE_SOURCE_DIR}/cmake/HunterGate.cmake"
+    )
+endif()
+
+# Hunter is used for managment of dependencies. See https://docs.hunter.sh
+include("cmake/HunterGate.cmake")
+HunterGate(
+    URL "https://github.com/ruslo/hunter/archive/v0.19.228.tar.gz"
+    SHA1 "5f8bde642d44d2ef652c917fa6b36dbc5f693d51"
+)
 
 # Project's name
 project(ELMO-2)
