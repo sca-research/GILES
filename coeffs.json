@@ -1,6 +1,6 @@
 {
-  "Coefficients": {
-    "ALU": {
+  "ALU": {
+    "Coefficients": {
       "Bit_Flip1": [
         0.000194604037769381,
         0.000281818064957793,
@@ -553,7 +553,6 @@
         0.0,
         0.0
       ],
-      "Constant": 0.0433876405700876,
       "Hamming_Distance_Operand1_Previous_Instruction": [
         5.68999225105642e-05,
         0.000225002170263429,
@@ -1167,7 +1166,19 @@
         0.0168112919230616
       ]
     },
-    "Loads": {
+    "Constant": 0.0433876405700876,
+    "Instructions": [
+        "adds",
+        "ands",
+        "cmps",
+        "eors",
+        "movs",
+        "orrs",
+        "subs"
+    ]
+  },
+  "Loads": {
+    "Coefficients": {
       "Bit_Flip1": [
         4.22238522019266e-05,
         3.90688244630806e-05,
@@ -1720,7 +1731,6 @@
         0.0,
         0.0
       ],
-      "Constant": 0.0781854011930805,
       "Hamming_Distance_Operand1_Previous_Instruction": [
         5.35776953219238e-05,
         1.6061637874095e-05,
@@ -2334,7 +2344,15 @@
         0.00133381796555395
       ]
     },
-    "Multiplies": {
+    "Constant": 0.0781854011930805,
+    "Instructions": [
+        "ldr",
+        "ldrb",
+        "ldrh"
+    ]
+  },
+  "Multiplies": {
+    "Coefficients": {
       "Bit_Flip1": [
         0.000329499026748586,
         0.00023430550568998,
@@ -2887,7 +2905,6 @@
         0.0,
         0.0
       ],
-      "Constant": 0.0674501211225732,
       "Hamming_Distance_Operand1_Previous_Instruction": [
         0.000153658775681067,
         0.000162542999633727,
@@ -3501,7 +3518,13 @@
         -0.000749136973122392
       ]
     },
-    "Shifts": {
+    "Constant": 0.0674501211225732,
+    "Instructions": [
+        "muls"
+    ]
+  },
+  "Shifts": {
+    "Coefficients": {
       "Bit_Flip1": [
         0.000299024791349064,
         0.000313203903897134,
@@ -4054,7 +4077,6 @@
         0.0,
         0.0
       ],
-      "Constant": 0.0673118364219904,
       "Hamming_Distance_Operand1_Previous_Instruction": [
         9.72008343386053e-05,
         0.000227362378634064,
@@ -4668,7 +4690,15 @@
         0.00136933520437795
       ]
     },
-    "Stores": {
+    "Constant": 0.0673118364219904,
+    "Instructions": [
+        "lsls",
+        "lsrs",
+        "rors"
+    ]
+  },
+  "Stores": {
+    "Coefficients": {
       "Bit_Flip1": [
         5.02717208812196e-05,
         2.15584709466768e-05,
@@ -5221,7 +5251,6 @@
         0.0,
         0.0
       ],
-      "Constant": 0.0904067413944756,
       "Hamming_Distance_Operand1_Previous_Instruction": [
         4.40273902263071e-05,
         0.000199546749106414,
@@ -5834,13 +5863,12 @@
         0.0114492158978336,
         0.0167058745097059
       ]
-    }
-  },
-  "Instruction_Catergories": {
-    "ALU": [],
-    "Loads": [],
-    "Multiplies": [],
-    "Shifts": [],
-    "Stores": []
+    },
+    "Constant": 0.0904067413944756,
+    "Instructions": [
+        "str",
+        "strb",
+        "strh"
+    ]
   }
 }
