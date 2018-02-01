@@ -26,22 +26,51 @@
 #ifndef COEFFICIENTS_HPP
 #define COEFFICIENTS_HPP
 
+#include <string>        // for string
+#include <unordered_set> // for unordered_set
+#include <vector>        // for vector
+
+#include <nlohmann/json.hpp> // for json
+
 namespace ELMO2
 {
 namespace Internal
 {
 //! @class Coefficients
 //! @brief The internal representation of the Coefficients file.
-//! The Coefficients file contains the coefficients that were created by
-//! measuring real hardware traces. Each instruction will have a corresponding
-//! coefficient that will be used to calculate predicted traces by the Model
-//! class.
-//! TODO: Learn more about traces to fill in a detailed description of what the
-//! coefficients file is.
-//! TODO: add @see link to ELMO paper or something to further describe what the
-//! Coefficients are.
+//! The Coefficients file contains the coefficient values that were created by
+//! measuring real hardware traces. Each instruction will have a set of terms
+//! with a list of corresponding values that will be used to calculate
+//! predicted traces by the Model class.
+//! @see https://eprint.iacr.org/2016/517
 class Coefficients
 {
+private:
+    const nlohmann::json m_coefficients;
+
+    const std::string
+    get_instruction_catergory(const std::string& p_opcode) const;
+
+public:
+    //! @brief Constructors an instance from the json as loaded from the
+    //! Coefficents file.
+    //! @param p_coefficients The validated coefficients, contained within a
+    //! json object, as they are stored in the file.
+    //! @warning Validation of the json p_coefficients should have already
+    //! occured before calling the constructor. TODO: Add link to IO validation
+    //! in doxygen warning.
+    explicit Coefficients(const nlohmann::json& p_coefficients)
+        : m_coefficients(p_coefficients)
+    {
+    }
+
+    const std::unordered_set<std::string> Get_Interaction_Terms() const;
+
+    const std::vector<double>
+    Get_Coefficients(const std::string& p_opcode,
+                     const std::string& p_interaction_term) const;
+
+    double Get_Constant(const std::string& p_opcode) const;
 };
 } // namespace Internal
 } // namespace ELMO2

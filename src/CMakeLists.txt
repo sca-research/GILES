@@ -30,6 +30,7 @@ find_package(nlohmann_json CONFIG REQUIRED)
 add_library(libELMO-2
     ELMO2.cpp
     Assembly_Instruction.hpp
+    Coefficients.cpp
     Coefficients.hpp
     Emulator_Interface.hpp
     Execution.hpp
