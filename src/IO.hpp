@@ -26,15 +26,17 @@
 #ifndef IO_HPP
 #define IO_HPP
 
-#include <string>
+#include <string> // for string
 
 #include "Coefficients.hpp"
-#include "Traces.hpp"
 
 namespace ELMO2
 {
 namespace Internal
 {
+// Forward Declarations
+class Traces;
+
 //! @class IO
 //! @brief This contains all Input and Output functions for ELMO2. This includes
 //! loading the Coefficients file and saving generated Traces.
@@ -42,25 +44,14 @@ class IO
 {
 public:
     //! All possible output formats for the generated traces to be saved as.
-    enum class Output_Format : uint8_t
+    enum class Output_Format : uint8_t // TODO: Should this be size_t instead?
     {
         Riscure
     };
 
-    //! @brief Loads the Coefficients from a file as specified by
-    //! p_coefficients_path.
-    //! @param p_coefficients_path The path where the Coefficients should be
-    //! loaded from.
-    //! @returns The Coefficients using the internal representation.
-    const ELMO2::Internal::Coefficients&
-    Load_Coefficients(const std::string& p_coefficients_path);
+    const ELMO2::Internal::Coefficients
+    Load_Coefficients(const std::string& p_coefficients_path) const;
 
-    //! @brief Saves the generated Traces to the file as specified by
-    //! p_traces_path. The p_format parameter specifies which format the Traces
-    //! should be saved in.
-    //! @param p_traces_path The destination to save the Traces to.
-    //! @param p_traces The Traces to be saved.
-    //! @param p_format The format in which the Traces are to be saved.
     bool Output_Traces(const std::string& p_traces_path,
                        const ELMO2::Internal::Traces& p_traces,
                        const Output_Format p_format) const;
