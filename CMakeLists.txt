@@ -30,6 +30,14 @@ endif()
 
 # Hunter is used for managment of dependencies. See https://docs.hunter.sh
 include("cmake/HunterGate.cmake")
+
+# Keeps Hunter files within source subdirectory if nowhere has been explicitly
+# specified
+if(NOT DEFINED ENV{HUNTER_ROOT})
+    set(HUNTER_ROOT ".hunter")
+endif()
+
+# Download Hunter
 HunterGate(
     URL "https://github.com/ruslo/hunter/archive/v0.19.228.tar.gz"
     SHA1 "5f8bde642d44d2ef652c917fa6b36dbc5f693d51"
