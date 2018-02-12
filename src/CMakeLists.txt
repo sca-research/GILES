@@ -40,6 +40,8 @@ add_library(libELMO-2
     Register.hpp
     Traces.hpp
     Unicorn_Interface.hpp
+    Validator_Coefficients.cpp
+    Validator_Coefficients.hpp
 )
 
 target_link_libraries(libELMO-2 PUBLIC nlohmann_json)

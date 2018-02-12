@@ -27,6 +27,7 @@
 
 #include "Coefficients.hpp"
 #include "IO.hpp"
+#include "Validator_Coefficients.hpp"
 
 #include <nlohmann/json.hpp> // for operator>>, json
 
@@ -50,7 +51,10 @@ const ELMO2::Internal::Coefficients ELMO2::Internal::IO::Load_Coefficients(
     nlohmann::json json;
     file >> json;
 
-    return Coefficents(json);
+    // This will throw an exception if validation fails.
+    ELMO2::Internal::Validator_Coefficients::Validate_Json(json);
+
+    return ELMO2::Internal::Coefficients(json);
 }
 
 //! @brief Saves the generated Traces to the file as specified by

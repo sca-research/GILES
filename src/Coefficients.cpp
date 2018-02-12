@@ -24,7 +24,6 @@
 */
 
 #include <algorithm> // for find
-#include <ios>       // for ios_base::failure
 #include <stdexcept> // for out_of_range
 
 #include "Coefficients.hpp"
