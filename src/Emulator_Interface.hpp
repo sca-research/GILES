@@ -20,7 +20,7 @@
     @brief Contains the Emulator_Interface class which serves as a base case for
     the interface to a specific emulator.
     @author Scott Egerton
-    @date 2017
+    @date 2017-2018
     @copyright GNU Affero General Public License Version 3+
 */
 

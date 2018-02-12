@@ -19,7 +19,7 @@
     @file Register.hpp
     @brief The internal representation of an individual register.
     @author Scott Egerton
-    @date 2017
+    @date 2017-2018
     @copyright GNU Affero General Public License Version 3+
 */
 
