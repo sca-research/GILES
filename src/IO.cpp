@@ -65,7 +65,7 @@ const ELMO2::Internal::Coefficients ELMO2::Internal::IO::Load_Coefficients(
 //! @param p_format The format in which the Traces are to be saved.
 bool ELMO2::Internal::IO::Output_Traces(const std::string& p_traces_path,
                                         const ELMO2::Internal::Traces& p_traces,
-                                        const Output_Format p_format) const
+                                        const Output_Format& p_format) const
 {
     return false; // TODO: Implement this
 }

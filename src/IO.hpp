@@ -54,7 +54,7 @@ public:
 
     bool Output_Traces(const std::string& p_traces_path,
                        const ELMO2::Internal::Traces& p_traces,
-                       const Output_Format p_format) const;
+                       const Output_Format& p_format) const;
 };
 } // namespace Internal
 } // namespace ELMO2

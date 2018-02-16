@@ -42,11 +42,6 @@ namespace Internal
 class Validator_Coefficients
 {
 private:
-    //! @brief This has been deleted to ensure the constructor and the copy
-    //! constructor cannot be called as this is just a utility class containing
-    //! nothing but static functions.
-    Validator_Coefficients(const Validator_Coefficients&) = delete;
-
     static void Validate_Not_Empty(const nlohmann::json& p_coefficients);
 
     static void
@@ -79,6 +74,11 @@ private:
         const nlohmann::json& p_coefficients);
 
 public:
+    //! @brief This has been deleted to ensure the constructor and the copy
+    //! constructor cannot be called as this is just a utility class containing
+    //! nothing but static functions.
+    Validator_Coefficients(const Validator_Coefficients&) = delete;
+    
     static void Validate_Json(const nlohmann::json& p_coefficients);
 };
 } // namespace Internal

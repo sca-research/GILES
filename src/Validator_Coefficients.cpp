@@ -87,7 +87,7 @@ void ELMO2::Internal::Validator_Coefficients::
     Validate_Interaction_Terms_Not_Empty(const nlohmann::json& p_coefficients)
 {
     // There must be at least one interaction term
-    if (0 >= p_coefficients[0].at("Coefficients").size())
+    if (p_coefficients.front().at("Coefficients").empty())
     {
         throw std::ios_base::failure("There must be at least one interaction "
                                      "term in the Coefficents file.");
@@ -164,12 +164,21 @@ void ELMO2::Internal::Validator_Coefficients::
     Validate_Catergory_Correct_Interaction_Terms(
         const nlohmann::json& p_catergory, const nlohmann::json& p_coefficients)
 {
-    // Each catergory should have the same interaction terms
-    if (p_catergory.at("Coefficents") != p_coefficients[0].at("Coefficents"))
+    // check each interaction term individually.
+    for (nlohmann::json::const_iterator interaction_term =
+             p_category["Coefficients"].begin();
+         interaction_term != p_category["Coefficients"].end();
+         ++interaction_term)
     {
-        throw std::ios_base::failure(
-            "The same interaction terms must be provided for all "
-            "catergories in the Coefficients file.");
+        if (p_coefficients.front()
+                .at("Coefficients")
+                .find(interaction_term.key()) ==
+            p_coefficients.front().at("Coefficients").end())
+        {
+            throw std::ios_base::failure(
+                "The same interaction terms must be provided for all "
+                "categories in the Coefficients file.");
+        }
     }
 }
 
@@ -230,12 +239,14 @@ void ELMO2::Internal::Validator_Coefficients::
     Validate_Catergory_Interaction_Terms_Size(
         const nlohmann::json& p_catergory, const nlohmann::json& p_coefficients)
 {
-    for (std::size_t i = 0; i != p_catergory["Coefficients"].size(); ++i)
+    for (const auto& interaction_term :
+         nlohmann::json::iterator_wrapper(p_category["Coefficients"]))
     {
         // Interaction terms must all have the same number of
         // Coefficient values.
-        if (p_catergory["Coefficients"][i].size() !=
-            p_coefficients[0]["Coefficients"][i].size())
+        if (interaction_term.value().size() !=
+            p_coefficients.front()["Coefficients"][interaction_term.key()]
+                .size())
         {
             throw std::ios_base::failure(
                 "Each interaction term in the Coefficients file must "
@@ -276,13 +287,13 @@ void ELMO2::Internal::Validator_Coefficients::
             // If the catergory has the same name as the instruction or
             // If the catergory has a list of instructions in it and
             // instruction is in this list.
-            if (search_catergory.get<std::string>() == instruction ||
                 (search_catergory.find("Instructions") !=
                      search_catergory.end() &&
                  std::find(search_catergory.at("Instructions").begin(),
                            search_catergory.at("Instructions").end(),
-                           instruction) !=
                      search_catergory.at("Instructions").end()))
+            if (search_category == instruction ||
+                           instruction.get<std::string>()) !=
             {
                 throw std::ios_base::failure(
                     "Each instruction in the Coefficients file  must have "

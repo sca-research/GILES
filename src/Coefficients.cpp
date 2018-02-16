@@ -47,31 +47,23 @@ namespace Internal
 const std::string ELMO2::Internal::Coefficients::get_instruction_catergory(
     const std::string& p_opcode) const
 {
-    // For each instruction catergory
-    for (const auto& catergory : m_coefficients)
+    for (const auto& category :
+         nlohmann::json::iterator_wrapper(m_coefficients))
     {
-        try
+        // The Instruction Categories are optional. If there are no
+        // categories then the 'category' is simply the opcode
+        if (category.key() == p_opcode)
         {
-            // If the instruction is in this catergory.
-            if (std::find(catergory.at("Instructions").begin(),
-                          catergory.at("Instructions").end(),
-                          p_opcode) != catergory.at("Instructions").end())
-            {
-                // Return the name of the catergory as a string
-                return catergory; // TODO: test this this returns
-                                  // what it's supposed to
-                                  // return.
-            }
+            return p_opcode;
         }
-        // It's okay for an exception to be thrown here, the Instruction
-        // Catergories are optional. If there are no catergories then the
-        // 'catergory' is simply the opcode
-        catch (nlohmann::json::out_of_range&)
+
+        // If the instruction is in this category, return the name of the
+        // category.
+        if (std::find(category.value().at("Instructions").begin(),
+                      category.value().at("Instructions").end(),
+                      p_opcode) != category.value().at("Instructions").end())
         {
-            if (catergory.get<std::string>() == p_opcode)
-            {
-                return p_opcode;
-            }
+            return category.key();
         }
     }
     throw std::out_of_range("This intruction (" + p_opcode +
@@ -89,8 +81,13 @@ const std::string ELMO2::Internal::Coefficients::get_instruction_catergory(
 const std::unordered_set<std::string>
 ELMO2::Internal::Coefficients::Get_Interaction_Terms() const
 {
-    return m_coefficients[0]["Coefficients"]
-        .get<std::unordered_set<std::string>>();
+    std::unordered_set<std::string> interaction_terms;
+    for (const auto& interaction_term : nlohmann::json::iterator_wrapper(
+             m_coefficients.front()["Coefficients"]))
+    {
+        interaction_terms.insert(interaction_term.key());
+    }
+    return interaction_terms;
 }
 
 //! @brief Retrives the coefficients for the interaction term given by

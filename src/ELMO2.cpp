@@ -85,9 +85,12 @@ public:
                                           // C++17 as saving should be optional.
     : emulator_Interface(std::make_unique<ELMO2::Internal::Unicorn_Interface>(
           ELMO2::Internal::Unicorn_Interface(p_progam_path))),
-      io(ELMO2::Internal::IO()), coefficients(ELMO2::Internal::Coefficients())
+      io(ELMO2::Internal::IO())
     {
         parse_options(p_options);
+
+        const ELMO2::Internal::Coefficients coefficients =
+            io.Load_Coefficients(p_coefficients_path);
     }
 };
 } // namespace ELMO2
