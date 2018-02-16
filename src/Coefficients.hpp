@@ -49,11 +49,11 @@ private:
     const nlohmann::json m_coefficients;
 
     const std::string
-    get_instruction_catergory(const std::string& p_opcode) const;
+    get_instruction_category(const std::string& p_opcode) const;
 
 public:
     //! @brief Constructors an instance from the json as loaded from the
-    //! Coefficents file.
+    //! Coefficients file.
     //! @param p_coefficients The validated coefficients, contained within a
     //! json object, as they are stored in the file.
     //! @warning Validation of the json p_coefficients should have already

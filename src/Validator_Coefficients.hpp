@@ -47,30 +47,30 @@ private:
     static void
     Validate_Interaction_Terms_Not_Empty(const nlohmann::json& p_coefficients);
 
-    static void Validate_Category_Not_Empty(const nlohmann::json& p_catergory);
+    static void Validate_Category_Not_Empty(const nlohmann::json& p_category);
 
     static void
-    Validate_Catergory_Headings_Coefficients(const nlohmann::json& p_catergory);
+    Validate_Category_Headings_Coefficients(const nlohmann::json& p_category);
 
     static void
-    Validate_Catergory_Headings_Constant(const nlohmann::json& p_catergory);
+    Validate_Category_Headings_Constant(const nlohmann::json& p_category);
 
-    static void Validate_Catergory_Correct_Interaction_Terms(
-        const nlohmann::json& p_catergory,
+    static void Validate_Category_Correct_Interaction_Terms(
+        const nlohmann::json& p_category,
         const nlohmann::json& p_coefficients);
 
-    static void Validate_Catergory_Instructions_Not_Empty(
-        const nlohmann::json& p_catergory);
+    static void Validate_Category_Instructions_Not_Empty(
+        const nlohmann::json& p_category);
 
-    static void Validate_Catergory_Interaction_Terms_Not_Empty(
-        const nlohmann::json& p_catergory);
+    static void Validate_Category_Interaction_Terms_Not_Empty(
+        const nlohmann::json& p_category);
 
-    static void Validate_Catergory_Interaction_Terms_Size(
-        const nlohmann::json& p_catergory,
+    static void Validate_Category_Interaction_Terms_Size(
+        const nlohmann::json& p_category,
         const nlohmann::json& p_coefficients);
 
-    static void Validate_Catergory_Instructions_Unique(
-        const nlohmann::json& p_catergory,
+    static void Validate_Category_Instructions_Unique(
+        const nlohmann::json& p_category,
         const nlohmann::json& p_coefficients);
 
 public:

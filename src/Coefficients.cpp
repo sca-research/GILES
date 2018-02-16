@@ -32,19 +32,19 @@ namespace ELMO2
 {
 namespace Internal
 {
-//! @brief Retrives the catergory that the given instruction is contained
+//! @brief Retrives the category that the given instruction is contained
 //! within. This is a utility function that is used to assist in retriving other
 //! data from the coefficients.
-//! @param p_opcode The opcode of the instruction for which the catergory will
+//! @param p_opcode The opcode of the instruction for which the category will
 //! be retrived.
-//! @returns The name of the catergory that the instruction is contained within.
+//! @returns The name of the category that the instruction is contained within.
 //! If the coefficients are not catergoried then the instruction opcode is
 //! returned.
 //! @exception std::out_of_range This exception is thrown if the instruction
-//! given by p_opcode is not found within any catergory in the coefficients.
+//! given by p_opcode is not found within any category in the coefficients.
 //! @see https://eprint.iacr.org/2016/517 Section 4.2 for more on the
-//! catergories.
-const std::string ELMO2::Internal::Coefficients::get_instruction_catergory(
+//! categories.
+const std::string ELMO2::Internal::Coefficients::get_instruction_category(
     const std::string& p_opcode) const
 {
     for (const auto& category :
@@ -91,7 +91,7 @@ ELMO2::Internal::Coefficients::Get_Interaction_Terms() const
 }
 
 //! @brief Retrives the coefficients for the interaction term given by
-//! p_interaction_term under the instruction catergory that contains the
+//! p_interaction_term under the instruction category that contains the
 //! instruction given by p_opcode.
 //! @param p_opcode  The opcode of the instruction that the Coefficients are
 //! required for.
@@ -103,22 +103,21 @@ ELMO2::Internal::Coefficients::Get_Interaction_Terms() const
 const std::vector<double> ELMO2::Internal::Coefficients::Get_Coefficients(
     const std::string& p_opcode, const std::string& p_interaction_term) const
 {
-    return m_coefficients
-        .at(get_instruction_catergory(p_opcode))["Coefficients"]
+    return m_coefficients.at(get_instruction_category(p_opcode))["Coefficients"]
         .at(p_interaction_term)
         .get<std::vector<double>>();
 }
 
-//! @brief Retrives the Constant for the Instruction Catergory that contains
+//! @brief Retrives the Constant for the Instruction Category that contains
 //! the instruction provided by p_opcode.
 //! @param p_opcode The opcode of the instruction that the Constant is
 //! required for.
-//! @returns The value of the constant for the catergory that the
+//! @returns The value of the constant for the category that the
 //! instruction belongs to.
 double
 ELMO2::Internal::Coefficients::Get_Constant(const std::string& p_opcode) const
 {
-    return m_coefficients.at(get_instruction_catergory(p_opcode))["Constant"]
+    return m_coefficients.at(get_instruction_category(p_opcode))["Constant"]
         .get<double>();
 }
 } // namespace Internal

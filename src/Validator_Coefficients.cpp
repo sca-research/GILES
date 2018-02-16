@@ -35,8 +35,8 @@ namespace Internal
 {
 //! @brief This function serves as an entry point to the validation rules.
 //! This function will invoke each validation rule in turn.
-//! @param p_coefficients The coefficients to be validatied, stored within a
-//! nholmann::json object.
+//! @param p_coefficients The coefficients to be validated, stored within a
+//! nlohmann::json object.
 //! returns This does not return anything as instead an exception will be
 //! thrown if a rule fails.
 void ELMO2::Internal::Validator_Coefficients::Validate_Json(
@@ -46,22 +46,22 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Json(
     Validate_Interaction_Terms_Not_Empty(
         p_coefficients); // TODO: Maybe call this later?
 
-    // Check each instruction catergory
-    for (const auto& catergory : p_coefficients)
+    // Check each instruction category
+    for (const auto& category : p_coefficients)
     {
-        Validate_Category_Not_Empty(catergory);
-        Validate_Catergory_Headings_Constant(catergory);
-        Validate_Catergory_Headings_Coefficients(catergory);
-        Validate_Catergory_Interaction_Terms_Not_Empty(catergory);
-        Validate_Catergory_Instructions_Not_Empty(catergory);
-        Validate_Catergory_Correct_Interaction_Terms(catergory, p_coefficients);
-        Validate_Catergory_Interaction_Terms_Size(catergory, p_coefficients);
-        Validate_Catergory_Instructions_Unique(catergory, p_coefficients);
+        Validate_Category_Not_Empty(category);
+        Validate_Category_Headings_Constant(category);
+        Validate_Category_Headings_Coefficients(category);
+        Validate_Category_Interaction_Terms_Not_Empty(category);
+        Validate_Category_Instructions_Not_Empty(category);
+        Validate_Category_Correct_Interaction_Terms(category, p_coefficients);
+        Validate_Category_Interaction_Terms_Size(category, p_coefficients);
+        Validate_Category_Instructions_Unique(category, p_coefficients);
     }
 }
 
 //! @brief Ensures that the given JSON is not an empty structure.
-//! @param p_coefficients The coefficents to be validated.
+//! @param p_coefficients The coefficients to be validated.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the JSON is an empty structure.
 void ELMO2::Internal::Validator_Coefficients::Validate_Not_Empty(
@@ -74,12 +74,12 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Not_Empty(
     }
 }
 
-//! @brief Ensures that the first catergory in the given JSON contains at least
+//! @brief Ensures that the first category in the given JSON contains at least
 //! one interaction term to be used. Otherwise there will be no actual
 //! coefficient values in the file.
-//! The first catergory is used as all catergories should be the same. This is
-//! checked in a seperate validation rule.
-//! @param p_coefficients The coefficents to be validated.
+//! The first category is used as all categories should be the same. This is
+//! checked in a separate validation rule.
+//! @param p_coefficients The coefficients to be validated.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the coefficients contain no interaction
 //! terms and therefore no coefficient values.
@@ -90,79 +90,79 @@ void ELMO2::Internal::Validator_Coefficients::
     if (p_coefficients.front().at("Coefficients").empty())
     {
         throw std::ios_base::failure("There must be at least one interaction "
-                                     "term in the Coefficents file.");
+                                     "term in the Coefficients file.");
     }
 }
 
 // TODO: Merge this with other not empty function? - Maybe do this when adding
 // more to exception messages.
 
-//! @brief Ensures that the given catergory is not an empty structure.
-//! @param p_catergory The instruction catergory to be validated.
+//! @brief Ensures that the given category is not an empty structure.
+//! @param p_category The instruction category to be validated.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the category is an empty structure.
 void ELMO2::Internal::Validator_Coefficients::Validate_Category_Not_Empty(
-    const nlohmann::json& p_catergory)
+    const nlohmann::json& p_category)
 {
-    // No catergory can be empty
-    if (p_catergory.empty())
+    // No category can be empty
+    if (p_category.empty())
     {
         throw std::ios_base::failure("Coefficients file must not contain "
-                                     "empty coefficient catergoies.");
+                                     "empty coefficient categories.");
     }
 }
 
-//! @brief Ensures that the given catergory contains a "Coefficients"
-//! subheading. Without this, the catergory would not conatain any actual
+//! @brief Ensures that the given category contains a "Coefficients"
+//! subheading. Without this, the category would not contain any actual
 //! coefficient values.
-//! @param p_catergory The instruction catergory to be validated.
+//! @param p_category The instruction category to be validated.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the "Coefficients" heading was not
 //! found.
 void ELMO2::Internal::Validator_Coefficients::
-    Validate_Catergory_Headings_Coefficients(const nlohmann::json& p_catergory)
+    Validate_Category_Headings_Coefficients(const nlohmann::json& p_category)
 {
-    if (p_catergory.find("Coefficents") == p_catergory.end())
+    if (p_category.find("Coefficients") == p_category.end())
     {
-        // Each catergory must contain Coefficients
+        // Each category must contain Coefficients
         throw std::ios_base::failure(
-            "Each catergory in the Coefficients file must contain a set of "
+            "Each category in the Coefficients file must contain a set of "
             "Coefficients.");
     }
 }
 
-//! @brief Ensures that the given catergory contains a "Constant" value.
+//! @brief Ensures that the given category contains a "Constant" value.
 //! subheading. Without this, the coefficient values could not be utilised
 //! within a Model.
-//! @param p_catergory The instruction catergory to be validated.
+//! @param p_category The instruction category to be validated.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the "Constant" heading was not
 //! found.
 void ELMO2::Internal::Validator_Coefficients::
-    Validate_Catergory_Headings_Constant(const nlohmann::json& p_catergory)
+    Validate_Category_Headings_Constant(const nlohmann::json& p_category)
 {
-    if (p_catergory.find("Constant") == p_catergory.end())
+    if (p_category.find("Constant") == p_category.end())
     {
-        // Each catergory must contain a Constant
-        throw std::ios_base::failure("Each catergory in the Coefficients file "
+        // Each category must contain a Constant
+        throw std::ios_base::failure("Each category in the Coefficients file "
                                      "must contain a Constant value.");
     }
 }
 
-//! @brief Ensures that the given catergory contains the same interaction terms
-//! as every other catergory. The Model will expect to find the same interaction
-//! terms for each catergory.
-//! The first catergory is used to check against as all catergories should be
+//! @brief Ensures that the given category contains the same interaction terms
+//! as every other category. The Model will expect to find the same interaction
+//! terms for each category.
+//! The first category is used to check against as all categories should be
 //! the same.
-//! @param p_catergory The instruction catergory to be validated.
-//! @param p_coefficients The coefficents, in order to compare against the first
-//! category.
+//! @param p_category The instruction category to be validated.
+//! @param p_coefficients The coefficients, in order to compare against the
+//! first category.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the correct interaction terms were not
 //! found.
 void ELMO2::Internal::Validator_Coefficients::
-    Validate_Catergory_Correct_Interaction_Terms(
-        const nlohmann::json& p_catergory, const nlohmann::json& p_coefficients)
+    Validate_Category_Correct_Interaction_Terms(
+        const nlohmann::json& p_category, const nlohmann::json& p_coefficients)
 {
     // check each interaction term individually.
     for (nlohmann::json::const_iterator interaction_term =
@@ -182,22 +182,22 @@ void ELMO2::Internal::Validator_Coefficients::
     }
 }
 
-//! @brief Ensures that the given catergory contains a "Constant" value.
+//! @brief Ensures that the given category contains a "Constant" value.
 //! subheading. Without this, the coefficient values could not be utilised
 //! within a Model.
-//! @param p_catergory The instruction catergory to be validated.
+//! @param p_category The instruction category to be validated.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the "Constant" heading was not
 //! found.
 void ELMO2::Internal::Validator_Coefficients::
-    Validate_Catergory_Instructions_Not_Empty(const nlohmann::json& p_catergory)
+    Validate_Category_Instructions_Not_Empty(const nlohmann::json& p_category)
 {
     // If the "Instructions" tag is present, it should not be empty
-    if (p_catergory.find("Instructions") != p_catergory.end() &&
-        p_catergory.at("Instructions").empty())
+    if (p_category.find("Instructions") != p_category.end() &&
+        p_category.at("Instructions").empty())
     {
         throw std::ios_base::failure(
-            "Catergories in the Coefficients file must not contain "
+            "Categories in the Coefficients file must not contain "
             "an "
             "empty list of instructions.");
     }
@@ -205,16 +205,16 @@ void ELMO2::Internal::Validator_Coefficients::
 
 //! @brief Ensures that each of the interaction terms within the given category
 //! is not an empty structure.
-//! @param p_catergory The instruction catergory to be validated.
+//! @param p_category The instruction category to be validated.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, an interaction term was found to not
-//! conatin any values.
+//! contain any values.
 void ELMO2::Internal::Validator_Coefficients::
-    Validate_Catergory_Interaction_Terms_Not_Empty(
-        const nlohmann::json& p_catergory)
+    Validate_Category_Interaction_Terms_Not_Empty(
+        const nlohmann::json& p_category)
 {
     // There must be at least one value for each interaction term.
-    for (const auto& interaction_term : p_catergory["Coefficients"])
+    for (const auto& interaction_term : p_category["Coefficients"])
     {
         if (interaction_term.empty())
         {
@@ -227,17 +227,17 @@ void ELMO2::Internal::Validator_Coefficients::
 
 //! @brief Ensures that each of the interaction terms within the given category
 //! contains the same amount of values.
-//! The first catergory is used to check against as all catergories should be
+//! The first category is used to check against as all categories should be
 //! the same.
-//! @param p_catergory The instruction catergory to be validated.
-//! @param p_coefficients The coefficents, in order to compare against the first
-//! category.
+//! @param p_category The instruction category to be validated.
+//! @param p_coefficients The coefficients, in order to compare against the
+//! first category.
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, an interaction term does not contain
 //! the correct number of values.
 void ELMO2::Internal::Validator_Coefficients::
-    Validate_Catergory_Interaction_Terms_Size(
-        const nlohmann::json& p_catergory, const nlohmann::json& p_coefficients)
+    Validate_Category_Interaction_Terms_Size(
+        const nlohmann::json& p_category, const nlohmann::json& p_coefficients)
 {
     for (const auto& interaction_term :
          nlohmann::json::iterator_wrapper(p_category["Coefficients"]))
@@ -250,50 +250,50 @@ void ELMO2::Internal::Validator_Coefficients::
         {
             throw std::ios_base::failure(
                 "Each interaction term in the Coefficients file must "
-                "conatin the same amount of values for each "
-                "catergory.");
+                "contain the same amount of values for each "
+                "category.");
         }
     }
 }
 
-//! @brief Ensures that no instruction is contained within multiple catergories.
-//! In the case that an instruction has the same name as a catergory. This is
-//! also regarded as invalid as the same name can refer to two different sets of
-//! coefficiens. The first catergory is used to check against as all catergories
-//! should be the same.
-//! @param p_catergory The instruction catergory to be validated.
-//! @param p_coefficients The coefficents, in order to compare against the first
-//! category.
+//! @brief Ensures that no instruction is contained within multiple
+//! categories. In the case that an instruction has the same name as a
+//! category. This is also regarded as invalid as the same name can refer to
+//! two different sets of coefficients. The first category is used to check
+//! against as all categories should be the same.
+//! @param p_category The instruction category to be validated.
+//! @param p_coefficients The coefficients, in order to compare against the
+//! first category.
 //! @exception std::ios_base::failure This is thrown in the case that this
-//! validation rule fails. In this case, an instruction was found to have more
-//! than one set of coefficients associated with it.
+//! validation rule fails. In this case, an instruction was found to have
+//! more than one set of coefficients associated with it.
 void ELMO2::Internal::Validator_Coefficients::
-    Validate_Catergory_Instructions_Unique(const nlohmann::json& p_catergory,
-                                           const nlohmann::json& p_coefficients)
+    Validate_Category_Instructions_Unique(const nlohmann::json& p_category,
+                                          const nlohmann::json& p_coefficients)
 {
-    // Instructions should not be in multiple catergories.
-    // For each instruction in that catergory
-    for (const std::string& instruction : p_catergory["Instructions"])
+    // Instructions should not be in multiple categories.
+    // For each instruction in that category
+    for (const auto& instruction : p_category["Instructions"])
     {
-        // Check if it's in every other instruction catergory
-        for (const auto& search_catergory : p_coefficients)
+        // Check if it's in every other instruction category
+        for (const auto& search_category : p_coefficients)
         {
-            // Don't search the catergory it was originally found in.
-            if (p_catergory == search_catergory)
+            // Don't search the category it was originally found in.
+            if (p_category == search_category)
             {
                 continue;
             }
 
-            // If the catergory has the same name as the instruction or
-            // If the catergory has a list of instructions in it and
+            // If the category has the same name as the instruction or
+            // If the category has a list of instructions in it and
             // instruction is in this list.
-                (search_catergory.find("Instructions") !=
-                     search_catergory.end() &&
-                 std::find(search_catergory.at("Instructions").begin(),
-                           search_catergory.at("Instructions").end(),
-                     search_catergory.at("Instructions").end()))
             if (search_category == instruction ||
+                (search_category.find("Instructions") !=
+                     search_category.end() &&
+                 std::find(search_category.at("Instructions").begin(),
+                           search_category.at("Instructions").end(),
                            instruction.get<std::string>()) !=
+                     search_category.at("Instructions").end()))
             {
                 throw std::ios_base::failure(
                     "Each instruction in the Coefficients file  must have "
