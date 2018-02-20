@@ -26,6 +26,16 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 hunter_add_package(nlohmann_json)
 find_package(nlohmann_json CONFIG REQUIRED)
 
+# Add the models dynamically
+# ******************************************************************************
+include("${PROJECT_SOURCE_DIR}/cmake/Models.cmake")
+
+#add_model("*NAME OF THE MODEL*", "*DESCRIPTION OF THE MODEL*", "ENABLED BY DEFAULT")
+add_model("TEMPLATE" "Description of the TEMPLATE model" OFF)
+
+configure_models()
+# ******************************************************************************
+
 # Add library called "libELMO-2" that is built from the source files
 add_library(libELMO-2
     ELMO2.cpp
@@ -35,11 +45,12 @@ add_library(libELMO-2
     Emulator_Interface.hpp
     Execution.hpp
     IO.hpp
-    Model_Power.hpp
     Model.hpp
     Register.hpp
     Traces.hpp
     Unicorn_Interface.hpp
+    ${CMAKE_CURRENT_BINARY_DIR}/Model_Factory.cpp
+    ${MODEL_SOURCES} # all of the files required to compile the models
     Validator_Coefficients.cpp
     Validator_Coefficients.hpp
 )
