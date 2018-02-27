@@ -24,10 +24,11 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <iostream>
-#include <unordered_map>
+#include <iostream>      // for operator<<, cout, ostream
+#include <string>        // for string
+#include <unordered_map> // for unordered_map
 
-#include "ELMO2.cpp"
+#include "ELMO2.cpp" // for ELMO_2
 
 //! Anonymous namespace is used as this functionality is only required when
 //! building not as a library.

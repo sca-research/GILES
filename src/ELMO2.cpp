@@ -24,22 +24,26 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <iostream>
-#include <memory>
-#include <unordered_map>
-#include <vector>
+#include <memory>        // for make_unique, unique_ptr
+#include <string>        // for string
+#include <unordered_map> // for unordered_map
+#include <unordered_set> // for unordered_set
+#include <utility>       // for pair
 
-#include "Coefficients.hpp"
-#include "Emulator_Interface.hpp"
-#include "Execution.hpp"
-#include "IO.hpp"
-#include "Model.hpp"
-#include "Model_Power.hpp"
-#include "Traces.hpp"
-#include "Unicorn_Interface.hpp"
-
+#include "Coefficients.hpp"       // for Coefficients
+#include "Emulator_Interface.hpp" // for Emulator_Interface
+#include "Execution.hpp"          // for Execution
+#include "IO.hpp"                 // for IO
+#include "Model_Factory.hpp"      // for Model_Factory
+#include "Unicorn_Interface.hpp"  // for Unicorn_Interface
 namespace ELMO2
 {
+// Forward Declarations
+namespace Internal
+{
+class Model;
+}
+
 //! @class ELMO_2
 //! @brief This contains the operations that control the rest of the program
 //! passing data between them.

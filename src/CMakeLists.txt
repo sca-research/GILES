@@ -37,28 +37,21 @@ configure_models()
 # ******************************************************************************
 
 # Add library called "libELMO-2" that is built from the source files
+# ******************************************************************************
 add_library(libELMO-2
     ELMO2.cpp
-    Assembly_Instruction.hpp
     Coefficients.cpp
-    Coefficients.hpp
-    Emulator_Interface.hpp
-    Execution.hpp
-    IO.hpp
-    Model.hpp
-    Register.hpp
-    Traces.hpp
-    Unicorn_Interface.hpp
+    IO.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/Model_Factory.cpp
     ${MODEL_SOURCES} # all of the files required to compile the models
     Validator_Coefficients.cpp
-    Validator_Coefficients.hpp
 )
 
 target_link_libraries(libELMO-2 PUBLIC nlohmann_json)
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 SET_TARGET_PROPERTIES(libELMO-2 PROPERTIES PREFIX "")
+# ******************************************************************************
 
 
 if(BUILD_EXECUTABLE)

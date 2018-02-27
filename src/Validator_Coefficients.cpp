@@ -24,8 +24,9 @@
 */
 
 #include <algorithm> // for find
-#include <iostream>  // for ios_base::failure, ios_base, size_t
-#include <string>    // for string, operator==, basic_string
+#include <iostream>  // for ios_base::failure, ios_base
+#include <map>       // for map<>::key_type
+#include <string>    // for basic_string, string
 
 #include "Validator_Coefficients.hpp"
 
