@@ -57,8 +57,8 @@ public:
     //! @param p_coefficients The validated coefficients, contained within a
     //! json object, as they are stored in the file.
     //! @warning Validation of the json p_coefficients should have already
-    //! occured before calling the constructor. TODO: Add link to IO validation
-    //! in doxygen warning.
+    //! occurred, using the Validator_Coefficients class, before calling the
+    //! constructor.
     explicit Coefficients(const nlohmann::json& p_coefficients)
         : m_coefficients(p_coefficients)
     {

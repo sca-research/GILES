@@ -240,8 +240,7 @@ void ELMO2::Internal::Validator_Coefficients::
     Validate_Category_Interaction_Terms_Size(
         const nlohmann::json& p_category, const nlohmann::json& p_coefficients)
 {
-    for (const auto& interaction_term :
-         nlohmann::json::iterator_wrapper(p_category["Coefficients"]))
+    for (const auto& interaction_term : p_category["Coefficients"].items())
     {
         // Interaction terms must all have the same number of
         // Coefficient values.

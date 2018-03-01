@@ -32,13 +32,14 @@ namespace ELMO2
 {
 namespace Internal
 {
-//! @brief Retrives the category that the given instruction is contained
-//! within. This is a utility function that is used to assist in retriving other
+//! @brief Retrieves the category that the given instruction is contained
+//! within. This is a utility function that is used to assist in retrieving
+//! other
 //! data from the coefficients.
 //! @param p_opcode The opcode of the instruction for which the category will
-//! be retrived.
+//! be retrieved.
 //! @returns The name of the category that the instruction is contained within.
-//! If the coefficients are not catergoried then the instruction opcode is
+//! If the coefficients are not categorised then the instruction opcode is
 //! returned.
 //! @exception std::out_of_range This exception is thrown if the instruction
 //! given by p_opcode is not found within any category in the coefficients.
@@ -47,8 +48,7 @@ namespace Internal
 const std::string ELMO2::Internal::Coefficients::get_instruction_category(
     const std::string& p_opcode) const
 {
-    for (const auto& category :
-         nlohmann::json::iterator_wrapper(m_coefficients))
+    for (const auto& category : m_coefficients.items())
     {
         // The Instruction Categories are optional. If there are no
         // categories then the 'category' is simply the opcode
@@ -66,11 +66,11 @@ const std::string ELMO2::Internal::Coefficients::get_instruction_category(
             return category.key();
         }
     }
-    throw std::out_of_range("This intruction (" + p_opcode +
+    throw std::out_of_range("This instruction (" + p_opcode +
                             ") was not found within the Coefficients");
 }
 
-//! @brief Retrives a list of all interaction terms contained within the
+//! @brief Retrieves a list of all interaction terms contained within the
 //! coefficients. This is needed in order to ensure the Model will be
 //! provided with the terms it requires. The interaction terms of the first
 //! coefficient are used as they should be identical to all other
@@ -82,15 +82,15 @@ const std::unordered_set<std::string>
 ELMO2::Internal::Coefficients::Get_Interaction_Terms() const
 {
     std::unordered_set<std::string> interaction_terms;
-    for (const auto& interaction_term : nlohmann::json::iterator_wrapper(
-             m_coefficients.front()["Coefficients"]))
+    for (const auto& interaction_term :
+         m_coefficients.front()["Coefficients"].items())
     {
         interaction_terms.insert(interaction_term.key());
     }
     return interaction_terms;
 }
 
-//! @brief Retrives the coefficients for the interaction term given by
+//! @brief Retrieves the coefficients for the interaction term given by
 //! p_interaction_term under the instruction category that contains the
 //! instruction given by p_opcode.
 //! @param p_opcode  The opcode of the instruction that the Coefficients are
@@ -98,7 +98,7 @@ ELMO2::Internal::Coefficients::Get_Interaction_Terms() const
 //! @param p_interaction_term The interaction term from within the model
 //! that the Coefficients are required for.
 //! @returns An ordered vector of the coefficient values.
-//! @exception nholmann::json::out_of_range This is thrown when the iteraction
+//! @exception nlohmann::json::out_of_range This is thrown when the interaction
 //! term given by p_interaction_term is not found.
 const std::vector<double> ELMO2::Internal::Coefficients::Get_Coefficients(
     const std::string& p_opcode, const std::string& p_interaction_term) const
@@ -108,7 +108,7 @@ const std::vector<double> ELMO2::Internal::Coefficients::Get_Coefficients(
         .get<std::vector<double>>();
 }
 
-//! @brief Retrives the Constant for the Instruction Category that contains
+//! @brief Retrieves the Constant for the Instruction Category that contains
 //! the instruction provided by p_opcode.
 //! @param p_opcode The opcode of the instruction that the Constant is
 //! required for.
