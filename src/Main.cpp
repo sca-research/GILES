@@ -59,7 +59,6 @@ int main(const int argc, const char* argv[])
                // program path passed correctly. - Boost::program_options
 
     ELMO2::ELMO_2 elmo2 =
-        ELMO2::ELMO_2(parse_command_line_flags(argv), p_coefficients_path,
-                      p_program_path, p_traces_path);
+        ELMO2::ELMO_2(m_coefficients_path, m_program_path, m_traces_path);
     return 0;
 }

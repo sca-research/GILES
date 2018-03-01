@@ -20,8 +20,11 @@ option(BUILD_EXECUTABLE
     ON
 )
 
-# C++14 is required for unique pointers, C++11 is required for nlohmann_json
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+# C++17 is required for std::optional
+# C++14 is required for unique pointers
+# C++11 is required for nlohmann_json
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 hunter_add_package(nlohmann_json)
 find_package(nlohmann_json CONFIG REQUIRED)

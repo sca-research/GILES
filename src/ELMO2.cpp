@@ -25,6 +25,7 @@
 */
 
 #include <memory>        // for make_unique, unique_ptr
+#include <optional>      // for optional
 #include <string>        // for string
 #include <unordered_map> // for unordered_map
 #include <unordered_set> // for unordered_set
@@ -47,21 +48,19 @@ class Model;
 //! @class ELMO_2
 //! @brief This contains the operations that control the rest of the program
 //! passing data between them.
-//! TODO: Should this be static?
 class ELMO_2
 {
 private:
     std::unique_ptr<ELMO2::Internal::Emulator_Interface> emulator_Interface;
-    std::vector<ELMO2::Internal::Model> models;
+    std::unordered_set<std::unique_ptr<ELMO2::Internal::Model>> models;
     const ELMO2::Internal::IO io;
-    const ELMO2::Internal::Coefficients coefficients;
 
     //! @brief Re-orders the assembly instructions.
     //! Re-ordering of the instructions is necessary as the order they are
     //! executed in is not the order that they were written in/compiled into.
     //! @note Out of order execution is supported by certain simulators making
     //! this redundant.
-    //! TODO: Maybe look into using a dissasembler e.g. capstone to work around
+    //! TODO: Maybe look into using a disassembler e.g. capstone to work around
     //! this issue?
     //! TODO: Should optionally accept the target program (Using the decided
     //! upon format (binary/assembly)) as overloaded function
@@ -80,21 +79,61 @@ private:
         throw("Function not yet implemented");
     }
 
-public:
-    ELMO_2(
-        const std::unordered_map<std::string, std::string>& p_options,
-        const std::string& p_coefficients_path,
-        const std::string& p_progam_path,
-        const std::string& p_traces_path) // TODO: Look into std::optional in
-                                          // C++17 as saving should be optional.
-    : emulator_Interface(std::make_unique<ELMO2::Internal::Unicorn_Interface>(
-          ELMO2::Internal::Unicorn_Interface(p_progam_path))),
-      io(ELMO2::Internal::IO())
+    const std::unordered_set<std::string> get_models_in_use()
     {
-        parse_options(p_options);
+        std::unordered_set<std::string> models_in_use;
+        // Create a list of models to use from a list of all models compiled
+        for (const auto& model :
+             ELMO2::Internal::Model_Factory::Get_All_Models())
+        {
+            // if this model is enabled.
+            if (model.second)
+            {
+                // Add it to the list of models in use.
+                models_in_use.insert(model.first);
+            }
+        }
+        return models_in_use;
+    }
+
+public:
+    // TODO: Separate out some of the functionality in here into an API
+    //! @brief The main entry point to the ELMO2 library. This controls the
+    //! running of ELMO2 and invokes other components.
+    //! @param p_coefficients_path The path to the Coefficients file.
+    //! @param p_program_path The path to the target executable to be ran in
+    //! the emulator.
+    //! @param p_traces_path The path to save the Traces to. This is an
+    //! optional parameter and omitting it will cause the traces to not be
+    //! saved to a file.
+    ELMO_2(const std::string& p_coefficients_path,
+           const std::string& p_program_path,
+           const std::optional<std::string>& p_traces_path)
+        : emulator_Interface(
+              std::make_unique<ELMO2::Internal::Unicorn_Interface>(
+                  ELMO2::Internal::Unicorn_Interface(p_program_path))),
+          io(ELMO2::Internal::IO())
+    {
+        // parse_options(p_options);
 
         const ELMO2::Internal::Coefficients coefficients =
             io.Load_Coefficients(p_coefficients_path);
+
+        const ELMO2::Internal::Execution execution =
+            ELMO2::Internal::Execution();
+        // emulator_Interface->Run_Code(); TODO: Change assignment to this
+
+        // Initialise all models.
+        for (const auto& model : get_models_in_use())
+        {
+            models.insert(ELMO2::Internal::Model_Factory::Create_Model(
+                model, execution, coefficients));
+        }
+
+        if (p_traces_path)
+        {
+            // Save to file.
+        }
     }
 };
 } // namespace ELMO2
