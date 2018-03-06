@@ -24,9 +24,15 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <iostream>      // for operator<<, cout, ostream
-#include <string>        // for string
-#include <unordered_map> // for unordered_map
+#include <algorithm>     // for move
+#include <iostream>      // for operator<<, cout, endl, ostream, basic_ostream
+#include <memory>        // for __shared_ptr_access
+#include <optional>      // for optional
+#include <stdexcept>     // for invalid_argument
+#include <stdlib.h>      // for exit
+#include <string>        // for string, operator<<
+
+#include <cxxopts.hpp> // for Options, value, OptionAdder, OptionDetails
 
 #include "ELMO2.cpp" // for ELMO_2
 
@@ -34,31 +40,70 @@
 //! building not as a library.
 namespace
 {
+std::string m_program_path;
+std::string m_coefficients_path;
+std::optional<std::string> m_traces_path;
+
 //! @brief Interprets the command line flags.
 //! @param p_options The options as contained within a string.
-//! @returns The options as contained within an unordered map. The
-//! key is the option and the value is what that option is set to.
-const std::unordered_map<std::string,
-                         std::string>& // TODO: Return by reference here?
-parse_command_line_flags(const char* p_options[])
+void parse_command_line_flags(int& argc, char**& argv)
 {
-    throw("Function not yet implemented");
+    cxxopts::Options options(argv[0], "Side channel leakage emulation tool");
+
+    options.positional_help("[--input] EXECUTABLE [--file] "
+                                    "COEFFICIENTS");
+
+    // Adds the command line options.
+    options.add_options()("h,help", "Print help")
+            ("r,runs", "Number of traces to generate", cxxopts::value<int>(),
+             "N")
+            ("f,file", "Coefficients file",
+             cxxopts::value<std::string>()->default_value("./coeffs.json"),
+             "COEFFICIENTS")
+            ("i,input", "Executable to be ran in the emulator",
+             cxxopts::value<std::string>(), "EXECUTABLE")
+            ("o,output", "Generated traces output file",
+             cxxopts::value<std::string>(), "FILE");
+
+    // Input can be specified without -i/--input flag
+    // Coefficients File can be specified without -f/--file flag
+    options.parse_positional(std::vector<std::string>{"input", "file"});
+
+    const auto& result = options.parse(argc, argv);
+
+    if (result.count("help")) // if help flag is passed
+    {
+        std::cout << options.help() << std::endl;
+        exit(0);
+    }
+
+    if (result.count("input")) // if input flag is passed
+    {
+        m_program_path = result["input"].as<std::string>();
+    }
+    else
+    {
+        throw std::invalid_argument("Input option is required. (-i / --input "
+                                    "\"Path to Executable\"). See "
+                                    "--help for more.");
+    }
+
+    if (result.count("output")) // if output flag is passed
+    {
+        m_traces_path = result["output"].as<std::string>();
+    }
+
+    // default "./coeffs.json" is used if flag is not passed
+    m_coefficients_path = result["file"].as<std::string>();
 }
 } // namespace
 
 //! @brief The entry point of the program.
-int main(const int argc, const char* argv[])
+int main(int argc, char* argv[])
 {
-    std::cout << "Hello World!\n";
-    std::string p_coefficients_path = "./"; // TODO: Change this
-    std::string p_traces_path = "./";       // TODO: Change this
-    std::string p_program_path = "./";      // TODO: Change this
-
-    parse_command_line_flags(
-        argv); // TODO: Look into ways of having the
-               // program path passed correctly. - Boost::program_options
+    parse_command_line_flags(argc, argv);
 
     ELMO2::ELMO_2 elmo2 =
-        ELMO2::ELMO_2(m_coefficients_path, m_program_path, m_traces_path);
+        ELMO2::ELMO_2(m_program_path, m_coefficients_path, m_traces_path);
     return 0;
 }

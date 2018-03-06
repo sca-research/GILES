@@ -100,14 +100,14 @@ public:
     // TODO: Separate out some of the functionality in here into an API
     //! @brief The main entry point to the ELMO2 library. This controls the
     //! running of ELMO2 and invokes other components.
-    //! @param p_coefficients_path The path to the Coefficients file.
     //! @param p_program_path The path to the target executable to be ran in
     //! the emulator.
+    //! @param p_coefficients_path The path to the Coefficients file.
     //! @param p_traces_path The path to save the Traces to. This is an
     //! optional parameter and omitting it will cause the traces to not be
     //! saved to a file.
-    ELMO_2(const std::string& p_coefficients_path,
-           const std::string& p_program_path,
+    ELMO_2(const std::string& p_program_path,
+           const std::string& p_coefficients_path,
            const std::optional<std::string>& p_traces_path)
         : emulator_Interface(
               std::make_unique<ELMO2::Internal::Unicorn_Interface>(
@@ -130,6 +130,7 @@ public:
                 model, execution, coefficients));
         }
 
+        // If a path was provided then save
         if (p_traces_path)
         {
             // Save to file.
