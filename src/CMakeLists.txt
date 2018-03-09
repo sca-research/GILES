@@ -26,8 +26,7 @@ option(BUILD_EXECUTABLE
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-hunter_add_package(nlohmann_json)
-find_package(nlohmann_json CONFIG REQUIRED)
+include("${PROJECT_SOURCE_DIR}/cmake/Third_Party.cmake")
 
 # Add the models dynamically
 # ******************************************************************************
@@ -50,15 +49,20 @@ add_library(libELMO-2
     Validator_Coefficients.cpp
 )
 
-target_link_libraries(libELMO-2 PUBLIC nlohmann_json)
+get_external_header("cxxopts.hpp" "https://raw.githubusercontent.com/jarro2783/cxxopts/master/include/cxxopts.hpp")
+
+target_include_directories(libELMO-2 SYSTEM PRIVATE ${THIRD_PARTY_DIR})
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 SET_TARGET_PROPERTIES(libELMO-2 PROPERTIES PREFIX "")
 # ******************************************************************************
 
-
 if(BUILD_EXECUTABLE)
+    get_external_header("nlohmann/json.hpp" "https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp")
     # Add executable "ELMO-2" that is a command line wrapper around libELMO-2
     add_executable(ELMO-2 Main.cpp)
+
     target_link_libraries(ELMO-2 libELMO-2)
+
+    target_include_directories(ELMO-2 SYSTEM PRIVATE ${THIRD_PARTY_DIR})
 endif(BUILD_EXECUTABLE)
