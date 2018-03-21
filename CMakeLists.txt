@@ -44,3 +44,6 @@ add_subdirectory(src)
 
 # Recurse into the "doc" subdirectory.
 add_subdirectory(doc)
+
+# Recurse into the "test" subdirectory.
+add_subdirectory(test)
