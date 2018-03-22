@@ -23,13 +23,16 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <fstream> // for ifstream, istream
-
-#include "Coefficients.hpp"
 #include "IO.hpp"
-#include "Validator_Coefficients.hpp"
 
-#include <nlohmann/json.hpp> // for operator>>, json
+#include <fstream>                     // for ifstream
+#include <iostream>                    // for operator<<, endl
+#include <stdexcept>                   // for invalid_argument
+
+#include <nlohmann/json.hpp>           // for json, basic_json<>::exception
+
+#include "Coefficients.hpp"            // for Coefficients
+#include "Validator_Coefficients.hpp"  // for Validator_Coefficients
 
 namespace ELMO2
 {
@@ -49,7 +52,19 @@ const ELMO2::Internal::Coefficients ELMO2::Internal::IO::Load_Coefficients(
     // read the Coefficients file into a JSON object
     std::ifstream file(p_coefficients_path);
     nlohmann::json json;
-    file >> json;
+
+    // Ensure the file contains valid JSON
+    try
+    {
+        json = nlohmann::json::parse(file);
+    }
+    catch (nlohmann::json::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+        throw std::invalid_argument("Coefficients file '" +
+                                    p_coefficients_path +
+                                    "' is not a valid JSON file");
+    }
 
     // This will throw an exception if validation fails.
     ELMO2::Internal::Validator_Coefficients::Validate_Json(json);
