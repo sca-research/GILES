@@ -27,6 +27,7 @@
 #define VALIDATOR_COEFFICIENTS_HPP
 
 #include <nlohmann/json.hpp> // for json
+#include <string>            // for string
 
 namespace ELMO2
 {
@@ -42,12 +43,16 @@ namespace Internal
 class Validator_Coefficients
 {
 private:
-    static void Validate_Not_Empty(const nlohmann::json& p_coefficients);
+    static void Validate_Not_Empty(const nlohmann::json& p_coefficients,
+                                   const std::string& p_exception_message);
 
-    static void
-    Validate_Interaction_Terms_Not_Empty(const nlohmann::json& p_coefficients);
+    static void Validate_Is_Object(const nlohmann::json& p_json);
 
-    static void Validate_Category_Not_Empty(const nlohmann::json& p_category);
+    static void Validate_Is_Number(const nlohmann::json& p_json);
+
+    static void Validate_Is_Array(const nlohmann::json& p_json);
+
+    static void Validate_Is_String(const nlohmann::json& p_json);
 
     static void
     Validate_Category_Headings_Coefficients(const nlohmann::json& p_category);
@@ -56,29 +61,27 @@ private:
     Validate_Category_Headings_Constant(const nlohmann::json& p_category);
 
     static void Validate_Category_Correct_Interaction_Terms(
-        const nlohmann::json& p_category,
-        const nlohmann::json& p_coefficients);
-
-    static void Validate_Category_Instructions_Not_Empty(
-        const nlohmann::json& p_category);
-
-    static void Validate_Category_Interaction_Terms_Not_Empty(
-        const nlohmann::json& p_category);
+        const nlohmann::json& p_category, const nlohmann::json& p_coefficients);
 
     static void Validate_Category_Interaction_Terms_Size(
-        const nlohmann::json& p_category,
-        const nlohmann::json& p_coefficients);
+        const nlohmann::json& p_category, const nlohmann::json& p_coefficients);
 
-    static void Validate_Category_Instructions_Unique(
-        const nlohmann::json& p_category,
-        const nlohmann::json& p_coefficients);
+    static void
+    Validate_Category_Instructions_Unique(const nlohmann::json& p_category,
+                                          const std::string& p_category_key,
+                                          const nlohmann::json& p_coefficients);
+
+    static void
+    Validate_Category_Header_Unique(const nlohmann::json& p_category,
+                                    const std::string& p_category_key,
+                                    const nlohmann::json& p_coefficients);
 
 public:
     //! @brief This has been deleted to ensure the constructor and the copy
     //! constructor cannot be called as this is just a utility class containing
     //! nothing but static functions.
     Validator_Coefficients(const Validator_Coefficients&) = delete;
-    
+
     static void Validate_Json(const nlohmann::json& p_coefficients);
 };
 } // namespace Internal
