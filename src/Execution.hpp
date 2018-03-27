@@ -44,9 +44,9 @@ namespace Internal
 class Execution
 {
 private:
-    //! The inital state of the registers in the emualator when the program
+    //! The initial state of the registers in the emulator when the program
     //! execution started.
-    const std::vector<ELMO2::Internal::Register> m_inital_registers;
+    const std::vector<ELMO2::Internal::Register> m_initial_registers;
 
     //! The full list of Assembly Instructions in the order they where executed.
     std::vector<ELMO2::Internal::Assembly_Instruction> m_assembly;
@@ -58,18 +58,20 @@ public:
     //! correct objects as opposed to strings as the format should be
     //! interpreted by the specific emulator interface.
     //! TODO: Document params.
-    Execution(const std::vector<ELMO2::Internal::Register>& p_inital_registers,
+    Execution(const std::vector<ELMO2::Internal::Register>& p_initial_registers,
               const ELMO2::Internal::Assembly_Instruction& p_first_instruction)
-        : m_inital_registers(p_inital_registers),
+        : m_initial_registers(p_initial_registers),
           m_assembly({p_first_instruction})
     {
     }
 
+    Execution(){}
+
     //! Get the state of the registers as they were when the program
     //! started to run.
-    const std::vector<ELMO2::Internal::Register>& get_inital_registers() const
+    const std::vector<ELMO2::Internal::Register>& get_initial_registers() const
     {
-        return m_inital_registers;
+        return m_initial_registers;
     }
 
     //! Get the full list of Assembly Instructions in the order they where

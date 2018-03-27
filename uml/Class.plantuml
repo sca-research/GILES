@@ -44,10 +44,10 @@ package ELMO {
     }
 
     class Execution {
-        -list<Register> registersInitalState
+        -list<Register> registersInitialState
         -list<AssemblyInstruction> assembly
-        +Execution(list<Register> registersInitalState, AssemblyInstruction firstInstruction)
-        +list<Register> getRegistersInitalState()
+        +Execution(list<Register> registersInitialState, AssemblyInstruction firstInstruction)
+        +list<Register> getRegistersInitialState()
         +list<AssemblyInstruction> getAssembly()
     }
 
@@ -66,7 +66,7 @@ package ELMO {
     end note
     note bottom of AssemblyInstruction
         Assembly instructions <b>executed</b> should be
-        stored as programs don't always run sequentually
+        stored as programs don't always run sequentially
     end note
 
     class Register {

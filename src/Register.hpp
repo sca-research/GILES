@@ -47,7 +47,7 @@ private:
     //! The name of the register.
     const std::string m_name;
 
-    //! The value conatined within that register. TODO: Change this type?
+    //! The value contained within that register. TODO: Change this type?
     const std::string m_value;
 
 public:
@@ -55,17 +55,17 @@ public:
     //! cannot be changed once set as this is meant to be a representation of a
     //! register, not a smart class with lots of functionality.
     //! @param p_name The name of the register.
-    //! @param p_value The value conatined within that register.
+    //! @param p_value The value contained within that register.
     Register(const std::string& p_name, const std::string& p_value)
         : m_name(p_name), m_value(p_value)
     {
     }
 
-    //! @brief Retrives the name of the register.
+    //! @brief Retrieves the name of the register.
     //! @returns The name of the register.
     const std::string& get_name() const { return m_name; }
 
-    //!@brief Retives the value conatined within that register.
+    //!@brief Retrieves the value contained within that register.
     const std::string& get_value() const { return m_value; }
 };
 } // namespace Internal

@@ -17,7 +17,7 @@
 
 /*!
     @file Traces.hpp
-    @brief Contains the internal representation of the genrated Traces.
+    @brief Contains the internal representation of the generated Traces.
     @author Scott Egerton
     @date 2017-2018
     @copyright GNU Affero General Public License Version 3+

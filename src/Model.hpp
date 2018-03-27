@@ -42,7 +42,7 @@ namespace Internal
 //! program.
 class Model
 {
-private:
+protected:
     //! The execution of the target program as recorded by the Emulator.
     const ELMO2::Internal::Execution m_execution;
 
@@ -55,7 +55,6 @@ private:
     //! @returns The Traces with the added noise.
     const ELMO2::Internal::Traces& addNoise(ELMO2::Internal::Traces& p_traces);
 
-protected:
     //! @brief The constructor needs to be provided with the recorded
     //! Execution of the target program and the details from real world
     //! traces, the Coefficients, to be able to calculate the Traces for the

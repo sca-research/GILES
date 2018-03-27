@@ -76,7 +76,7 @@ private:
     void
     parse_options(const std::unordered_map<std::string, std::string>& p_options)
     {
-        throw("Function not yet implemented");
+        // throw("Function not yet implemented");
     }
 
     const std::unordered_set<std::string> get_models_in_use()
@@ -134,6 +134,7 @@ public:
         if (p_traces_path)
         {
             // Save to file.
+            //io.Output_Traces(p_traces_path, Output_Format.Riscure)
         }
     }
 };

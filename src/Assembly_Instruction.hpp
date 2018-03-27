@@ -17,7 +17,7 @@
 
 /*!
     @file Assembly_Instruction.hpp
-    @brief The internal representation of an individual assembly instrction.
+    @brief The internal representation of an individual assembly instruction.
     @author Scott Egerton
     @date 2017-2018
     @copyright GNU Affero General Public License Version 3+
@@ -54,7 +54,7 @@ public:
     //! @brief The constructor must be given all details about the assembly
     //! instruction as these cannot be set or changed later.
     //! @param p_opcode The instructions opcode.
-    //! @param p_changed_registers A list of registers that the instrction has
+    //! @param p_changed_registers A list of registers that the instruction has
     //! changed and their values.
     //! TODO: Should this be changed to instead a string and parse the opcode
     //! and operands from that? Or deduce the operands from the changed
@@ -74,11 +74,11 @@ public:
     //! @return A vector of operands.
     // TODO: Should this get the operand at a specified index i.e.
     // get_operand(1); //TODO: Implement both after converting OPERANDS to
-    // ORDERED map. Opernads != Registers. A list of registers is better stored
+    // ORDERED map. Operands != Registers. A list of registers is better stored
     // as a map.
     const std::vector<std::string>& get_operands() const { return m_operands; }
 
-    //! @brief Gets a list of registers that were changed by this instrcution
+    //! @brief Gets a list of registers that were changed by this instruction
     //! and their new values.
     //! @returns A vector of Registers.
     const std::vector<ELMO2::Internal::Register>& get_changed_registers() const

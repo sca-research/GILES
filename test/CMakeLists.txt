@@ -15,6 +15,8 @@
     along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
 #]=]
 
+cmake_minimum_required(VERSION 2.6)
+
 get_external_header("catch.hpp" "https://raw.githubusercontent.com/CatchOrg/Catch2/master/single_include/catch.hpp")
 
 # C++11 is required for nlohmann_json and catch

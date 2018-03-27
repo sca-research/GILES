@@ -24,13 +24,14 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <algorithm>     // for move
-#include <iostream>      // for operator<<, cout, endl, ostream, basic_ostream
-#include <memory>        // for __shared_ptr_access
-#include <optional>      // for optional
-#include <stdexcept>     // for invalid_argument
-#include <stdlib.h>      // for exit
-#include <string>        // for string, operator<<
+#include <algorithm> // for move
+#include <iostream>  // for operator<<, cout, endl, ostream, basic_ostream
+#include <memory>    // for __shared_ptr_access
+#include <optional>  // for optional
+#include <stdexcept> // for invalid_argument
+#include <stdlib.h>  // for exit
+#include <string>    // for string, operator<<
+#include <vector>    // for vector
 
 #include <cxxopts.hpp> // for Options, value, OptionAdder, OptionDetails
 
@@ -46,12 +47,13 @@ std::optional<std::string> m_traces_path;
 
 //! @brief Interprets the command line flags.
 //! @param p_options The options as contained within a string.
-void parse_command_line_flags(int& argc, char**& argv)
+// TODO: Returns tag?
+void parse_command_line_flags(int& argc, const char**& argv)
 {
     cxxopts::Options options(argv[0], "Side channel leakage emulation tool");
 
     options.positional_help("[--input] EXECUTABLE [--file] "
-                                    "COEFFICIENTS");
+                            "COEFFICIENTS");
 
     // Adds the command line options.
     options.add_options()("h,help", "Print help")
@@ -99,7 +101,7 @@ void parse_command_line_flags(int& argc, char**& argv)
 } // namespace
 
 //! @brief The entry point of the program.
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
     parse_command_line_flags(argc, argv);
 
