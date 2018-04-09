@@ -30,7 +30,7 @@ add_executable(tests ${TEST_SOURCES})
 # Include the src being tested
 target_include_directories(tests PRIVATE ${PROJECT_SOURCE_DIR}/src ${EXECUTABLE_OUTPUT_PATH})
 
-target_link_libraries(tests libELMO-2)
+target_link_libraries(tests lib${PROJECT_NAME})
 target_include_directories(tests SYSTEM PRIVATE ${THIRD_PARTY_DIR})
 
 enable_testing()

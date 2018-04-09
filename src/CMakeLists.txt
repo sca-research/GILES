@@ -16,7 +16,7 @@
 #]=]
 
 option(BUILD_EXECUTABLE
-    "Build ELMO-2 as a command line executable. (libELMO-2 will be built regardless)"
+    "Build ${PROJECT_NAME} as a command line executable. (The library will be built regardless)"
     ON
 )
 
@@ -38,9 +38,9 @@ add_model("TEMPLATE" "Description of the TEMPLATE model" OFF)
 configure_models()
 # ******************************************************************************
 
-# Add library called "libELMO-2" that is built from the source files
+# Add library called that is built from the source files
 # ******************************************************************************
-add_library(libELMO-2
+add_library(lib${PROJECT_NAME}
     ELMO2.cpp
     Coefficients.cpp
     IO.cpp
@@ -51,18 +51,19 @@ add_library(libELMO-2
 
 get_external_header("cxxopts.hpp" "https://raw.githubusercontent.com/jarro2783/cxxopts/master/include/cxxopts.hpp")
 
-target_include_directories(libELMO-2 SYSTEM PRIVATE ${THIRD_PARTY_DIR})
+get_external_header("nlohmann/json.hpp" "https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp")
+
+target_include_directories(lib${PROJECT_NAME} SYSTEM PRIVATE ${THIRD_PARTY_DIR})
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
-SET_TARGET_PROPERTIES(libELMO-2 PROPERTIES PREFIX "")
+SET_TARGET_PROPERTIES(lib${PROJECT_NAME} PROPERTIES PREFIX "")
 # ******************************************************************************
 
 if(BUILD_EXECUTABLE)
-    get_external_header("nlohmann/json.hpp" "https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp")
-    # Add executable "ELMO-2" that is a command line wrapper around libELMO-2
-    add_executable(ELMO-2 Main.cpp)
+    # Add executable that is a command line wrapper around the library
+    add_executable(${PROJECT_NAME} Main.cpp)
 
-    target_link_libraries(ELMO-2 libELMO-2)
+    target_link_libraries(${PROJECT_NAME} lib${PROJECT_NAME})
 
-    target_include_directories(ELMO-2 SYSTEM PRIVATE ${THIRD_PARTY_DIR})
+    target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${THIRD_PARTY_DIR})
 endif(BUILD_EXECUTABLE)
