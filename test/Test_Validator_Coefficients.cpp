@@ -501,6 +501,35 @@ TEST_CASE("JSON is not blank"
                                       "Coefficients file."));
     }
 
+    SECTION("Inconsistent number of interaction terms")
+    {
+        REQUIRE_NOTHROW(json = nlohmann::json::parse(R"(
+                {
+                    "ALU" :
+                    {
+                        "Constant" : 0,
+                        "Coefficients" :
+                        {
+                            "Operand1" : [0, 1, 2, 3]
+                        }
+                    },
+                    "Shifts" :
+                    {
+                        "Constant" : 0,
+                        "Coefficients" :
+                        {
+                            "Operand1" : [0, 1, 2]
+                        }
+                    }
+                })"));
+
+        REQUIRE_THROWS_WITH(
+            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            Catch::Matchers::Contains("Each interaction term in the "
+                                      "Coefficients file must contain the same "
+                                      "amount of values for each category."));
+    }
+
     // TODO: Do valid tests (this point on) need to be in a seperate TEST_CASE
     // macro?
 
