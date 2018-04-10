@@ -59,11 +59,11 @@ target_include_directories(lib${PROJECT_NAME} SYSTEM PRIVATE ${THIRD_PARTY_DIR})
 SET_TARGET_PROPERTIES(lib${PROJECT_NAME} PROPERTIES PREFIX "")
 # ******************************************************************************
 
-if(BUILD_EXECUTABLE)
+if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     # Add executable that is a command line wrapper around the library
     add_executable(${PROJECT_NAME} Main.cpp)
 
     target_link_libraries(${PROJECT_NAME} lib${PROJECT_NAME})
 
     target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${THIRD_PARTY_DIR})
-endif(BUILD_EXECUTABLE)
+endif(${PROJECT_NAME}_BUILD_EXECUTABLE)

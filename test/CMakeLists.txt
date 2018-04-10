@@ -27,7 +27,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(${PROJECT_NAME}_CALCULATE_COVERAGE "Setup ready to calculate the code coverage of the unit tests. This adds profiling compiler flags, disables optimisations and adds the 'coverage' target. Requires Gcovr." OFF)
 
-if(CALCULATE_COVERAGE)
+if(${PROJECT_NAME}_CALCULATE_COVERAGE)
     # Enable profiling for code coverage
     # PARENT_SCOPE is needed for these flags to persist outside this directory
     set(CMAKE_CXX_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage" PARENT_SCOPE)
@@ -45,7 +45,7 @@ if(CALCULATE_COVERAGE)
             DEPENDS tests
             COMMENT "Generating HTML coverage report"
     )
-endif(CALCULATE_COVERAGE)
+endif(${PROJECT_NAME}_CALCULATE_COVERAGE)
 
 # Make test executable
 set(TEST_SOURCES Test_Validator_Coefficients.cpp)

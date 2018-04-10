@@ -22,9 +22,9 @@ option(${PROJECT_NAME}_BUILD_DOCUMENTATION
 )
 
 # if option is selected then build the documentation with target "all".
-if(BUILD_DOCUMENTATION)
+if(${PROJECT_NAME}_BUILD_DOCUMENTATION)
     set(ALL_OPTION ALL)
-endif(BUILD_DOCUMENTATION)
+endif(${PROJECT_NAME}_BUILD_DOCUMENTATION)
 
 if(DOXYGEN_FOUND)
     # Replace directories with those of the current build directory etc.

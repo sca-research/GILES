@@ -27,7 +27,7 @@ macro(get_external_header FILE_NAME URL)
 
     # Download the file, if it is not already downloaded, or if the update
     # option is specified.
-    if(UPDATE_EXTERNAL_HEADERS OR NOT EXISTS "${THIRD_PARTY_DIR}/${FILE_NAME}")
+    if(${PROJECT_NAME}_UPDATE_EXTERNAL_HEADERS OR NOT EXISTS "${THIRD_PARTY_DIR}/${FILE_NAME}")
         message("Downloading dependency: ${FILE_NAME}")
         file(
                 DOWNLOAD
