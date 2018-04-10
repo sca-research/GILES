@@ -40,10 +40,12 @@ set(THIRD_PARTY_DIR ${CMAKE_CURRENT_BINARY_DIR}/third_party)
 # Recurse into the "src" subdirectory. This does not actually
 # cause another cmake executable to run. The same process will walk through
 # the project's entire directory structure.
-add_subdirectory(src)
+# The "test" directory is added before "src" so that compile flags can be added
+# if coverage is enabled.
+add_subdirectory(test)
 
 # Recurse into the "doc" subdirectory.
 add_subdirectory(doc)
 
-# Recurse into the "test" subdirectory.
-add_subdirectory(test)
+# Recurse into the "src" subdirectory.
+add_subdirectory(src)
