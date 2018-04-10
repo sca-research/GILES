@@ -17,7 +17,7 @@
 
 find_package(Doxygen)
 
-option(BUILD_DOCUMENTATION
+option(${PROJECT_NAME}_BUILD_DOCUMENTATION
     "Create the API documentation (requires Doxygen)" ${DOXYGEN_FOUND}
 )
 

@@ -25,7 +25,7 @@ get_external_header("catch.hpp" "https://raw.githubusercontent.com/CatchOrg/Catc
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(CALCULATE_COVERAGE "Setup ready to calculate the code coverage of the unit tests. This adds profiling compiler flags, disables optimisations and adds the 'coverage' target. Requires Gcovr." OFF)
+option(${PROJECT_NAME}_CALCULATE_COVERAGE "Setup ready to calculate the code coverage of the unit tests. This adds profiling compiler flags, disables optimisations and adds the 'coverage' target. Requires Gcovr." OFF)
 
 if(CALCULATE_COVERAGE)
     # Enable profiling for code coverage

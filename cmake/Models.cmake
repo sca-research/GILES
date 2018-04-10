@@ -44,7 +44,7 @@ macro(configure_models)
 
         # Add a cmake option, allowing this model to be enabled/disabled by
         # default.
-        option(Model_${MODEL} ${${MODEL}_DESCRIPTION} ${${MODEL}_ENABLED})
+        option(${PROJECT_NAME}_Model_${MODEL} ${${MODEL}_DESCRIPTION} ${${MODEL}_ENABLED})
 
         # Add the code that will generate the model to the model factory class.
         string(APPEND MODEL_FACTORY_CODE "

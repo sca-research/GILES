@@ -15,7 +15,7 @@
     along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
 #]=]
 
-option(BUILD_EXECUTABLE
+option(${PROJECT_NAME}_BUILD_EXECUTABLE
     "Build ${PROJECT_NAME} as a command line executable. (The library will be built regardless)"
     ON
 )

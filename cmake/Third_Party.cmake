@@ -17,7 +17,7 @@
 
 # This option adds all dependencies to be re-downloaded as a method of updating
 # them. Dependencies that had not yet been downloaded will be downloaded.
-option(UPDATE_EXTERNAL_HEADERS "Force re-download all external header files"
+option(${PROJECT_NAME}_UPDATE_EXTERNAL_HEADERS "Force re-download all external header files"
         OFF)
 
 # This macro downloads the file specified by ${URL} and saves it to
