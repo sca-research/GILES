@@ -48,7 +48,7 @@ std::optional<std::string> m_traces_path;
 //! @brief Interprets the command line flags.
 //! @param p_options The options as contained within a string.
 // TODO: Returns tag?
-void parse_command_line_flags(int& argc, const char**& argv)
+void parse_command_line_flags(int& argc, char**& argv)
 {
     cxxopts::Options options(argv[0], "Side channel leakage emulation tool");
 
@@ -101,7 +101,7 @@ void parse_command_line_flags(int& argc, const char**& argv)
 } // namespace
 
 //! @brief The entry point of the program.
-int main(int argc, const char* argv[])
+int main(int argc, char* argv[])
 {
     parse_command_line_flags(argc, argv);
 
