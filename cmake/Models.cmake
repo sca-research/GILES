@@ -52,6 +52,7 @@ macro(configure_models)
     {
         model = std::make_unique<ELMO2::Internal::Model_${MODEL}>(p_execution,
                                                                 p_coefficients);
+        return model;
     }")
 
         # The list of include statements within the model factory. Each model
