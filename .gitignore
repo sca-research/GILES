@@ -1,3 +1,0 @@
-# Ignore package manager files
-.hunter
-cmake/HunterGate.cmake
