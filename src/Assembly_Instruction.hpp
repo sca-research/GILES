@@ -29,6 +29,8 @@
 #include <string>
 #include <vector>
 
+#include <boost/dynamic_bitset.hpp>
+
 #include "Register.hpp"
 
 namespace ELMO2
@@ -43,48 +45,98 @@ namespace Internal
 class Assembly_Instruction
 {
 private:
+    //! A pair of the assembly and the binary representation of the opcode.
     //! @see https://en.wikipedia.org/wiki/Opcode
-    const std::string m_opcode;
+    //! @todo Future improvement: Store whole encoded instruction as well.
+    std::pair<std::string, boost::dynamic_bitset<>> m_opcode;
 
+    //! The instruction operands stored as binary.
     //! @see https://en.wikipedia.org/wiki/Operand#Computer_science
-    std::vector<std::string> m_operands;
-    const std::vector<Register> m_changed_registers;
+    //! @todo Does this need to be stored in human readable form as well? If
+    //! so then std::pair could be used.
+    //! @todo Future improvement: Store whole encoded instruction
+    std::vector<boost::dynamic_bitset<>> m_operands;
+
+    // TODO: Future: Should this be stored in Assembly_Instruction or Execution?
+    // const std::vector<Register> m_changed_registers;
 
 public:
+    //! @todo Change brief.
     //! @brief The constructor must be given all details about the assembly
     //! instruction as these cannot be set or changed later.
     //! @param p_opcode The instructions opcode.
-    //! @param p_changed_registers A list of registers that the instruction has
-    //! changed and their values.
-    //! TODO: Should this be changed to instead a string and parse the opcode
-    //! and operands from that? Or deduce the operands from the changed
-    //! registers?
-    Assembly_Instruction(
-        const std::string& p_opcode,
-        const std::vector<ELMO2::Internal::Register>& p_changed_registers)
-        : m_opcode(p_opcode), m_changed_registers(p_changed_registers)
+    //! @param p_opcode_binary The binary representation of the opcode as it
+    //! would be encoded on real hardware.
+    //! @param p_operands The binary representation of the operands as they
+    //! would be encoded on real hardware.
+    //! @todo Remove temp constructors
+    //! @todo A disassembler is needed to get opcode as well as binary form of
+    //! full instruction and binary form of opcode and seperate operands
+    //! @todo Use string splitter on input if needed
+    //! @see
+    //! https://stackoverflow.com/questions/236129/the-most-elegant-way-to-iterate-the-words-of-a-string
+    Assembly_Instruction(const std::string& p_opcode, // TODO: Maybe refactor?
+                         const std::string& p_opcode_binary,
+                         const std::vector<std::string>&
+                             p_operands) // TODO: Why is this a string?
+        : m_opcode(std::make_pair(p_opcode,
+                                  boost::dynamic_bitset<>(p_opcode_binary)))
     {
+        for (const auto& operand : p_operands)
+        {
+            m_operands.push_back(boost::dynamic_bitset<>(operand));
+        }
     }
 
-    //! @brief Gets the instructions opcode.
-    //! @return The opcode.
-    const std::string& get_opcode() const { return m_opcode; }
+    //! @brief Gets the instructions opcode in human readable form e.g. "add".
+    //! @return The opcode as a string.
+    const std::string& get_opcode() const { return m_opcode.first; }
+
+    //! @brief Gets the binary representation of the instructions opcode.
+    //! @return The opcode contained within a dynamic_bitset container from the
+    //! boost libraries.
+    //! @see
+    //! https://www.boost.org/doc/libs/release/libs/dynamic_bitset/dynamic_bitset.html
+    const boost::dynamic_bitset<>& get_opcode_binary() const
+    {
+        return m_opcode.second;
+    }
 
     //! @brief Gets a list of the instructions operands.
     //! @return A vector of operands.
     // TODO: Should this get the operand at a specified index i.e.
     // get_operand(1); //TODO: Implement both after converting OPERANDS to
-    // ORDERED map. Operands != Registers. A list of registers is better stored
-    // as a map.
-    const std::vector<std::string>& get_operands() const { return m_operands; }
-
-    //! @brief Gets a list of registers that were changed by this instruction
-    //! and their new values.
-    //! @returns A vector of Registers.
-    const std::vector<ELMO2::Internal::Register>& get_changed_registers() const
+    // ORDERED map. Operands != Registers. A list of registers is better
+    // stored as a map.
+    const std::vector<boost::dynamic_bitset<>>& get_operands() const
     {
-        return m_changed_registers;
+        return m_operands;
     }
+
+    //! @brief Gets one of the instructions operands.
+    //! @return A string containing the operand.
+    //! @note get_operand(1) will return
+    //! @exception std::out_of_range This is thrown when the index given by
+    //! p_operand_index - 1 is out of the array bounds as no range checking
+    //! is performed in this function.
+    const boost::dynamic_bitset<>&
+    get_operand(const uint8_t p_operand_index) const
+    {
+        return m_operands[p_operand_index - 1];
+    }
+
+    //! TODO: Future: Make use of this.
+    //! TODO: Maybe move this to be under Execution instead.
+    //! @brief Gets a list of registers that were changed by this
+    //! instruction and their new values.
+    //! @returns A vector of Registers.
+    /*
+     *const std::vector<ELMO2::Internal::Register>& get_changed_registers()
+     *const
+     *{
+     *    return m_changed_registers;
+     *}
+     */
 };
 } // namespace Internal
 } // namespace ELMO2

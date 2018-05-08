@@ -46,6 +46,7 @@ class Execution
 private:
     //! The initial state of the registers in the emulator when the program
     //! execution started.
+    //! @TODO: Future: Actually make use of this
     const std::vector<ELMO2::Internal::Register> m_initial_registers;
 
     //! The full list of Assembly Instructions in the order they where executed.
@@ -65,7 +66,7 @@ public:
     {
     }
 
-    Execution(){}
+    Execution() {}
 
     //! Get the state of the registers as they were when the program
     //! started to run.
@@ -74,11 +75,16 @@ public:
         return m_initial_registers;
     }
 
-    //! Get the full list of Assembly Instructions in the order they where
-    //! executed.
+    //! @brief Get the full list of Assembly Instructions in the order they
+    //! where executed.
+    //! @TODO: Document
     const std::vector<ELMO2::Internal::Assembly_Instruction>&
-    get_assembly() const
+    get_assembly() // TODO: const
     {
+        // TODO: Remove these temporary values
+        m_assembly.emplace_back(ELMO2::Internal::Assembly_Instruction(
+            "add", "010", std::vector<std::string>{"00001", "01010"}));
+
         return m_assembly;
     }
 };
