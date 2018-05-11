@@ -27,10 +27,10 @@
 #ifndef MODEL_FACTORY_HPP
 #define MODEL_FACTORY_HPP
 
-#include <memory>        // for make...
-#include <stdexcept>     // for inva...
-#include <string>        // for oper...
-#include <unordered_map> // for unor...
+#include <map>       // for map
+#include <memory>    // for make...
+#include <stdexcept> // for inva...
+#include <string>    // for oper...
 
 #include "Model.hpp"
 
@@ -51,17 +51,18 @@ namespace Internal
 //! @see https://en.wikipedia.org/wiki/Factory_method_pattern
 class Model_Factory
 {
-private:
-    //! The list of all available models, regardless of whether or not they
-    //! are enabled.
-    static const std::unordered_map<std::string, bool> m_all_models;
-
-    //! @brief This has been deleted to ensure the constructor and the copy
-    //! constructor cannot be called as this is just a utility class containing
-    //! nothing but static functions.
-    Model_Factory(const Model_Factory&) = delete;
 
 public:
+    // TODO: Change this to use lambdas
+    using Create_Function =
+        std::unique_ptr<Model> (*)(const ELMO2::Internal::Execution&,
+                                   const ELMO2::Internal::Coefficients&);
+    /*
+     *using Create_Function = std::function<ELMO2::Internal::Model(
+     *    const ELMO2::Internal::Execution&,
+     *    const ELMO2::Internal::Coefficients&)>
+     */
+
     //! @brief This function assists with the initialisation of the models.
     //! This will be passed the parameters to be passed on to the model
     //! constructor. It will selectively construct a model based on the first
@@ -74,16 +75,45 @@ public:
     //! is to the base Model class allowing the caller to ignore the actual
     //! type of the model and make use of the Model class interface.
     static std::unique_ptr<ELMO2::Internal::Model>
-    Create_Model(const std::string& p_model_type,
-                 const ELMO2::Internal::Execution& p_execution,
-                 const ELMO2::Internal::Coefficients& p_coefficients);
+    Construct(const std::string& p_model_type,
+              const ELMO2::Internal::Execution& p_execution,
+              const ELMO2::Internal::Coefficients& p_coefficients);
+
+    //! @brief This registers classes in the list available to the factory,
+    //! allowing the factory to create an instance of anything within the list.
+    //! This is needed to that classes can self register meaning that the list
+    //! of classes available does not need to be hard coded.
+    //! @see https://www.bfilipek.com/2018/02/factory-selfregister.html
+    //! @param p_type A string representing the type of the class being
+    //! registered. This is used to identify classes.
+    //! @param p_create_function A pointer to a function that will return a
+    //! constructed instance of the class.
+    //! @returns A bool indicating whether or not the class given by p_type was
+    //! already registered.
+    static bool Register(const std::string& p_type,
+                         const Create_Function& p_create_function);
 
     //! @brief Retrieves a list of all of the models that have been compiled
-    //! and whether or not they are enabled.
-    //! @returns An unordered map, indexed by the name of the model, containing
+    //! and whether or not they are enabled. TODO: Make the code match this
+    //! brief.
+    //! @returns A map, indexed by the name of the model, containing
     //! boolean values indicating as to whether that model is enabled by
-    //! default.
-    static const std::unordered_map<std::string, bool>& Get_All_Models();
+    //! default. TODO: Change this
+    //! @note This is a function wrapper around a static object using the
+    //! "Construct members on first use idiom". This is needed to guarentee that
+    //! the map is initalised whilst the factory contents are registering
+    //! themselves. This is a work around for the well known static
+    //! initialisation order fiasco.
+    //! @see https://isocpp.org/wiki/faq/ctors#static-init-order
+    //! @see
+    //! https://isocpp.org/wiki/faq/ctors#static-init-order-on-first-use-members
+    static std::map<std::string, Create_Function>& Get_All_Models();
+
+private:
+    //! @brief This has been deleted to ensure the constructor and the copy
+    //! constructor cannot be called as this is just a utility class containing
+    //! nothing but static functions.
+    Model_Factory(const Model_Factory&) = delete;
 };
 } // namespace Internal
 } // namespace ELMO2

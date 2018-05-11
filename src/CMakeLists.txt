@@ -33,9 +33,10 @@ include("${PROJECT_SOURCE_DIR}/cmake/Third_Party.cmake")
 include("${PROJECT_SOURCE_DIR}/cmake/Models.cmake")
 
 #add_model("*NAME OF THE MODEL*", "*DESCRIPTION OF THE MODEL*", "ENABLED BY DEFAULT")
-add_model("TEMPLATE" "Description of the TEMPLATE model" OFF)
+#add_model("TEMPLATE" "Description of the TEMPLATE model" OFF)
+#add_model("Hamming_Weight" "Description of the TEMPLATE model" ON)
 
-configure_models()
+#configure_models()
 # ******************************************************************************
 
 # Add library called that is built from the source files
@@ -44,7 +45,8 @@ add_library(lib${PROJECT_NAME}
     ELMO2.cpp
     Coefficients.cpp
     IO.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/Model_Factory.cpp
+    Model_Factory.cpp
+    Model_TEMPLATE.cpp
     ${MODEL_SOURCES} # all of the files required to compile the models
     Validator_Coefficients.cpp
 )

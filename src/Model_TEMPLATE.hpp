@@ -34,8 +34,9 @@
 #include <string>        // for string
 #include <unordered_set> // for unordered_set
 
-#include "Model.hpp"  // for Model
-#include "Traces.hpp" // for Traces
+#include "Factory_Register.hpp" // for Factory_Register
+#include "Model.hpp"            // for Model
+#include "Traces.hpp"           // for Traces
 
 namespace ELMO2
 {
@@ -49,7 +50,11 @@ class Execution;
 //! @brief This derived class contains a specific implementation of a
 //! mathematical model to calculate the traces for a target program. It is
 //! designed as a template allowing new models to be added with ease.
-class Model_TEMPLATE : public virtual ELMO2::Internal::Model
+//! Deriving from Factory_Register as well will automatically register this
+//! class within the factory class.
+class Model_TEMPLATE
+    : public virtual ELMO2::Internal::Model,
+      public ELMO2::Internal::Factory_Register<ELMO2::Internal::Model_TEMPLATE>
 {
 private:
     static const std::unordered_set<std::string> m_required_interaction_terms;
@@ -59,10 +64,12 @@ protected:
     //! the model. These must be provided by the Coefficients in order for
     //! the model to function.
     //! @returns The list of interaction terms used within the model.
+    //! @todo This makes sense to be static but is bad for readability - make
+    //! static in base class? - THIS CAN BE DONE USING CTRP.
     const std::unordered_set<std::string>&
     Get_Interaction_Terms() const override
     {
-        return m_required_interaction_terms;
+        return ELMO2::Internal::Model_TEMPLATE::m_required_interaction_terms;
     }
 
 public:
@@ -72,9 +79,34 @@ public:
                    const ELMO2::Internal::Coefficients& p_coefficients)
         : ELMO2::Internal::Model(p_execution, p_coefficients)
     {
+        // This is required to be "used" somewhere in order to prevent the
+        // compiler from optimising it away, thus preventing self registration.
+        // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
+        // Section 6.6.4.1, point 2 states that this statment will not be
+        // optimised away.
+        m_is_registered;
     }
 
-    const ELMO2::Internal::Traces& Generate_Traces() const override;
+    virtual const ELMO2::Internal::Traces& Generate_Traces() const override;
+
+    //! @brief Retrieves the name of this Model.
+    //! @returns The name as a string.
+    //! @note This is needed to ensure self registration in the factory works.
+    //! The factory registration requires this to be a unique identifier.
+    //! @todo make this override a function in Model - CTRP
+    //! @todo This seems to require being in derived classes and not base.
+    static const std::string Get_Name() { return "TEMPLATE"; }
+
+    //! @todo Document
+    //! @todo make this override a function in Model
+    //! @todo Change name? - Construct? - Construct_Unique?
+    static std::unique_ptr<Model>
+    Create_Function(const ELMO2::Internal::Execution& p_execution,
+                    const ELMO2::Internal::Coefficients& p_coefficients)
+    {
+        return std::make_unique<ELMO2::Internal::Model_TEMPLATE>(
+            p_execution, p_coefficients);
+    }
 };
 } // namespace Internal
 } // namespace ELMO2
