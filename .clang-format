@@ -1,6 +1,9 @@
 AccessModifierOffset : -4
 AlignTrailingComments : true
 AllowShortFunctionsOnASingleLine : true
+BasedOnStyle : llvm
+BinPackArguments : false
+BinPackParameters : false
 BreakBeforeBraces : Allman
 ColumnLimit : 80
 FixNamespaceComments : true

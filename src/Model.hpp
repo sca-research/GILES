@@ -101,7 +101,8 @@ public:
         const auto& coefficients_terms = m_coefficients.Get_Interaction_Terms();
 
         return std::includes(coefficients_terms.begin(),
-                             coefficients_terms.end(), models_terms.begin(),
+                             coefficients_terms.end(),
+                             models_terms.begin(),
                              models_terms.end());
     }
 };

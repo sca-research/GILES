@@ -56,16 +56,18 @@ void parse_command_line_flags(int& argc, char**& argv)
                             "COEFFICIENTS");
 
     // Adds the command line options.
-    options.add_options()("h,help", "Print help")
-            ("r,runs", "Number of traces to generate", cxxopts::value<int>(),
-             "N")
-            ("f,file", "Coefficients file",
+    // clang-format off
+    options.add_options()
+        ("h,help", "Print help")
+        ("r,runs", "Number of traces to generate", cxxopts::value<int>(), "N")
+        ("f,file", "Coefficients file",
              cxxopts::value<std::string>()->default_value("./coeffs.json"),
              "COEFFICIENTS")
-            ("i,input", "Executable to be ran in the emulator",
+        ("i,input", "Executable to be ran in the emulator",
              cxxopts::value<std::string>(), "EXECUTABLE")
-            ("o,output", "Generated traces output file",
+        ("o,output", "Generated traces output file",
              cxxopts::value<std::string>(), "FILE");
+    // clang-format on
 
     // Input can be specified without -i/--input flag
     // Coefficients File can be specified without -f/--file flag
