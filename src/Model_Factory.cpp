@@ -25,10 +25,11 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <map>       // for map
-#include <memory>    // for make...
-#include <stdexcept> // for inva...
-#include <string>    // for oper...
+#include <functional> // for bind
+#include <map>        // for map
+#include <memory>     // for unique_ptr
+#include <stdexcept>  // for invalid_argument
+#include <string>     // for oper...
 
 #include "Model_Factory.hpp"
 

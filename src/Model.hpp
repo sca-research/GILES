@@ -68,9 +68,7 @@ protected:
           const ELMO2::Internal::Coefficients& p_coefficients)
         : m_execution(p_execution), m_coefficients(p_coefficients)
     {
-    } // TODO: Should this read Model() =
-    // 0??? And have a generate_traces()
-    // method to do this instead?
+    }
 
     //! @brief Retrieves the interaction terms used within the model. This is
     //! required to ensure the Coefficients file provided all of the required

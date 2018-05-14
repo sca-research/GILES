@@ -46,30 +46,48 @@ namespace Internal
 //! This evaulation will call the Register function in the Factory class,
 //! registering the type given by T. i.e. The class that derived from this.
 //! @see https://www.bfilipek.com/2018/02/factory-selfregister.html
-template <typename T> class Factory_Register
+template <typename Derived> class Factory_Register
 {
-protected: // TODO: Should this be protected??? It is protected in example
+private:
+    static std::unique_ptr<Model>
+    create(const ELMO2::Internal::Execution& p_execution,
+           const ELMO2::Internal::Coefficients& p_coefficients)
+    {
+        return std::make_unique<Derived>(p_execution, p_coefficients);
+    }
+
+    //! @brief Retrieves the name of this Model.
+    //! @returns The name as a string.
+    //! This is needed to ensure self registration in the factory works. As
+    //! such, this implementation ensures that all classes that wish to self
+    //! register must provide an implementation for Get_Name() because the
+    //! factory registration requires this as unique identifier.
+    //! @note This idiom is known as the curiously recurring template pattern.
+    //! @see https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern
+    static const std::string get_name() { return Derived::Get_Name(); }
+
+protected: // TODO: Should this be protected?
     //! This static variable is evaluated before main() is called. The
     //! evaluation of this requires the Register function to be called,
     //! automatically registering the class defined by the template T in the
     //! factory before main() is called.
     static bool m_is_registered;
+
+    //! @brief This has been made protected to ensure the constructor and the
+    //! copy constructor cannot be called directly as this class is designed to
+    //! be inherited from and not instantiated directly.
+    Factory_Register() = default;
+
+    //! @brief Virtual destructor to ensure proper memory cleanup.
+    //! @see https://stackoverflow.com/a/461224
+    virtual ~Factory_Register() =
+        default; // TODO: Should this = default? Rule of
+    // ZERO? http://en.cppreference.com/w/cpp/language/rule_of_three
 };
 
-template <typename T>
-bool ELMO2::Internal::Factory_Register<T>::m_is_registered =
-    ELMO2::Internal::Model_Factory::Register(
-        T::Get_Name(),
-        /*
-         *[](const ELMO2::Internal::Execution& p_execution,
-         *   const ELMO2::Internal::Coefficients& p_coefficients) {
-         *    return std::make_unique<ELMO2::Internal::Model_TEMPLATE>(
-         *        p_execution, p_coefficients);
-         *});
-         */
-        T::Create_Function); // TODO: Replace T::Create_Function( with lamba
-// function @see
-// http://coliru.stacked-crooked.com/a/de4467d26dd02b42
+template <typename Derived>
+bool ELMO2::Internal::Factory_Register<Derived>::m_is_registered =
+    ELMO2::Internal::Model_Factory::Register(Derived::Get_Name(), create);
 } // namespace Internal
 } // namespace ELMO2
 

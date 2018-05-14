@@ -59,13 +59,13 @@ class Model_TEMPLATE
 private:
     static const std::unordered_set<std::string> m_required_interaction_terms;
 
-protected:
     //! @brief Retrieves a list of the interaction terms that are used within
     //! the model. These must be provided by the Coefficients in order for
     //! the model to function.
     //! @returns The list of interaction terms used within the model.
     //! @todo This makes sense to be static but is bad for readability - make
-    //! static in base class? - THIS CAN BE DONE USING CTRP.
+    //! static in base class? - THIS CAN BE DONE USING CTRP see
+    //! http://blog.aaronballman.com/2011/08/static-polymorphism-in-c/.
     const std::unordered_set<std::string>&
     Get_Interaction_Terms() const override
     {
@@ -92,21 +92,8 @@ public:
     //! @brief Retrieves the name of this Model.
     //! @returns The name as a string.
     //! @note This is needed to ensure self registration in the factory works.
-    //! The factory registration requires this to be a unique identifier.
-    //! @todo make this override a function in Model - CTRP
-    //! @todo This seems to require being in derived classes and not base.
+    //! The factory registration requires this as unique identifier.
     static const std::string Get_Name() { return "TEMPLATE"; }
-
-    //! @todo Document
-    //! @todo make this override a function in Model
-    //! @todo Change name? - Construct? - Construct_Unique?
-    static std::unique_ptr<Model>
-    Create_Function(const ELMO2::Internal::Execution& p_execution,
-                    const ELMO2::Internal::Coefficients& p_coefficients)
-    {
-        return std::make_unique<ELMO2::Internal::Model_TEMPLATE>(
-            p_execution, p_coefficients);
-    }
 };
 } // namespace Internal
 } // namespace ELMO2

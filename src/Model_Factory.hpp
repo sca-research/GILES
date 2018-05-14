@@ -27,10 +27,11 @@
 #ifndef MODEL_FACTORY_HPP
 #define MODEL_FACTORY_HPP
 
-#include <map>       // for map
-#include <memory>    // for make...
-#include <stdexcept> // for inva...
-#include <string>    // for oper...
+#include <functional> // for function
+#include <map>        // for map
+#include <memory>     // for unique_ptr
+#include <stdexcept>  // for inva...
+#include <string>     // for oper...
 
 #include "Model.hpp"
 
@@ -53,21 +54,18 @@ class Model_Factory
 {
 
 public:
-    // TODO: Change this to use lambdas
+    //! A function pointer used to point to the function that calls the
+    //! constructor for objects in the factory.
     using Create_Function =
         std::unique_ptr<Model> (*)(const ELMO2::Internal::Execution&,
                                    const ELMO2::Internal::Coefficients&);
-    /*
-     *using Create_Function = std::function<ELMO2::Internal::Model(
-     *    const ELMO2::Internal::Execution&,
-     *    const ELMO2::Internal::Coefficients&)>
-     */
 
     //! @brief This function assists with the initialisation of the models.
     //! This will be passed the parameters to be passed on to the model
-    //! constructor. It will selectively construct a model based on the first
-    //! parameter, p_model_type and return a pointer to it.
-    //! @param p_model_type The type of the model to be constructed as a string.
+    //! constructor. It will selectively construct a model based on the
+    //! first parameter, p_model_type and return a pointer to it.
+    //! @param p_model_type The type of the model to be constructed as a
+    //! string.
     //! @param p_execution The Execution as received from the emulator.
     //! @param p_coefficients The Coefficients as loaded from the
     //! coefficients file.
