@@ -28,17 +28,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include("${PROJECT_SOURCE_DIR}/cmake/Third_Party.cmake")
 
-# Add the models dynamically
-# ******************************************************************************
-include("${PROJECT_SOURCE_DIR}/cmake/Models.cmake")
-
-#add_model("*NAME OF THE MODEL*", "*DESCRIPTION OF THE MODEL*", "ENABLED BY DEFAULT")
-#add_model("TEMPLATE" "Description of the TEMPLATE model" OFF)
-#add_model("Hamming_Weight" "Description of the TEMPLATE model" ON)
-
-#configure_models()
-# ******************************************************************************
-
 # Add library called that is built from the source files
 # ******************************************************************************
 add_library(lib${PROJECT_NAME}
@@ -47,7 +36,7 @@ add_library(lib${PROJECT_NAME}
     IO.cpp
     Model_Factory.cpp
     Model_TEMPLATE.cpp
-    ${MODEL_SOURCES} # all of the files required to compile the models
+    Model_Hamming_Weight.cpp
     Validator_Coefficients.cpp
 )
 
