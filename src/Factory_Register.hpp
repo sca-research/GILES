@@ -49,6 +49,15 @@ namespace Internal
 template <typename Derived> class Factory_Register
 {
 private:
+    //! @brief This calls the constructor of the derived class. A pointer to
+    //! this funtion is passed to the factory class so that it can create
+    //! instances of the self registering derived classes.
+    //! @param p_execution The recored Execution of the simulation of the target
+    //! program.
+    //! @param p_coefficients The coefficients as loaded from the Coefficients
+    //! file.
+    //! @returns A unique_ptr to an object of the type given by the Derived
+    //! template.
     static std::unique_ptr<Model>
     create(const ELMO2::Internal::Execution& p_execution,
            const ELMO2::Internal::Coefficients& p_coefficients)
