@@ -16,7 +16,7 @@
 */
 
 /*!
-    @TODO: Change this
+    @todo Change this
     @file Model_Hamming_Weight.hpp
     @brief This file is a template. This can be used as a base for implementing
     a mathematical model for generating traces of a given target program.

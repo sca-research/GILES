@@ -16,7 +16,7 @@
 */
 
 /*!
-    @TODO: Change this
+    @todo Change this
     @file Model_Hamming_Weight.hpp
     @brief This file is a template. This can be used as a base for implementing
     a mathematical model for generating traces of a given target program.
@@ -29,14 +29,15 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#ifndef MODEL_Hamming_Weight_HPP
-#define MODEL_Hamming_Weight_HPP
+#ifndef MODEL_HAMMING_WEIGHT_HPP
+#define MODEL_HAMMING_WEIGHT_HPP
 
 #include <string>        // for string
 #include <unordered_set> // for unordered_set
 
-#include "Model.hpp"  // for Model
-#include "Traces.hpp" // for Traces
+#include "Factory_Register.hpp" // for Factory_Register
+#include "Model.hpp"            // for Model
+#include "Traces.hpp"           // for Traces
 
 namespace ELMO2
 {
@@ -50,12 +51,13 @@ class Execution;
 //! @brief This derived class contains a specific implementation of a
 //! mathematical model to calculate the traces for a target program. It is
 //! designed as a template allowing new models to be added with ease.
-class Model_Hamming_Weight : public virtual ELMO2::Internal::Model
+class Model_Hamming_Weight : public virtual ELMO2::Internal::Model,
+                             public ELMO2::Internal::Factory_Register<
+                                 ELMO2::Internal::Model_Hamming_Weight>
 {
 private:
     static const std::unordered_set<std::string> m_required_interaction_terms;
 
-protected:
     //! @brief Retrieves a list of the interaction terms that are used within
     //! the model. These must be provided by the Coefficients in order for
     //! the model to function.
@@ -73,9 +75,21 @@ public:
                          const ELMO2::Internal::Coefficients& p_coefficients)
         : ELMO2::Internal::Model(p_execution, p_coefficients)
     {
+        // This is required to be "used" somewhere in order to prevent the
+        // compiler from optimising it away, thus preventing self registration.
+        // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
+        // Section 6.6.4.1, point 2 states that this statment will not be
+        // optimised away.
+        m_is_registered;
     }
 
     const ELMO2::Internal::Traces& Generate_Traces() const override;
+
+    //! @brief Retrieves the name of this Model.
+    //! @returns The name as a string.
+    //! @note This is needed to ensure self registration in the factory works.
+    //! The factory registration requires this as unique identifier.
+    static const std::string Get_Name() { return "Hamming Weight"; }
 };
 } // namespace Internal
 } // namespace ELMO2
