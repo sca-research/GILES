@@ -27,11 +27,10 @@
 #ifndef MODEL_FACTORY_HPP
 #define MODEL_FACTORY_HPP
 
-#include <functional> // for function
-#include <map>        // for map
-#include <memory>     // for unique_ptr
-#include <stdexcept>  // for inva...
-#include <string>     // for oper...
+#include <memory>        // for unique_ptr
+#include <stdexcept>     // for inva...
+#include <string>        // for oper...
+#include <unordered_map> // for unordered_map
 
 #include "Model.hpp"
 
@@ -94,18 +93,18 @@ public:
     //! @brief Retrieves a list of all of the models that have been compiled
     //! and whether or not they are enabled. TODO: Make the code match this
     //! brief.
-    //! @returns A map, indexed by the name of the model, containing
+    //! @returns An unordered_map, indexed by the name of the model, containing
     //! boolean values indicating as to whether that model is enabled by
     //! default. TODO: Change this
     //! @note This is a function wrapper around a static object using the
     //! "Construct members on first use idiom". This is needed to guarentee that
-    //! the map is initalised whilst the factory contents are registering
-    //! themselves. This is a work around for the well known static
+    //! the unordered_map is initalised whilst the factory contents are
+    //! registering themselves. This is a work around for the well known static
     //! initialisation order fiasco.
     //! @see https://isocpp.org/wiki/faq/ctors#static-init-order
     //! @see
     //! https://isocpp.org/wiki/faq/ctors#static-init-order-on-first-use-members
-    static std::map<std::string, Create_Function>& Get_All_Models();
+    static std::unordered_map<std::string, Create_Function>& Get_All_Models();
 
 private:
     //! @brief This has been deleted to ensure the constructor and the copy

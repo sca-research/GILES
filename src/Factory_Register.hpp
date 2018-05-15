@@ -27,10 +27,9 @@
 #ifndef FACTORY_REGISTER_HPP
 #define FACTORY_REGISTER_HPP
 
-#include <map>       // for map
-#include <memory>    // for make...
-#include <stdexcept> // for inva...
-#include <string>    // for oper...
+#include <memory>        // for unique_ptr, make_unique
+#include <string>        // for oper...
+#include <unordered_map> // forunordered_map
 
 #include "Model_Factory.hpp"
 

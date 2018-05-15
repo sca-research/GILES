@@ -25,11 +25,11 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <functional> // for bind
-#include <map>        // for map
-#include <memory>     // for unique_ptr
-#include <stdexcept>  // for invalid_argument
-#include <string>     // for oper...
+#include <functional>    // for bind
+#include <memory>        // for unique_ptr
+#include <stdexcept>     // for invalid_argument
+#include <string>        // for oper...
+#include <unordered_map> // for unordered_map
 
 #include "Model_Factory.hpp"
 
@@ -85,11 +85,12 @@ bool ELMO2::Internal::Model_Factory::Register(
     return false;
 }
 
-std::map<std::string, ELMO2::Internal::Model_Factory::Create_Function>&
+std::unordered_map<std::string,
+                   ELMO2::Internal::Model_Factory::Create_Function>&
 ELMO2::Internal::Model_Factory::Get_All_Models()
 {
-    static std::map<std::string,
-                    ELMO2::Internal::Model_Factory::Create_Function>
+    static std::unordered_map<std::string,
+                              ELMO2::Internal::Model_Factory::Create_Function>
         models;
     return models;
 }
