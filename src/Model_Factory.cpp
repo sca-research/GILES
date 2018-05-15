@@ -57,19 +57,6 @@ ELMO2::Internal::Model_Factory::Construct(
         return Get_All_Models()[p_type](p_execution, p_coefficients);
     }
 
-    // TODO: find a way to inegrate this? - Put this in register and make
-    // Find_Interaction_Terms static? - THIS WONT WORK as Find_Interaction_Terms
-    // requires loaded coeffs.json
-    // Put this check within Construct? Or Maybe get_models_in_use()? - A lazy
-    // approach would suggest in Construct() along with a check if it's enabled?
-    /*
-     *if (!model->Find_Interaction_Terms())
-     *{
-     *    throw std::logic_error("Model was not provided with correct "
-     *                           "interaction terms by the Coefficients file.");
-     *}
-     */
-
     throw std::invalid_argument("Unknown Model type");
 }
 

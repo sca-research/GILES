@@ -85,6 +85,15 @@ public:
         // Section 6.6.4.1, point 2 states that this statment will not be
         // optimised away.
         m_is_registered;
+
+        // TODO: This can be moved up into Model if CTRP is used. CTRP can work
+        // if a non template interface class is introduced.
+        if (!this->Check_Interaction_Terms())
+        {
+            throw std::logic_error(
+                "Model was not provided with correct "
+                "interaction terms by the Coefficients file.");
+        }
     }
 
     virtual const ELMO2::Internal::Traces& Generate_Traces() const override;
