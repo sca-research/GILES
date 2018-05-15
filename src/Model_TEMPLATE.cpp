@@ -43,7 +43,7 @@ const std::unordered_set<std::string>
         "Hamming_Weight_Operand2_Previous_Instruction",
         "Hamming_Weight_Operand2_Subsequent_Instruction",
         "Operand1",
-        "Operand1_Bit_Interactions"
+        "Operand1_Bit_Interactions",
         "Operand2",
         "Operand2_Bit_Interactions",
         "Previous_Instruction",

@@ -92,16 +92,24 @@ public:
     //! @brief Ensures that all the interaction terms used within the model
     //! are provided by the Coefficients.
     //! @returns True if the all the interaction terms required by the model
-    //! are contained within the Coefficients.
+    //! are contained within the Coefficients and false if not.
     bool Find_Interaction_Terms() const
     {
         const auto& models_terms = Get_Interaction_Terms();
         const auto& coefficients_terms = m_coefficients.Get_Interaction_Terms();
 
-        return std::includes(coefficients_terms.begin(),
-                             coefficients_terms.end(),
-                             models_terms.begin(),
-                             models_terms.end());
+        // A function for checking if an individual element is in
+        // coefficients_terms.
+        const auto in_coefficients_terms =
+            [&coefficients_terms](const auto& x) {
+                return coefficients_terms.end() != coefficients_terms.find(x);
+            };
+
+        // Apply that function to all terms in models_terms.
+        return models_terms.size() <= coefficients_terms.size() &&
+               std::all_of(models_terms.begin(),
+                           models_terms.end(),
+                           in_coefficients_terms);
     }
 };
 } // namespace Internal
