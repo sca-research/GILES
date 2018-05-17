@@ -93,7 +93,7 @@ public:
     //! are provided by the Coefficients.
     //! @returns True if the all the interaction terms required by the model
     //! are contained within the Coefficients and false if not.
-    bool Find_Interaction_Terms() const
+    bool Check_Interaction_Terms() const
     {
         const auto& models_terms = Get_Interaction_Terms();
         const auto& coefficients_terms = m_coefficients.Get_Interaction_Terms();
