@@ -31,11 +31,13 @@
 #include <unordered_set> // for unordered_set
 #include <utility>       // for pair
 
+#include <iostream> // for temp debuging TODO: Remove this
+
 #include "Coefficients.hpp"       // for Coefficients
 #include "Emulator_Interface.hpp" // for Emulator_Interface
 #include "Execution.hpp"          // for Execution
 #include "IO.hpp"                 // for IO
-#include "Model_Factory.hpp"      // for Model_Factory
+#include "Model_Factory.hpp"      // forModel_Factory
 #include "Unicorn_Interface.hpp"  // for Unicorn_Interface
 namespace ELMO2
 {
@@ -79,13 +81,17 @@ private:
         // throw("Function not yet implemented");
     }
 
+    //! @todo Optimise this using std methods. Can be reduced down to
+    //! std::remove_if or something similar.
+    //! @todo This is not needed. Using a lazy approach we can only check the
+    //! constructed model.
     const std::unordered_set<std::string> get_models_in_use()
     {
         std::unordered_set<std::string> models_in_use;
         // Create a list of models to use from a list of all models compiled
-        for (const auto& model :
-             ELMO2::Internal::Model_Factory::Get_All_Models())
+        for (const auto& model : ELMO2::Internal::Model_Factory::Get_All())
         {
+            std::cout << "Found " << model.first << std::endl;
             // if this model is enabled.
             if (model.second)
             {
@@ -126,15 +132,22 @@ public:
         // Initialise all models.
         for (const auto& model : get_models_in_use())
         {
-            models.insert(ELMO2::Internal::Model_Factory::Create_Model(
+            // TODO: Pass in unique pointers to params instead.
+            models.insert(ELMO2::Internal::Model_Factory::Construct(
                 model, execution, coefficients));
+        }
+
+        // Run all models.
+        for (const auto& model : models)
+        {
+            model->Generate_Traces();
         }
 
         // If a path was provided then save
         if (p_traces_path)
         {
             // Save to file.
-            //io.Output_Traces(p_traces_path, Output_Format.Riscure)
+            // io.Output_Traces(p_traces_path, Output_Format.Riscure)
         }
     }
 };
