@@ -16,22 +16,23 @@
 */
 
 /*!
-    @file Model_Factory.hpp
-    @brief This file contains the Factory_Register class, which is used to
-    assist with registering classes within the Factory class
+    @todo Chnage this
+    @file Abstract_Factory_Register.hpp
+    @brief This file contains the Abstract_Factory_Register class, which is used
+    to assist with registering classes within the Abstract_Factory class.
+    @todo Seperate this into a hpp and cpp.
     @author Scott Egerton
     @date 2017-2018
     @copyright GNU Affero General Public License Version 3+
 */
 
-#ifndef FACTORY_REGISTER_HPP
-#define FACTORY_REGISTER_HPP
+#ifndef ABSTRACT_FACTORY_REGISTER_HPP
+#define ABSTRACT_FACTORY_REGISTER_HPP
 
-#include <memory>        // for unique_ptr, make_unique
-#include <string>        // for oper...
-#include <unordered_map> // forunordered_map
+#include <memory> // for unique_ptr, make_unique
+#include <string> // for string
 
-#include "Model_Factory.hpp"
+#include "Abstract_Factory.hpp"
 
 namespace ELMO2
 {
@@ -41,14 +42,15 @@ namespace Internal
 //! within the factory.
 //! The idea is that a class would inherit from this, using itself as the
 //! template typename. This will add the bool m_is_registered to it. At run
-//! time, m_is_registered will be evaluated due to the fact that it is staitic.
-//! This evaulation will call the Register function in the Factory class,
+//! time, m_is_registered will be evaluated due to the fact that it is static.
+//! The evaulation of this will call the Register function in the Factory class,
 //! registering the type given by T. i.e. The class that derived from this.
 //! @see https://www.bfilipek.com/2018/02/factory-selfregister.html
-template <typename Derived> class Factory_Register
+template <class Base, class Derived, typename... Args>
+class Abstract_Factory_Register
 {
 private:
-    //! @brief This calls the constructor of the derived class. A pointer to
+    //! @brief This calls the constructor of the Derived class. A pointer to
     //! this funtion is passed to the factory class so that it can create
     //! instances of the self registering derived classes.
     //! @param p_execution The recored Execution of the simulation of the target
@@ -57,14 +59,12 @@ private:
     //! file.
     //! @returns A unique_ptr to an object of the type given by the Derived
     //! template.
-    static std::unique_ptr<Model>
-    create(const ELMO2::Internal::Execution& p_execution,
-           const ELMO2::Internal::Coefficients& p_coefficients)
+    static std::unique_ptr<Base> create(Args... p_args)
     {
-        return std::make_unique<Derived>(p_execution, p_coefficients);
+        return std::make_unique<Derived>(p_args...);
     }
 
-    //! @brief Retrieves the name of this Model.
+    //! @brief Retrieves the name of the Derived class.
     //! @returns The name as a string.
     //! This is needed to ensure self registration in the factory works. As
     //! such, this implementation ensures that all classes that wish to self
@@ -84,18 +84,24 @@ protected: // TODO: Should this be protected?
     //! @brief This has been made protected to ensure the constructor and the
     //! copy constructor cannot be called directly as this class is designed to
     //! be inherited from and not instantiated directly.
-    Factory_Register() = default;
+    Abstract_Factory_Register() = default;
 
     //! @brief Virtual destructor to ensure proper memory cleanup.
     //! @see https://stackoverflow.com/a/461224
-    virtual ~Factory_Register() =
+    virtual ~Abstract_Factory_Register() =
         default; // TODO: Should this = default? Rule of
     // ZERO? http://en.cppreference.com/w/cpp/language/rule_of_three
 };
 
-template <typename Derived>
-bool ELMO2::Internal::Factory_Register<Derived>::m_is_registered =
-    ELMO2::Internal::Model_Factory::Register(Derived::Get_Name(), create);
+//! @todo Does this inherit the doxygen comments from m_is_registered? - if not,
+//! add doxygen comments.
+template <class Base, class Derived, typename... Args>
+bool ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
+    m_is_registered =
+        ELMO2::Internal::Abstract_Factory<Base, Args...>::Register(
+            Derived::Get_Name(),
+            ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
+                create);
 } // namespace Internal
 } // namespace ELMO2
 

@@ -34,9 +34,9 @@
 #include <string>        // for string
 #include <unordered_set> // for unordered_set
 
-#include "Factory_Register.hpp" // for Factory_Register
-#include "Model.hpp"            // for Model
-#include "Traces.hpp"           // for Traces
+#include "Model.hpp"                  // for Model
+#include "Model_Factory_Register.hpp" // for Model_Factory_Register
+#include "Traces.hpp"                 // for Traces
 
 namespace ELMO2
 {
@@ -50,11 +50,11 @@ class Execution;
 //! @brief This derived class contains a specific implementation of a
 //! mathematical model to calculate the traces for a target program. It is
 //! designed as a template allowing new models to be added with ease.
-//! Deriving from Factory_Register as well will automatically register this
-//! class within the factory class.
-class Model_TEMPLATE
-    : public virtual ELMO2::Internal::Model,
-      public ELMO2::Internal::Factory_Register<ELMO2::Internal::Model_TEMPLATE>
+//! Deriving from Model_Factory_Register as well will automatically register
+//! this class within the factory class.
+class Model_TEMPLATE : public virtual ELMO2::Internal::Model,
+                       public ELMO2::Internal::Model_Factory_Register<
+                           ELMO2::Internal::Model_TEMPLATE>
 {
 private:
     static const std::unordered_set<std::string> m_required_interaction_terms;
@@ -68,6 +68,7 @@ private:
     //! http://blog.aaronballman.com/2011/08/static-polymorphism-in-c/.
     const std::unordered_set<std::string>&
     Get_Interaction_Terms() const override
+    // static const std::unordered_set<std::string>& get_interaction_terms()
     {
         return ELMO2::Internal::Model_TEMPLATE::m_required_interaction_terms;
     }

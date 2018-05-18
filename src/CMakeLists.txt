@@ -34,9 +34,8 @@ add_library(lib${PROJECT_NAME}
     ELMO2.cpp
     Coefficients.cpp
     IO.cpp
-    Model_Factory.cpp
-    Model_TEMPLATE.cpp
     Model_Hamming_Weight.cpp
+    Model_TEMPLATE.cpp
     Validator_Coefficients.cpp
 )
 
