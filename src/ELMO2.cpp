@@ -125,6 +125,17 @@ public:
         const ELMO2::Internal::Coefficients coefficients =
             io.Load_Coefficients(p_coefficients_path);
 
+        // Initialise all emulators.
+        for (const auto& Emulator_Interface :
+             ELMO2::Internal::Emulator_Factory::Get_All())
+        {
+            std::cout << "Found " << Emulator_Interface.first << std::endl;
+
+            auto emu = ELMO2::Internal::Emulator_Factory::Construct(
+                Emulator_Interface.first, "./bin/");
+            emu->Run_Code();
+        }
+
         const ELMO2::Internal::Execution execution =
             ELMO2::Internal::Execution();
         // emulator_Interface->Run_Code(); TODO: Change assignment to this
