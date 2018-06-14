@@ -25,11 +25,11 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include "Assembly_Instruction.hpp" // for Assembly_Instruction
-#include "Execution.hpp"            // for Execution
-#include <bits/stdint-uintn.h>      // for uint8_t
-#include <bitset>                   // for bitset
-#include <vector>                   // for vector
+#include "Assembly_Instruction.hpp"  // for Assembly_Instruction
+#include "Execution.hpp"             // for Execution
+#include <bits/stdint-uintn.h>       // for uint8_t
+#include <bitset>                    // for bitset
+#include <vector>                    // for vector
 
 #include "Model_Hamming_Weight.hpp"
 
@@ -51,7 +51,7 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
     // TODO: Change this temporary structure
     ELMO2::Internal::Execution m_execution;
 
-    for (const auto& instruction : m_execution.get_assembly())
+    for (const auto& instruction : m_execution.Get_Assembly())
     {
         // Calculates the Hamming weight of the second operand and appends it to
         // the traces object

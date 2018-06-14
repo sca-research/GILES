@@ -29,8 +29,8 @@
 #ifndef ABSTRACT_FACTORY_REGISTER_HPP
 #define ABSTRACT_FACTORY_REGISTER_HPP
 
-#include <memory> // for unique_ptr, make_unique
-#include <string> // for string
+#include <memory>  // for unique_ptr, make_unique
+#include <string>  // for string
 
 #include "Abstract_Factory.hpp"
 
@@ -51,10 +51,10 @@ class Abstract_Factory_Register
 {
 private:
     //! @brief This calls the constructor of the Derived class. A pointer to
-    //! this funtion is passed to the factory class so that it can create
+    //! this function is passed to the factory class so that it can create
     //! instances of the self registering derived classes.
-    //! @param p_execution The recored Execution of the simulation of the target
-    //! program.
+    //! @param p_execution The recorded Execution of the simulation of the
+    //! target program.
     //! @param p_coefficients The coefficients as loaded from the Coefficients
     //! file.
     //! @returns A unique_ptr to an object of the type given by the Derived
@@ -74,7 +74,7 @@ private:
     //! @see https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern
     static const std::string get_name() { return Derived::Get_Name(); }
 
-protected: // TODO: Should this be protected?
+protected:  // TODO: Should this be protected?
     //! This static variable is evaluated before main() is called. The
     //! evaluation of this requires the Register function to be called,
     //! automatically registering the class defined by the template T in the
@@ -89,7 +89,7 @@ protected: // TODO: Should this be protected?
     //! @brief Virtual destructor to ensure proper memory cleanup.
     //! @see https://stackoverflow.com/a/461224
     virtual ~Abstract_Factory_Register() =
-        default; // TODO: Should this = default? Rule of
+        default;  // TODO: Should this = default? Rule of
     // ZERO? http://en.cppreference.com/w/cpp/language/rule_of_three
 };
 
@@ -102,7 +102,7 @@ bool ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
             Derived::Get_Name(),
             ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
                 create);
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif

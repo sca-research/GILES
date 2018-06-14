@@ -27,16 +27,16 @@
 #ifndef ABSTRACT_FACTORY_HPP
 #define ABSTRACT_FACTORY_HPP
 
-#include <memory>        // for unique_ptr
-#include <string>        // for string
-#include <unordered_map> // for unordered_map
+#include <memory>         // for unique_ptr
+#include <string>         // for string
+#include <unordered_map>  // for unordered_map
 
 namespace ELMO2
 {
 namespace Internal
 {
 
-//! @classAbstract_Factory
+//! @class Abstract_Factory
 //! @brief This is a static factory class that assists in the construction of
 //! objects. By providing abstraction for the caller, it hides the exact type of
 //! the object from the caller and allows the caller to make use of the object
@@ -51,7 +51,6 @@ namespace Internal
 //! @see https://www.bfilipek.com/2018/02/factory-selfregister.html
 template <class Base, typename... Args> class Abstract_Factory
 {
-
 public:
     //! A function pointer used to point to the function that calls the
     //! constructor for objects in the factory.
@@ -121,7 +120,7 @@ public:
     {
         static std::unordered_map<std::string,
                                   Create_Function>
-            map; // TODO: Rename
+            map;  // TODO: Rename
         return map;
     }
 
@@ -131,7 +130,7 @@ private:
     //! nothing but static functions.
     Abstract_Factory(const Abstract_Factory&) = delete;
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif

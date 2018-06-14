@@ -9,6 +9,6 @@ ColumnLimit : 80
 FixNamespaceComments : true
 IndentWidth : 4
 PointerBindsToType : true
-SpacesBeforeTrailingComments : 1
+SpacesBeforeTrailingComments : 2
 TabWidth : 8
 UseTab : Never

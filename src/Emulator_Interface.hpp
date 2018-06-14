@@ -27,8 +27,8 @@
 #ifndef EMULATOR_INTERFACE_HPP
 #define EMULATOR_INTERFACE_HPP
 
-#include <string>
-#include <vector>
+#include <string>  // for string
+#include <vector>  // for vector
 
 #include "Assembly_Instruction.hpp"
 #include "Execution.hpp"
@@ -47,11 +47,11 @@ namespace Internal
 class Emulator_Interface
 {
 private:
-    const std::string m_program_path; // TODO: This should be optional ideally:
-                                      // Don't pass in path instead pass in
-                                      // binary loaded from IO. Can this simply
-                                      // be loaded as a string or is there a
-                                      // better way?
+    const std::string m_program_path;  // TODO: This should be optional ideally:
+                                       // Don't pass in path instead pass in
+                                       // binary loaded from IO. Can this simply
+                                       // be loaded as a string or is there a
+                                       // better way?
 
     //! @brief Turns a string containing information about the Registers in the
     //! form as provided by the specific emulator into the internal
@@ -85,7 +85,9 @@ protected:
 public:
     //! @brief Virtual destructor to ensure proper memory cleanup.
     //! @see https://stackoverflow.com/a/461224
-    virtual ~Emulator_Interface() {}
+    virtual ~Emulator_Interface() =
+        default;  // TODO: Should this = default? Rule of
+    // ZERO? http://en.cppreference.com/w/cpp/language/rule_of_three
     // TODO: Should many functions everywhere be noexcept?
 
     //! @brief A function to start the process of invoking the emulator and
@@ -93,7 +95,7 @@ public:
     //! @returns The recorded Execution of the target program.
     virtual const ELMO2::Internal::Execution& Run_Code() = 0;
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif

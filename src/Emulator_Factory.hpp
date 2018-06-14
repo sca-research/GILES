@@ -34,7 +34,7 @@
 #include "Abstract_Factory.hpp"    // for Abstract_Factory
 #include "Emulator_Interface.hpp"  // for Emulator_Interface
 
-//! This is a complete list of all emulators to be compiled. Anything not listed
+//! This is a complete list of all models to be compiled. Anything not listed
 //! here will not self register and consequently not be useable.
 #include "Emulator_TEMPLATE.hpp"
 

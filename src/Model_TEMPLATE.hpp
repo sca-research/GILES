@@ -31,12 +31,12 @@
 #ifndef MODEL_TEMPLATE_HPP
 #define MODEL_TEMPLATE_HPP
 
-#include <string>        // for string
-#include <unordered_set> // for unordered_set
+#include <string>         // for string
+#include <unordered_set>  // for unordered_set
 
-#include "Model.hpp"                  // for Model
-#include "Model_Factory_Register.hpp" // for Model_Factory_Register
-#include "Traces.hpp"                 // for Traces
+#include "Model.hpp"                   // for Model
+#include "Model_Factory_Register.hpp"  // for Model_Factory_Register
+#include "Traces.hpp"                  // for Traces
 
 namespace ELMO2
 {
@@ -83,7 +83,7 @@ public:
         // This is required to be "used" somewhere in order to prevent the
         // compiler from optimising it away, thus preventing self registration.
         // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
-        // Section 6.6.4.1, point 2 states that this statment will not be
+        // Section 6.6.4.1, point 2 states that this statement will not be
         // optimised away.
         m_is_registered;
 
@@ -105,7 +105,7 @@ public:
     //! The factory registration requires this as unique identifier.
     static const std::string Get_Name() { return "TEMPLATE"; }
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif

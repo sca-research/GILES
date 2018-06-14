@@ -18,7 +18,7 @@
 /*!
     @file Model_Factory.hpp
     @brief Contains the Model_Factory class; a factory class for initialisation
-    of models. This file exists only to simplify the synatx of using the
+    of models. This file exists only to simplify the syntax of using the
     Abstract_Factory class and ensure that all models are included in the
     compilation.
     @author Scott Egerton
@@ -29,8 +29,8 @@
 #ifndef MODEL_FACTORY_HPP
 #define MODEL_FACTORY_HPP
 
-#include "Abstract_Factory.hpp" // for Abstract_Factory
-#include "Model.hpp"            // for Model
+#include "Abstract_Factory.hpp"  // for Abstract_Factory
+#include "Model.hpp"             // for Model
 
 //! This is a complete list of all models to be compiled. Anything not listed
 //! here will not self register and consequently not be useable.
@@ -44,24 +44,24 @@ namespace Internal
 
 //! @class Model_Factory
 //! @brief This class exists only to simply the usage of the Abstract_Factory
-//! class. By providing an intermidiate class, the possibility of accidentally
-//! initialisating a seperate template is eliminated. Additionally, this
+//! class. By providing an intermediate class, the possibility of accidentally
+//! initialising a separate template is eliminated. Additionally, this
 //! provides for a more meaningful name. To see what is actually going on behind
 //! the scenes, refer to the Abstract_Factory class.
 class Model_Factory
     : public ELMO2::Internal::Abstract_Factory<
           ELMO2::Internal::Model,
           const ELMO2::Internal::Execution&,
-          const ELMO2::Internal::Coefficients&> // TODO: public virtal instead?
+          const ELMO2::Internal::Coefficients&>  // TODO: public virtual
+                                                 // instead?
 {
-
 private:
     //! @brief This has been deleted to ensure the constructor and the copy
     //! constructor cannot be called as this is just a utility class containing
     //! nothing but static functions.
     Model_Factory(const Model_Factory&) = delete;
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif

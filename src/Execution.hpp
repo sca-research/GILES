@@ -27,8 +27,8 @@
 #ifndef EXECUTION_HPP
 #define EXECUTION_HPP
 
-#include <string>
-#include <vector>
+#include <string>  // for string
+#include <vector>  // for vector
 
 #include "Assembly_Instruction.hpp"
 #include "Register.hpp"
@@ -46,7 +46,7 @@ class Execution
 private:
     //! The initial state of the registers in the emulator when the program
     //! execution started.
-    //! @TODO: Future: Actually make use of this
+    //! @todo: Future: Actually make use of this
     const std::vector<ELMO2::Internal::Register> m_initial_registers;
 
     //! The full list of Assembly Instructions in the order they where executed.
@@ -54,9 +54,9 @@ private:
 
 public:
     //! The constructor should be provided with the initial state of the
-    //! registers and the first instruction executed as these should already be
-    //! known. TODO: Should the first instruction be known? TODO: Pass in the
-    //! correct objects as opposed to strings as the format should be
+    //! registers and the first instruction executed as these should already
+    //! be known. TODO: Should the first instruction be known? TODO: Pass in
+    //! the correct objects as opposed to strings as the format should be
     //! interpreted by the specific emulator interface.
     //! TODO: Document params.
     Execution(const std::vector<ELMO2::Internal::Register>& p_initial_registers,
@@ -70,16 +70,16 @@ public:
 
     //! Get the state of the registers as they were when the program
     //! started to run.
-    const std::vector<ELMO2::Internal::Register>& get_initial_registers() const
+    const std::vector<ELMO2::Internal::Register>& Get_Initial_Registers() const
     {
         return m_initial_registers;
     }
 
     //! @brief Get the full list of Assembly Instructions in the order they
     //! where executed.
-    //! @TODO: Document
-    const std::vector<ELMO2::Internal::Assembly_Instruction>&
-    get_assembly() // TODO: const
+    //! @todo: Document
+    const std::deque<ELMO2::Internal::Assembly_Instruction>&
+    Get_Assembly()  // TODO: const
     {
         // TODO: Remove these temporary values
         m_assembly.emplace_back(ELMO2::Internal::Assembly_Instruction(
@@ -88,7 +88,7 @@ public:
         return m_assembly;
     }
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
-#endif
+#endif  // EXECUTION_HPP

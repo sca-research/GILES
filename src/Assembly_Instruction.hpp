@@ -26,8 +26,9 @@
 #ifndef ASSEMBLY_INSTRUCTION_HPP
 #define ASSEMBLY_INSTRUCTION_HPP
 
-#include <string>
-#include <vector>
+#include <string>   // for string
+#include <utility>  // for pair
+#include <vector>   // for vector
 
 #include <boost/dynamic_bitset.hpp>
 
@@ -75,10 +76,10 @@ public:
     //! @todo Use string splitter on input if needed
     //! @see
     //! https://stackoverflow.com/questions/236129/the-most-elegant-way-to-iterate-the-words-of-a-string
-    Assembly_Instruction(const std::string& p_opcode, // TODO: Maybe refactor?
+    Assembly_Instruction(const std::string& p_opcode,  // TODO: Maybe refactor?
                          const std::string& p_opcode_binary,
                          const std::vector<std::string>&
-                             p_operands) // TODO: Why is this a string?
+                             p_operands)  // TODO: Why is this a string?
         : m_opcode(std::make_pair(p_opcode,
                                   boost::dynamic_bitset<>(p_opcode_binary)))
     {
@@ -138,6 +139,6 @@ public:
      *}
      */
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 #endif

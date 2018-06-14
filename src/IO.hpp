@@ -40,7 +40,8 @@ class Traces;
 //! @class IO
 //! @brief This contains all Input and Output functions for ELMO2. This includes
 //! loading the Coefficients file and saving generated Traces.
-class IO
+class IO // TODO: Maybe have an option to output just one trace (or a few) to a
+         // seperate file?
 {
 public:
     //! All possible output formats for the generated traces to be saved as.

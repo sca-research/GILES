@@ -24,21 +24,22 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <memory>        // for make_unique, unique_ptr
-#include <optional>      // for optional
-#include <string>        // for string
-#include <unordered_map> // for unordered_map
-#include <unordered_set> // for unordered_set
-#include <utility>       // for pair
+#include <memory>         // for make_unique, unique_ptr
+#include <optional>       // for optional
+#include <string>         // for string
+#include <unordered_map>  // for unordered_map
+#include <unordered_set>  // for unordered_set
+#include <utility>        // for pair
 
-#include <iostream> // for temp debuging TODO: Remove this
+#include <iostream>  // for temp debugging TODO: Remove this
 
-#include "Coefficients.hpp"       // for Coefficients
-#include "Emulator_Interface.hpp" // for Emulator_Interface
-#include "Execution.hpp"          // for Execution
-#include "IO.hpp"                 // for IO
-#include "Model_Factory.hpp"      // forModel_Factory
-#include "Unicorn_Interface.hpp"  // for Unicorn_Interface
+#include "Coefficients.hpp"        // for Coefficients
+#include "Emulator_Factory.hpp"    // for Emulator_Factory
+#include "Emulator_Interface.hpp"  // for Emulator_Interface
+#include "Execution.hpp"           // for Execution
+#include "IO.hpp"                  // for IO
+#include "Model_Factory.hpp"       // for Model_Factory
+#include "Unicorn_Interface.hpp"   // for Unicorn_Interface
 namespace ELMO2
 {
 // Forward Declarations
@@ -93,7 +94,9 @@ private:
         {
             std::cout << "Found " << model.first << std::endl;
             // if this model is enabled.
-            if (model.second)
+            if (model.second)  // TODO: model.second is currently a function
+                               // pointer to the constructor, not is_enabled
+                               // bool.
             {
                 // Add it to the list of models in use.
                 models_in_use.insert(model.first);
@@ -162,4 +165,4 @@ public:
         }
     }
 };
-} // namespace ELMO2
+}  // namespace ELMO2
