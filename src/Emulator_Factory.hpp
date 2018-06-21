@@ -45,22 +45,30 @@ namespace Internal
 
 //! @class Emulator_Factory
 //! @brief This class exists only to simply the usage of the Abstract_Factory
-//! class. By providing an intermidiate class, the possibility of accidentally
-//! initialisating a seperate template is eliminated. Additionally, this
+//! class. By providing an intermediate class, the possibility of accidentally
+//! initialising a separate template is eliminated. Additionally, this
 //! provides for a more meaningful name. To see what is actually going on behind
 //! the scenes, refer to the Abstract_Factory class.
 class Emulator_Factory
     : public ELMO2::Internal::Abstract_Factory<
           ELMO2::Internal::Emulator_Interface,
-          const std::string&>  // TODO: public virtal instead?
+          const std::string&>  // TODO: public virtual instead?
 {
-private:
     //! @brief This has been deleted to ensure the constructor and the copy
-    //! constructor cannot be called as this is just a utility class containing
-    //! nothing but static functions.
+    //! constructor cannot be called as this is just a utility class
+    //! containing nothing but static functions.
+    //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
+    //! @see https://en.cppreference.com/w/cpp/language/copy_constructor
     Emulator_Factory(const Emulator_Factory&) = delete;
+
+    //! @brief This has been deleted to ensure the copy
+    //! assignment operator cannot be called as this is just a utility class
+    //! containing nothing but static functions.
+    //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
+    //! @see https://en.cppreference.com/w/cpp/language/copy_assignment
+    Emulator_Factory& operator=(const Emulator_Factory&) = delete;
 };
 }  // namespace Internal
 }  // namespace ELMO2
 
-#endif
+#endif  // EMULATOR_FACTORY_HPP

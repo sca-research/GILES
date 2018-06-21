@@ -124,11 +124,19 @@ public:
         return map;
     }
 
-private:
     //! @brief This has been deleted to ensure the constructor and the copy
     //! constructor cannot be called as this is just a utility class containing
     //! nothing but static functions.
+    //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
+    //! @see https://en.cppreference.com/w/cpp/language/copy_constructor
     Abstract_Factory(const Abstract_Factory&) = delete;
+
+    //! @brief This has been deleted to ensure the copy
+    //! assignment operator cannot be called as this is just a utility class
+    //! containing nothing but static functions.
+    //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
+    //! @see https://en.cppreference.com/w/cpp/language/copy_assignment
+    Abstract_Factory& operator=(const Abstract_Factory&) = delete;
 };
 }  // namespace Internal
 }  // namespace ELMO2

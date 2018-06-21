@@ -26,8 +26,9 @@
 #ifndef VALIDATOR_COEFFICIENTS_HPP
 #define VALIDATOR_COEFFICIENTS_HPP
 
-#include <nlohmann/json.hpp> // for json
-#include <string>            // for string
+#include <string>  // for string
+
+#include <nlohmann/json.hpp>  // for json
 
 namespace ELMO2
 {
@@ -76,15 +77,24 @@ private:
                                     const std::string& p_category_key,
                                     const nlohmann::json& p_coefficients);
 
-public:
     //! @brief This has been deleted to ensure the constructor and the copy
     //! constructor cannot be called as this is just a utility class containing
     //! nothing but static functions.
+    //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
+    //! @see https://en.cppreference.com/w/cpp/language/copy_constructor
     Validator_Coefficients(const Validator_Coefficients&) = delete;
 
+    //! @brief This has been deleted to ensure the copy
+    //! assignment operator cannot be called as this is just a utility class
+    //! containing nothing but static functions.
+    //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
+    //! @see https://en.cppreference.com/w/cpp/language/copy_assignment
+    Validator_Coefficients& operator=(const Validator_Coefficients&) = delete;
+
+public:
     static void Validate_Json(const nlohmann::json& p_coefficients);
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
-#endif
+#endif  // VALIDATOR_COEFFICIENTS_HPP

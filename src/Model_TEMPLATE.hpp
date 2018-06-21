@@ -82,9 +82,9 @@ public:
     {
         // This is required to be "used" somewhere in order to prevent the
         // compiler from optimising it away, thus preventing self registration.
-        // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
         // Section 6.6.4.1, point 2 states that this statement will not be
-        // optimised away.
+        // optimised away as this is static.
+        // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
         m_is_registered;
 
         // TODO: This can be moved up into Model if CTRP is used. CTRP can work
@@ -97,7 +97,7 @@ public:
         }
     }
 
-    virtual const ELMO2::Internal::Traces& Generate_Traces() const override;
+    const ELMO2::Internal::Traces& Generate_Traces() const override;
 
     //! @brief Retrieves the name of this Model.
     //! @returns The name as a string.

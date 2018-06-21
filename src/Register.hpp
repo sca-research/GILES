@@ -35,7 +35,9 @@ namespace Internal
 //! @class Register
 //! @brief The internal representation of an individual register.
 //! This contains the opcode and operands of the instruction as well as a list
-//! of registers that have been changed making use of the Register class.
+//! of registers that have been changed making use of the Register class. This
+//! class mainly exists to provide a clearer, more context aware syntax than
+//! std::pair. For example: reg.get_name() is clearer than reg.first.
 //! @see https://en.wikipedia.org/wiki/Processor_register
 //! TODO: Maybe this sin't a good way to store registers as it makes it
 //! difficult store in a data structure such as a map. Actually maybe a map
@@ -68,7 +70,7 @@ public:
     //!@brief Retrieves the value contained within that register.
     const std::string& get_value() const { return m_value; }
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif

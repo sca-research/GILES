@@ -55,13 +55,21 @@ class Model_Factory
           const ELMO2::Internal::Coefficients&>  // TODO: public virtual
                                                  // instead?
 {
-private:
     //! @brief This has been deleted to ensure the constructor and the copy
-    //! constructor cannot be called as this is just a utility class containing
-    //! nothing but static functions.
+    //! constructor cannot be called as this is just a utility class
+    //! containing nothing but static functions.
+    //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
+    //! @see https://en.cppreference.com/w/cpp/language/copy_constructor
     Model_Factory(const Model_Factory&) = delete;
+
+    //! @brief This has been deleted to ensure the copy
+    //! assignment operator cannot be called as this is just a utility class
+    //! containing nothing but static functions.
+    //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
+    //! @see https://en.cppreference.com/w/cpp/language/copy_assignment
+    Model_Factory& operator=(const Model_Factory&) = delete;
 };
 }  // namespace Internal
 }  // namespace ELMO2
 
-#endif
+#endif  // MODEL_FACTORY_HPP
