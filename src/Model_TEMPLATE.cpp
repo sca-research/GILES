@@ -52,7 +52,7 @@ const std::unordered_set<std::string>
 //! @brief This function contains the mathematical calculations that generate
 //! the Traces.
 //! @returns The generated Traces for the target program.
-const ELMO2::Internal::Traces&
+const ELMO2::Internal::Traces
 ELMO2::Internal::Model_TEMPLATE::Generate_Traces() const
 {
     // *** Place your code here ***

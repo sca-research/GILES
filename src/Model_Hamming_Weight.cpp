@@ -41,10 +41,10 @@ const std::unordered_set<std::string>
 //! @brief This function contains the mathematical calculations that generate
 //! the Traces.
 //! @returns The generated Traces for the target program.
-const ELMO2::Internal::Traces&
+const ELMO2::Internal::Traces
 ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
 {
-    // TODO: If traces are seralised upon generation then do we need a traces
+    // TODO: If traces are serialised upon generation then do we need a traces
     // object?
     ELMO2::Internal::Traces traces;
 

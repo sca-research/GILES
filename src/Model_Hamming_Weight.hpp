@@ -32,12 +32,12 @@
 #ifndef MODEL_HAMMING_WEIGHT_HPP
 #define MODEL_HAMMING_WEIGHT_HPP
 
-#include <string>        // for string
-#include <unordered_set> // for unordered_set
+#include <string>         // for string
+#include <unordered_set>  // for unordered_set
 
-#include "Model.hpp"                  // for Model
-#include "Model_Factory_Register.hpp" // for Model_Factory_Register
-#include "Traces.hpp"                 // for Traces
+#include "Model.hpp"                   // for Model
+#include "Model_Factory_Register.hpp"  // for Model_Factory_Register
+#include "Traces.hpp"                  // for Traces
 
 namespace ELMO2
 {
@@ -94,7 +94,7 @@ public:
         }
     }
 
-    const ELMO2::Internal::Traces& Generate_Traces() const override;
+    const ELMO2::Internal::Traces Generate_Traces() const override;
 
     //! @brief Retrieves the name of this Model.
     //! @returns The name as a string.
@@ -102,7 +102,7 @@ public:
     //! The factory registration requires this as unique identifier.
     static const std::string Get_Name() { return "Hamming Weight"; }
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif

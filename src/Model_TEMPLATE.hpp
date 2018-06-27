@@ -97,7 +97,7 @@ public:
         }
     }
 
-    const ELMO2::Internal::Traces& Generate_Traces() const override;
+    const ELMO2::Internal::Traces Generate_Traces() const override;
 
     //! @brief Retrieves the name of this Model.
     //! @returns The name as a string.

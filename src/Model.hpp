@@ -81,13 +81,13 @@ protected:
 public:
     //! @brief Virtual destructor to ensure proper memory cleanup.
     //! @see https://stackoverflow.com/a/461224
-    virtual ~Model() = default; // TODO: Should this = default? Rule of
+    virtual ~Model() = default;  // TODO: Should this = default? Rule of
     // ZERO? http://en.cppreference.com/w/cpp/language/rule_of_three
 
     //! @brief In derived classes, this function should contain the mathematical
     //! calculations that generate the Traces.
     //! @returns The generated Traces for the target program.
-    virtual const ELMO2::Internal::Traces& Generate_Traces() const = 0;
+    virtual const ELMO2::Internal::Traces Generate_Traces() const = 0;
 
     //! @brief Ensures that all the interaction terms used within the model
     //! are provided by the Coefficients.
@@ -112,7 +112,7 @@ public:
                            in_coefficients_terms);
     }
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif
