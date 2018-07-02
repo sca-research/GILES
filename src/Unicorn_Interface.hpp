@@ -47,9 +47,9 @@ public:
     {
     }
 
-    const ELMO2::Internal::Execution& Run_Code() override {}
+    const ELMO2::Internal::Execution Run_Code() override {}
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif
