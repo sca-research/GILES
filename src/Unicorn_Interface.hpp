@@ -30,23 +30,7 @@ namespace Internal
 // Doxygen comments are inherited from Emulator_Interface.hpp
 class Unicorn_Interface : public virtual ELMO2::Internal::Emulator_Interface
 {
-private:
-    const std::vector<ELMO2::Internal::Register>&
-    parse_registers(const std::string& p_registers) override
-    {
-    }
-
-    const ELMO2::Internal::Assembly_Instruction&
-    parse_assembly(const std::string& p_assembly) override
-    {
-    }
-
 public:
-    explicit Unicorn_Interface(const std::string& p_program_path)
-        : ELMO2::Internal::Emulator_Interface(p_program_path)
-    {
-    }
-
     const ELMO2::Internal::Execution Run_Code() override {}
 };
 }  // namespace Internal

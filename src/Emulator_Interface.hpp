@@ -53,24 +53,6 @@ private:
                                        // be loaded as a string or is there a
                                        // better way?
 
-    //! @brief Turns a string containing information about the Registers in the
-    //! form as provided by the specific emulator into the internal
-    //! representation of a list of Register objects.
-    //! @param p_registers The Register details as provided by the emulator.
-    //! @returns The internal representation of a list of Registers.
-    virtual const std::vector<ELMO2::Internal::Register>&
-    parse_registers(const std::string& p_registers) = 0;
-
-    //! @brief Turns a string containing the information about an Assembly
-    //! Instruction in the form as provided by the specific emulator into the
-    //! internal representation of an Assembly_Instruction.
-    //! @param p_assembly The assembly instructions as provided by the emulator.
-    //! @returns The internal representation of the assembly instruction.
-    // TODO: Should this return a vector of Assembly_Instruction or single
-    // instruction? Should there be two functions for this?
-    virtual const ELMO2::Internal::Assembly_Instruction&
-    parse_assembly(const std::string& p_assembly) = 0;
-
     // TODO: ****** GO THROUGH EVERY CLASS WITH RULE OF FIVE *******************
 protected:
     //! @brief This constructor is marked as protected as it should only be
