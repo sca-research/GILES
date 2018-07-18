@@ -332,7 +332,7 @@ public:
         // Remove the opcode from the instruction and store it in a separate
         // variable.
         std::string opcode =
-            ELMO2::Internal::Utility::string_split_head_pop(instruction, " ");
+            ELMO2::Internal::Utility::string_split_head_pop(&instruction, " ");
 
         // Remove white space
         boost::algorithm::trim(instruction);
