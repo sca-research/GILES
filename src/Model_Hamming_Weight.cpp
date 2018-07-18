@@ -31,6 +31,8 @@
 #include <bitset>                    // for bitset
 #include <vector>                    // for vector
 
+#include <iostream>  // for temp debugging
+
 #include "Model_Hamming_Weight.hpp"
 
 //! The list of interaction terms used by this model in order to generate
@@ -44,17 +46,51 @@ const std::unordered_set<std::string>
 const ELMO2::Internal::Traces
 ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
 {
-    // TODO: If traces are serialised upon generation then do we need a traces
-    // object?
+    // TODO: If traces are serialised upon generation then do we need a
+    // traces object?
     ELMO2::Internal::Traces traces;
 
-    // TODO: Change this temporary structure
-    ELMO2::Internal::Execution m_execution;
-
-    for (const auto& instruction : m_execution.Get_Assembly())
+    for (size_t i = 0; i < m_execution.Get_Cycle_Count(); ++i)
     {
-        // Calculates the Hamming weight of the second operand and appends it to
-        // the traces object
-        traces.append(instruction.get_operand(2).count());
+        // Prevents trying to calculate the hamming weight of stalls and
+        // flushes.
+        if (ELMO2::Internal::Execution::State::Normal !=
+            m_execution.Get_State(i, "Execute"))
+        {
+            std::cout << "Abnormal state reached" << std::endl;
+            continue;
+        }
+
+        std::cout << m_execution.Get_Value<std::string>(i, "Execute")
+                  << std::endl;
+
+        // Retrieves what is in the "Execute" pipeline stage at clock cycle "i".
+        auto instruction = m_execution.Get_Instruction(i, "Execute");
+
+        // auto operand_value = instruction.Get_Operand(operand_number);
+
+        std::cout << instruction.Get_Opcode();
+
+        for (const auto& operand : instruction.Get_Operands())
+        {
+            // If the operand is a register look up the value in that register,
+            // else treat it as a raw value.
+            if (!m_execution.Is_Register(operand))
+            {
+                std::cout << "," << operand;
+                continue;
+            }
+            std::cout << ",|" << std::dec
+                      << ELMO2::Internal::Model_Hamming_Weight::Hamming_Weight<
+                             size_t>(m_execution.Get_Register_Value(i, operand))
+                      << "|";
+        }
+        std::cout << std::endl;
+
+        // Calculates the Hamming weight of the second operand and appends
+        // it to the traces object
+        // traces.append(instruction.get_operand(2).count());  // TODO: Add
+        // a function that actually makes this work to Assembly_Instruction.
     }
+    return traces;
 }

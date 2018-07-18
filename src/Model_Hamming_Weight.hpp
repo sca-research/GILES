@@ -101,6 +101,22 @@ public:
     //! @note This is needed to ensure self registration in the factory works.
     //! The factory registration requires this as unique identifier.
     static const std::string Get_Name() { return "Hamming Weight"; }
+
+    //! @brief Calculates the hamming weight of the given input.
+    //! @param p_input The value to find the hamming weight of.
+    //! @tparam T This is a template in order to support multiple integer based
+    //! types in one function.
+    //! @returns The hamming weight of p_input as the same type as the input.
+    //! @see https://en.wikipedia.org/wiki/Hamming_weight
+    template <typename T> const T Hamming_Weight(T p_input) const
+    {
+        T count = p_input ? 1 : 0;
+        while (p_input &= (p_input - 1))
+        {
+            ++count;
+        }
+        return count;
+    }
 };
 }  // namespace Internal
 }  // namespace ELMO2
