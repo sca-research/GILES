@@ -46,7 +46,7 @@ namespace Internal
 // TODO: Look into gem5.
 class Emulator_Interface
 {
-private:
+protected:
     const std::string m_program_path;  // TODO: This should be optional ideally:
                                        // Don't pass in path instead pass in
                                        // binary loaded from IO. Can this simply
@@ -54,7 +54,6 @@ private:
                                        // better way?
 
     // TODO: ****** GO THROUGH EVERY CLASS WITH RULE OF FIVE *******************
-protected:
     //! @brief This constructor is marked as protected as it should only be
     //! called by derived classes to assist with initialisation.
     //! @param p_program_path The path where the program is. TODO: Change this
