@@ -36,7 +36,8 @@
 
 //! This is a complete list of all models to be compiled. Anything not listed
 //! here will not self register and consequently not be useable.
-#include "Emulator_TEMPLATE.hpp"
+// #include "Emulator_TEMPLATE.hpp"
+#include "Emulator_Andres.hpp"
 
 namespace ELMO2
 {
