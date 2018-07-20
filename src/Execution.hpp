@@ -112,10 +112,10 @@ private:
         T_Value_Type m_value;
     };
 
-    //! @brief A data structure for storing zthe per clock cycle pipeline of any
+    //! @brief A data structure for storing the per clock cycle pipeline of any
     //! given processor. The values are indexed by clock cycle and then by
     //! pipeline stage. For each clock cycle (stored as a vector) there will be
-    //! a map storing the value for that pipeline stage, during that cyle, as
+    //! a map storing the value for that pipeline stage, during that cycle, as
     //! indexed by the name of the pipeline stage.
     //! clock cycle no<pipe stage<pipe_name, <value state, value>>>
     //! e.g. 20<<"Decode", <Normal, <"str r1, r2">>>>

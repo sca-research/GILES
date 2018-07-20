@@ -23,8 +23,8 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <algorithm> // for find
-#include <stdexcept> // for out_of_range
+#include <algorithm>  // for find
+#include <stdexcept>  // for out_of_range
 
 #include "Coefficients.hpp"
 
@@ -120,5 +120,5 @@ ELMO2::Internal::Coefficients::Get_Constant(const std::string& p_opcode) const
     return m_coefficients.at(get_instruction_category(p_opcode))["Constant"]
         .get<double>();
 }
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2

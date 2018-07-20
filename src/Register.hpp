@@ -26,7 +26,7 @@
 #ifndef REGISTER_HPP
 #define REGISTER_HPP
 
-#include <string>
+#include <string>  // for string
 
 namespace ELMO2
 {
@@ -67,7 +67,7 @@ public:
     //! @returns The name of the register.
     const std::string& get_name() const { return m_name; }
 
-    //!@brief Retrieves the value contained within that register.
+    //! @brief Retrieves the value contained within that register.
     const std::string& get_value() const { return m_value; }
 };
 }  // namespace Internal

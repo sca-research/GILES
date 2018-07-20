@@ -59,7 +59,6 @@ public:
 
         // Loop indefinitely until the end of the string if reached.
         // This is basically a while loop with a variable declared within it.
-        // TODO: Change this back to a while loop.
         size_t position;
         while (std::string::npos != (position = p_input.find(p_delimiter)))
         {

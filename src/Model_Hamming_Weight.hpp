@@ -80,7 +80,7 @@ public:
         // This is required to be "used" somewhere in order to prevent the
         // compiler from optimising it away, thus preventing self registration.
         // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
-        // Section 6.6.4.1, point 2 states that this statment will not be
+        // Section 6.6.4.1, point 2 states that this statement will not be
         // optimised away.
         m_is_registered;
 

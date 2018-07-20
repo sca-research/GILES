@@ -33,12 +33,12 @@ if(${PROJECT_NAME}_CALCULATE_COVERAGE)
     set(CMAKE_CXX_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage" PARENT_SCOPE)
     # Second call is needed to set these in the current directory
     set(CMAKE_CXX_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage")
-    
-    # A custom command to generate a html code coverage report using gcovr. 
+
+    # A custom command to generate a html code coverage report using gcovr.
     # (https://gcovr.com/)
     # This will create a directory, "coverage", compile and run the tests and then
     # generate the coverage information for those tests.
-    add_custom_target(coverage 
+    add_custom_target(coverage
         COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/coverage
         COMMAND ${EXECUTABLE_OUTPUT_PATH}/tests
         COMMAND gcovr ${PROJECT_BINARY_DIR} -r ${PROJECT_SOURCE_DIR} --exclude-unreachable-branches --exclude-directories=test --html --html-details -o ${PROJECT_BINARY_DIR}/coverage/coverage.html

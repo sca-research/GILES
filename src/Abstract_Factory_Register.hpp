@@ -16,11 +16,10 @@
 */
 
 /*!
-    @todo Chnage this
+    @todo Change this
     @file Abstract_Factory_Register.hpp
     @brief This file contains the Abstract_Factory_Register class, which is used
     to assist with registering classes within the Abstract_Factory class.
-    @todo Seperate this into a hpp and cpp.
     @author Scott Egerton
     @date 2017-2018
     @copyright GNU Affero General Public License Version 3+
@@ -38,6 +37,7 @@ namespace ELMO2
 {
 namespace Internal
 {
+//! @class Abstract_Factory_Register
 //! @brief This class is used to assist with the self registration of classes
 //! within the factory.
 //! The idea is that a class would inherit from this, using itself as the

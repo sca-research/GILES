@@ -73,7 +73,8 @@ public:
 
     //! @brief A function to start the process of invoking the emulator and
     //! recording the results.
-    //! @returns The recorded Execution of the target program.
+    //! @returns The recorded Execution of the target program as an Execution
+    //! object.
     virtual const ELMO2::Internal::Execution Run_Code() = 0;
 };
 }  // namespace Internal

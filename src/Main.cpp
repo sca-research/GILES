@@ -24,18 +24,18 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <algorithm> // for move
-#include <iostream>  // for operator<<, cout, endl, ostream, basic_ostream
-#include <memory>    // for __shared_ptr_access
-#include <optional>  // for optional
-#include <stdexcept> // for invalid_argument
-#include <stdlib.h>  // for exit
-#include <string>    // for string, operator<<
-#include <vector>    // for vector
+#include <algorithm>  // for move
+#include <iostream>   // for operator<<, cout, endl, ostream, basic_ostream
+#include <memory>     // for __shared_ptr_access
+#include <optional>   // for optional
+#include <stdexcept>  // for invalid_argument
+#include <stdlib.h>   // for exit
+#include <string>     // for string, operator<<
+#include <vector>     // for vector
 
-#include <cxxopts.hpp> // for Options, value, OptionAdder, OptionDetails
+#include <cxxopts.hpp>  // for Options, value, OptionAdder, OptionDetails
 
-#include "ELMO2.cpp" // for ELMO_2
+#include "ELMO2.cpp"  // for ELMO_2
 
 //! Anonymous namespace is used as this functionality is only required when
 //! building not as a library.
@@ -75,13 +75,13 @@ void parse_command_line_flags(int& argc, char**& argv)
 
     const auto& result = options.parse(argc, argv);
 
-    if (result.count("help")) // if help flag is passed
+    if (result.count("help"))  // if help flag is passed
     {
         std::cout << options.help() << std::endl;
         exit(0);
     }
 
-    if (result.count("input")) // if input flag is passed
+    if (result.count("input"))  // if input flag is passed
     {
         m_program_path = result["input"].as<std::string>();
     }
@@ -92,7 +92,7 @@ void parse_command_line_flags(int& argc, char**& argv)
                                     "--help for more.");
     }
 
-    if (result.count("output")) // if output flag is passed
+    if (result.count("output"))  // if output flag is passed
     {
         m_traces_path = result["output"].as<std::string>();
     }
@@ -100,7 +100,7 @@ void parse_command_line_flags(int& argc, char**& argv)
     // default "./coeffs.json" is used if flag is not passed
     m_coefficients_path = result["file"].as<std::string>();
 }
-} // namespace
+}  // namespace
 
 //! @brief The entry point of the program.
 int main(int argc, char* argv[])
