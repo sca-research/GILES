@@ -45,9 +45,9 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/bin)
 # Place libraries into a 'lib' folder
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
-set(THIRD_PARTY_DIR ${CMAKE_CURRENT_BINARY_DIR}/third_party)
+set(EXTERNAL_PROJECT_DIR ${PROJECT_SOURCE_DIR}/external)
 
-# Recurse into the "src" subdirectory. This does not actually
+# Recurse into the "test" subdirectory. This does not actually
 # cause another cmake executable to run. The same process will walk through
 # the project's entire directory structure.
 # The "test" directory is added before "src" so that compile flags can be added

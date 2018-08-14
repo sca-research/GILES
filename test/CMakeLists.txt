@@ -17,9 +17,7 @@
 
 cmake_minimum_required(VERSION 2.6)
 
-include("${PROJECT_SOURCE_DIR}/cmake/Third_Party.cmake")
-
-get_external_header("catch.hpp" "https://raw.githubusercontent.com/CatchOrg/Catch2/master/single_include/catch.hpp")
+include("${PROJECT_SOURCE_DIR}/cmake/External.cmake")
 
 # C++11 is required for nlohmann_json and catch
 set(CMAKE_CXX_STANDARD 11)
@@ -50,6 +48,10 @@ endif(${PROJECT_NAME}_CALCULATE_COVERAGE)
 # Make test executable
 set(TEST_SOURCES Test_Validator_Coefficients.cpp)
 add_executable(tests ${TEST_SOURCES})
+
+# Download and include required files from external projects
+target_include_external_project(tests Catch2 single_include/catch2)
+target_include_external_project(tests json single_include/nlohmann)
 
 # Include the src being tested
 target_include_directories(tests PRIVATE ${PROJECT_SOURCE_DIR}/src ${EXECUTABLE_OUTPUT_PATH})

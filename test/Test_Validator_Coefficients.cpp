@@ -25,11 +25,11 @@
 
 #define CATCH_CONFIG_MAIN
 
-#include <catch.hpp> // for catch
+#include <catch.hpp>  // for catch
 
 #include "Tests.cpp"
 
-#include <nlohmann/json.hpp> // for json
+#include <json.hpp>  // for json
 
 #include "Validator_Coefficients.hpp"
 
@@ -143,7 +143,7 @@ TEST_CASE("JSON is not blank"
     {
         REQUIRE_NOTHROW(json = nlohmann::json::parse(R"(
                 {
-                    "ALU" : 
+                    "ALU" :
                     {
                         "Constant" : "Invalid",
                         "Coefficients" :

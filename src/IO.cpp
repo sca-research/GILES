@@ -29,7 +29,7 @@
 #include <iostream>                    // for operator<<, endl
 #include <stdexcept>                   // for invalid_argument
 
-#include <nlohmann/json.hpp>           // for json, basic_json<>::exception
+#include <json.hpp>           // for json, basic_json<>::exception
 
 #include "Coefficients.hpp"            // for Coefficients
 #include "Validator_Coefficients.hpp"  // for Validator_Coefficients

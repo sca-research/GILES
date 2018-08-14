@@ -26,9 +26,8 @@ option(${PROJECT_NAME}_BUILD_EXECUTABLE
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include("${PROJECT_SOURCE_DIR}/cmake/Third_Party.cmake")
+include("${PROJECT_SOURCE_DIR}/cmake/External.cmake")
 
-# Add library called that is built from the source files
 # ******************************************************************************
 add_library(lib${PROJECT_NAME}
     ELMO2.cpp
@@ -39,11 +38,13 @@ add_library(lib${PROJECT_NAME}
     Validator_Coefficients.cpp
 )
 
-get_external_header("cxxopts.hpp" "https://raw.githubusercontent.com/jarro2783/cxxopts/master/include/cxxopts.hpp")
+# Download and include required files from external projects
+target_include_external_project(lib${PROJECT_NAME} Traces_Serialiser src)
+target_include_external_project(lib${PROJECT_NAME} json single_include/nlohmann)
 
-get_external_header("nlohmann/json.hpp" "https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp")
+target_include_directories(lib${PROJECT_NAME} SYSTEM PRIVATE ${EXTERNAL_PROJECT_DIR}/json/single_include/nlohmann)
 
-target_include_directories(lib${PROJECT_NAME} SYSTEM PRIVATE ${THIRD_PARTY_DIR})
+target_link_libraries(lib${PROJECT_NAME} lib_simulator)
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 SET_TARGET_PROPERTIES(lib${PROJECT_NAME} PROPERTIES PREFIX "")
@@ -55,5 +56,10 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
 
     target_link_libraries(${PROJECT_NAME} lib${PROJECT_NAME})
 
-    target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${THIRD_PARTY_DIR})
+    target_link_libraries(lib${PROJECT_NAME} lib_simulator)
+
+    # Include required files from external projects
+    target_include_external_project(${PROJECT_NAME} cxxopts include)
+    target_include_external_project(${PROJECT_NAME} json single_include/nlohmann)
+
 endif(${PROJECT_NAME}_BUILD_EXECUTABLE)

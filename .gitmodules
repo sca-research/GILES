@@ -1,0 +1,12 @@
+[submodule "external/Traces-Serialiser"]
+	path = external/Traces_Serialiser
+	url = https://github.com/bristol-sca/Traces-Serialiser.git
+[submodule "external/cxxopts"]
+	path = external/cxxopts
+	url = https://github.com/jarro2783/cxxopts.git
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json.git
+[submodule "external/Catch2"]
+	path = external/Catch2
+	url = https://github.com/catchorg/Catch2.git

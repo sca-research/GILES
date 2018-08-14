@@ -30,7 +30,7 @@
 #include <unordered_set> // for unordered_set
 #include <vector>        // for vector
 
-#include <nlohmann/json.hpp> // for json
+#include <json.hpp> // for json
 
 namespace ELMO2
 {
