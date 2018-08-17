@@ -23,6 +23,11 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
+#include <stdexcept>  // for range_error
+#include <vector>     // for vector
+
+#include <iostream>  // TODO: for temp debugging
+
 #ifndef TRACES_HPP
 #define TRACES_HPP
 
@@ -37,8 +42,54 @@ namespace Internal
 //! is.
 class Traces
 {
+private:
+    // TODO: Need a very large (several GBs) container to store traces. Look
+    // into libs? STXXL? Basically a very large array is needed.
+
+    // 2d vector. A vector of traces containing a vector of samples within that
+    // trace.
+    // Empty braces initialisation prevents a segfault.
+    std::vector<std::vector<uint32_t>> m_traces{{}};
+
+public:
+    void Append(const uint32_t& p_value)
+    {
+        std::cout << "Trace: ";
+        std::cout << p_value << std::endl;
+
+        m_traces.back().push_back(p_value);
+    }
+
+    //! @brief Constructs a new std::vector and add it to m_traces. As traces
+    //! are appended to the last element in m_traces, this will mean that new
+    //! samples are added to this new trace in future.
+    //! @note This only needs to be called after the first trace is added. One
+    //! empty trace will be automatically created upon initialisation ready to
+    //! be populated.
+    void Start_New_Trace()
+    {
+        // Don't create a new trace if the current is empty - Use that instead,
+        if (m_traces.back().empty())
+        {
+            return;
+        }
+
+        if (m_traces.back().size() != m_traces.front().size())
+        {
+            throw std::range_error("Cannot start a new trace, this trace is "
+                                   "not the same length as the other traces");
+        }
+        m_traces.emplace_back();
+    }
+
+    size_t Get_Number_Of_Traces() const { return m_traces.size(); }
+
+    size_t Get_Number_Of_Samples_Per_Trace() const
+    {
+        return m_traces[0].size();
+    }
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif
