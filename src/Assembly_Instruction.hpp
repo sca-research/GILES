@@ -26,9 +26,10 @@
 #ifndef ASSEMBLY_INSTRUCTION_HPP
 #define ASSEMBLY_INSTRUCTION_HPP
 
-#include <string>   // for string
-#include <utility>  // for pair
-#include <vector>   // for vector
+#include <stdexcept>  // for overflow_error, underflow_error
+#include <string>     // for string
+#include <utility>    // for pair
+#include <vector>     // for vector
 
 #include <boost/algorithm/string.hpp>  // TODO: Convert Uility.h over to boost algorithms (or the other way around?)
 
@@ -106,11 +107,32 @@ public:
     //! @exception std::out_of_range This is thrown when the index given by
     //! p_operand_index - 1 is out of the array bounds as no range checking
     //! is performed in this function.
+    //! @throws overflow_error This is thrown when the instruction does not
+    //! contain enough operands. E.g. The fifth operand is requested when the
+    //! instruction only has one operand.
+    //! @throws underflow_error When the number given by p_operand_index is too
+    //! low to refer to any operand.
+    //! @note This function is not zero indexed. Get_Operand(1) will retrieve
+    //! the first operand.
     //! TODO: Convert to a get operand name (e.g. r1) and a get_operand_value
     //! (e.g. ab89204c)
     const std::string& Get_Operand(const uint8_t p_operand_index) const
     {
-        return m_operands[p_operand_index - 1];
+        if (p_operand_index > m_operands.size() + 1)
+        {
+            throw std::overflow_error(
+                "Cannot retrieve operand. This " +
+                static_cast<std::string>(m_opcode) +
+                "instruction does not have that many operands");
+        }
+        else if (0 == p_operand_index)
+        {
+            throw std::underflow_error(
+                "Cannot retrieve operand. Operand index cannot be 0. This may "
+                "because this function is not zero indexed. Get_Operand(1) "
+                "will retrieve the first operand.");
+        }
+        return m_operands.at(p_operand_index - 1);
     }
 };
 }  // namespace Internal

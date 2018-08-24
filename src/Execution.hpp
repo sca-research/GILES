@@ -379,7 +379,7 @@ public:
     const std::map<std::string, size_t>&
     Get_Registers(const size_t p_cycle) const
     {
-        return m_registers[p_cycle];
+        return m_registers.at(p_cycle);
     }
 
     //! @todo document
