@@ -10,3 +10,6 @@
 [submodule "external/Catch2"]
 	path = external/Catch2
 	url = https://github.com/catchorg/Catch2.git
+[submodule "external/thumb-sim"]
+	path = external/thumb-sim
+	url = https://github.com/bristol-sca/thumb-sim.git
