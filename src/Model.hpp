@@ -95,21 +95,20 @@ public:
     //! are contained within the Coefficients and false if not.
     bool Check_Interaction_Terms() const
     {
-        const auto& models_terms = Get_Interaction_Terms();
+        const auto& models_terms       = Get_Interaction_Terms();
         const auto& coefficients_terms = m_coefficients.Get_Interaction_Terms();
 
-        // A function for checking if an individual element is in
-        // coefficients_terms.
-        const auto in_coefficients_terms =
-            [&coefficients_terms](const auto& x) {
-                return coefficients_terms.end() != coefficients_terms.find(x);
-            };
-
-        // Apply that function to all terms in models_terms.
         return models_terms.size() <= coefficients_terms.size() &&
+               // For each term the model uses, check it is contained within the
+               // set of terms provided by the Coefficients.
                std::all_of(models_terms.begin(),
                            models_terms.end(),
-                           in_coefficients_terms);
+                           // A function for checking if an individual element
+                           // is in coefficients_terms.
+                           [&coefficients_terms](const auto& x) {
+                               return coefficients_terms.end() !=
+                                      coefficients_terms.find(x);
+                           });
     }
 };
 }  // namespace Internal
