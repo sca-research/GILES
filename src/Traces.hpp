@@ -26,6 +26,9 @@
 #include <stdexcept>  // for range_error
 #include <vector>     // for vector
 
+#include <any>       // for any
+#include <typeinfo>  //for bad_typeid
+
 #include <iostream>  // TODO: for temp debugging
 
 #ifndef TRACES_HPP
@@ -46,29 +49,46 @@ private:
     // TODO: Need a very large (several GBs) container to store traces. Look
     // into libs? STXXL? Basically a very large array is needed.
 
-    // 2d vector. A vector of traces containing a vector of samples within that
-    // trace.
-    // Empty braces initialisation prevents a segfault.
-    std::vector<std::vector<uint32_t>> m_traces{{}};
+    // 2d vector. A vector of traces containing a vector of samples within
+    // that trace. Empty braces initialisation prevents a segfault.
+    // TODO: Convert T to pair<T, std::string> to include
+    // cryptographic data (The instruction, maybe clock cycle) in the
+    // traces.
+    // std::shared_ptr<Trace_Samples_Base> m_traces;  //{{}};
+    std::vector<std::vector<std::any>> m_traces{{}};
 
 public:
-    void Append(const uint32_t& p_value)
+    template <typename T_Value_Type> void Append(const T_Value_Type& p_value)
     {
+        // Ensure that the template type is arithmetic.
+        static_assert(std::is_arithmetic<T_Value_Type>::value,
+                      "Traces must be stored as a number");
+
         std::cout << "Trace: ";
-        std::cout << p_value << std::endl;
+        std::cout << std::dec << p_value << std::endl;
+
+        // This check will seg fault if the samples vector is not initialised,
+        // so check it's not empty before checking it's first element..
+        if (!m_traces.front().empty() &&
+            m_traces.front().front().type() != typeid(p_value))
+        {
+            throw std::range_error(
+                "Every sample in every trace must be of the same type");
+        }
 
         m_traces.back().push_back(p_value);
     }
 
-    //! @brief Constructs a new std::vector and add it to m_traces. As traces
-    //! are appended to the last element in m_traces, this will mean that new
-    //! samples are added to this new trace in future.
-    //! @note This only needs to be called after the first trace is added. One
-    //! empty trace will be automatically created upon initialisation ready to
-    //! be populated.
+    //! @brief Constructs a new std::vector and add it to m_traces. As
+    //! traces are appended to the last element in m_traces, this will mean
+    //! that new samples are added to this new trace in future.
+    //! @note This only needs to be called after the first trace is added.
+    //! One empty trace will be automatically created upon initialisation
+    //! ready to be populated.
     void Start_New_Trace()
     {
-        // Don't create a new trace if the current is empty - Use that instead,
+        // Don't create a new trace if the current is empty - Use that
+        // instead,
         if (m_traces.back().empty())
         {
             return;
@@ -82,14 +102,34 @@ public:
         m_traces.emplace_back();
     }
 
+    template <typename T_Value_Type>
+    const std::vector<std::vector<T_Value_Type>> Get() const
+    {
+        // Ensure that the template type is arithmetic.
+        static_assert(std::is_arithmetic<T_Value_Type>::value,
+                      "Traces must be stored as a number");
+
+        std::vector<std::vector<T_Value_Type>> cast_traces;
+        for (const auto& trace : m_traces)
+        {
+            cast_traces.emplace_back();
+            for (const auto& sample : trace)
+            {
+                cast_traces.back().push_back(
+                    std::any_cast<T_Value_Type>(sample));
+            }
+        }
+        return cast_traces;
+    }
+
     size_t Get_Number_Of_Traces() const { return m_traces.size(); }
 
     size_t Get_Number_Of_Samples_Per_Trace() const
     {
-        return m_traces[0].size();
+        return m_traces.at(0).size();
     }
 };
 }  // namespace Internal
 }  // namespace ELMO2
 
-#endif
+#endif  // TRACES_HPP
