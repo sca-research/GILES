@@ -391,6 +391,45 @@ public:
         return m_registers.at(p_cycle).at(p_register_name);
     }
 
+    //! @brief Retrieves the value of an operand in numerical form. If that
+    //! operand is a register then the value contained within that register is
+    //! retrieved instead
+    //! @param p_cycle The cycle number at which to retrieve the operand
+    //! from.
+    //! @param p_operand The operand to retrieve the value from.
+    //! @ returns The value stored in the operand, or the value  in the register
+    //! pointed to by the operand in numeric form.
+    //! @note Offsets do not need to be considered as they offset the loaded
+    //! value, not the address.
+    std::size_t Get_Operand_Value(const std::size_t p_cycle,
+                                  const std::string& p_operand) const
+    {
+        return Is_Register(p_operand) ? Get_Register_Value(p_cycle, p_operand)
+                                      : std::stoi(p_operand);
+    }
+
+    //! @brief Retrieves the value of an operand in numerical form. If that
+    //! operand is a register then the value contained within that register is
+    //! retrieved instead
+    //! @param p_cycle The cycle number at which to retrieve the operand
+    //! from.
+    //! @param p_instruction The instruction to retrieve the operand from.
+    //! @param p_operand_number The index of the operand to retrieve the value
+    //! from.
+    //! @ returns The value stored in the operand, or the value in the register
+    //! pointed to by the operand in numeric form.
+    //! @note This function is not zero indexed. Get_Operand_Value(x, y, 1) will
+    //! retrieve the first operand.
+    //! @note Offsets do not need to be considered as they offset the loaded
+    //! value, not the address.
+    std::size_t Get_Operand_Value(
+        const std::size_t p_cycle,
+        const ELMO2::Internal::Assembly_Instruction& p_instruction,
+        const std::size_t p_operand_number) const
+    {
+        return Get_Operand_Value(p_cycle, p_instruction.Get_Operand(1));
+    }
+
     //! @brief Retrieves the total number of clock cycles that occurred
     //! during the running of the target program.
     //! @returns The total number of clock cycles.

@@ -90,12 +90,7 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
         // TODO: Convert this to a Get_Operand_Value() function or similar in
         // Execution.
         const std::size_t operand_value =
-            m_execution.Is_Register(operand)
-                ? m_execution.Get_Register_Value(i, operand)
-                : std::stoi(operand);
-        //: 11111111;
-        // TODO: Make this work - TODO: Requires proper passing of all operands
-        // i.e. fix {} braces issue.
+            m_execution.Get_Operand_Value(i, instruction, 1);
 
         // Calculates the Hamming weight of the second operand and appends
         // it to the traces object

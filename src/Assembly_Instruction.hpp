@@ -114,8 +114,6 @@ public:
     //! low to refer to any operand.
     //! @note This function is not zero indexed. Get_Operand(1) will retrieve
     //! the first operand.
-    //! TODO: Convert to a get operand name (e.g. r1) and a get_operand_value
-    //! (e.g. ab89204c)
     const std::string& Get_Operand(const uint8_t p_operand_index) const
     {
         if (p_operand_index > m_operands.size() + 1)
