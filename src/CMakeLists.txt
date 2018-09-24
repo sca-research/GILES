@@ -28,13 +28,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include("${PROJECT_SOURCE_DIR}/cmake/External.cmake")
 
+include_directories(${EXTERNAL_PROJECT_DIR}/thumb-sim/library)
+include_directories(${EXTERNAL_PROJECT_DIR}/thumb-sim/include)
+include_directories(${EXTERNAL_PROJECT_DIR}/Traces_Serialiser/src)
+
+# Add library that is built from the source files
 # ******************************************************************************
-add_library(lib${PROJECT_NAME}
+add_library(lib${PROJECT_NAME} SHARED
     ELMO2.cpp
     Coefficients.cpp
     IO.cpp
     Model_Hamming_Weight.cpp
     Model_TEMPLATE.cpp
+    Emulator_Andres.cpp
     Validator_Coefficients.cpp
 )
 
@@ -44,19 +50,18 @@ target_include_external_project(lib${PROJECT_NAME} json single_include/nlohmann)
 
 target_include_directories(lib${PROJECT_NAME} SYSTEM PRIVATE ${EXTERNAL_PROJECT_DIR}/json/single_include/nlohmann)
 
-target_link_libraries(lib${PROJECT_NAME} lib_simulator)
+#TODO: Why does this still work with this commented but not for exe version?
+#target_link_libraries(lib${PROJECT_NAME} libthumb-sim)
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
-SET_TARGET_PROPERTIES(lib${PROJECT_NAME} PROPERTIES PREFIX "")
+set_target_properties(lib${PROJECT_NAME} PROPERTIES PREFIX "")
 # ******************************************************************************
 
 if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     # Add executable that is a command line wrapper around the library
     add_executable(${PROJECT_NAME} Main.cpp)
 
-    target_link_libraries(${PROJECT_NAME} lib${PROJECT_NAME})
-
-    target_link_libraries(lib${PROJECT_NAME} lib_simulator)
+    target_link_libraries(${PROJECT_NAME} lib${PROJECT_NAME} libthumb-sim)
 
     # Include required files from external projects
     target_include_external_project(${PROJECT_NAME} cxxopts include)

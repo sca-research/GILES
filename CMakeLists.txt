@@ -54,8 +54,7 @@ set(EXTERNAL_PROJECT_DIR ${PROJECT_SOURCE_DIR}/external)
 # if coverage is enabled.
 add_subdirectory(test)
 
-# Recurse into the "doc" subdirectory.
 add_subdirectory(doc)
 
-# Recurse into the "src" subdirectory.
+add_subdirectory(${EXTERNAL_PROJECT_DIR}/thumb-sim)
 add_subdirectory(src)
