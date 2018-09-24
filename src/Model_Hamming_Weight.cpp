@@ -53,8 +53,7 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
     {
         // Prevents trying to calculate the hamming weight of stalls and
         // flushes.
-        if (ELMO2::Internal::Execution::State::Normal !=
-            m_execution.Get_State(i, "Execute"))
+        if (!m_execution.Is_Normal_State(i, "Execute"))
         {
             std::cout << "Abnormal state reached" << std::endl;
             traces.Append<std::uint32_t>(

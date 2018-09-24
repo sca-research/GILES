@@ -65,6 +65,7 @@ private:
     //! This class specifically is used as a base class for the template class,
     //! Pipeline_Value, so that values of that type can be stored in the
     //! Execution class without making Execution a template class.
+    // TODO: All of this can be converted to std::any
     struct Pipeline_Value_Base
     {
         //! @brief Virtual destructor to ensure proper memory cleanup.
@@ -308,11 +309,29 @@ public:
         }
     }
 
+    //! @todo document
+    //! @brief Checks to see if the type of state of the pipeline stage given by
+    //! p_pipeline_stage_name at the clock cycle given by p_cycle is Normal.
+    //! @param p_cycle The clock cycle number from which to retrieve the
+    //! pipeline state.
+    //! @param p_pipeline_stage_name The pipeline stage from which to
+    //! retrieve the state.
+    //! @returns The requested type of state using the State enum.
+    //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
+    //! @see https://en.wikipedia.org/wiki/Clock_cycle
+    //! @see https://en.wikipedia.org/wiki/Pipeline_stall
+    bool Is_Normal_State(const std::uint32_t p_cycle,
+                         const std::string& p_pipeline_stage_name) const
+    {
+        return ELMO2::Internal::Execution::State::Normal !=
+               Get_State(p_cycle, p_pipeline_stage_name);
+    }
+
     //! @brief Retrieves the instruction in the pipeline stage given by
     //! p_pipeline_stage_name at the clock cycle given by p_cycle.
     //! @warning This function does not check the type of the Value before
-    //! attempting to turn it into an assembly instruction. This should be done
-    //! separately; Get_State() can help with this.
+    //! attempting to turn it into an assembly instruction. This should be
+    //! done separately; Get_State() can help with this.
     //! @param p_cycle The clock cycle number from which to retrieve the
     //! pipeline state.
     //! @param p_pipeline_stage_name The pipeline stage from which to
@@ -320,7 +339,8 @@ public:
     //! @returns The requested instruction.
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
-    // TODO: Settle on using boost for all string functions or not using boost.
+    // TODO: Settle on using boost for all string functions or not using
+    // boost.
     const ELMO2::Internal::Assembly_Instruction
     Get_Instruction(const uint32_t p_cycle,
                     const std::string& p_pipeline_stage_name) const
@@ -331,6 +351,7 @@ public:
 
         // Remove the opcode from the instruction and store it in a separate
         // variable.
+        // TODO: Some instructions don't have operands, this fails with those.
         std::string opcode =
             ELMO2::Internal::Utility::string_split_head_pop(&instruction, " ");
 
@@ -455,7 +476,10 @@ public:
 template <typename T_Value_Type>
 const T_Value_Type& ELMO2::Internal::Execution::Pipeline_Value_Base::get() const
 {
-    return dynamic_cast<const Pipeline_Value<T_Value_Type>&>(*this).get();
+    return dynamic_cast<
+               const ELMO2::Internal::Execution::Pipeline_Value<T_Value_Type>&>(
+               *this)
+        .get();
 }
 
 #endif  // EXECUTION_HPP
