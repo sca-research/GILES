@@ -323,7 +323,7 @@ public:
     bool Is_Normal_State(const std::uint32_t p_cycle,
                          const std::string& p_pipeline_stage_name) const
     {
-        return ELMO2::Internal::Execution::State::Normal !=
+        return ELMO2::Internal::Execution::State::Normal ==
                Get_State(p_cycle, p_pipeline_stage_name);
     }
 
