@@ -59,7 +59,7 @@ public:
 
         // Loop indefinitely until the end of the string if reached.
         // This is basically a while loop with a variable declared within it.
-        size_t position;
+        std::size_t position;
         while (std::string::npos != (position = p_input.find(p_delimiter)))
         {
             // Push back everything from the beginning until this point as one
@@ -86,6 +86,8 @@ public:
     //! @brief Splits a string into into two using a string given by
     //! p_delimiter as a delimiter for splitting. The left hand side of the
     //! split is removed from the input and returned.
+    //! If the delimiter is not found, the entire string is popped and returned,
+    //! clearing p_input.
     //! @warning This function can potentially remove characters from the
     //! original input as p_input is a pointer.
     //! @param p_input The string to be split. This is a passed by pointer and
@@ -94,23 +96,14 @@ public:
     //! reference to indicate that it contains the original data.
     //! @param p_delimiter The delimiting string to spilt on. This will not be
     //! present in the output.
-    //! @returns The left hand side of the first occurence of p_delimiter in
-    //! p_input.
+    //! @returns The left hand side of the first occurrence of p_delimiter in
+    //! p_input or the entire string if p_delimiter is not found.
     static const std::string
     string_split_head_pop(std::string* const p_input,
                           const std::string& p_delimiter)
     {
         std::string head;
         auto position = p_input->find(p_delimiter);
-
-        /*
-         *if (std::string::npos == position)
-         *{
-         *    throw std::invalid_argument(
-         *        "Could not split string, the delimiting value was not
-         *found.");
-         *}
-         */
 
         // Push back everything from the beginning until this point as one
         // split.
@@ -119,6 +112,12 @@ public:
         // Remove what was just pushed back from the input string.
         p_input->erase(0, position + p_delimiter.length());
 
+        if (std::string::npos == position)
+        {
+            // If the delimiting value was not found, then pop the whole string
+            // as the head
+            p_input->clear();
+        }
         return head;
     }
 
