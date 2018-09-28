@@ -27,6 +27,7 @@
 #ifndef EXECUTION_HPP
 #define EXECUTION_HPP
 
+#include <any>        // for any, any_cast, bad_any_cast
 #include <deque>      // for deque
 #include <map>        // for map
 #include <memory>     // for shared_ptr
@@ -39,6 +40,8 @@
 #include "Assembly_Instruction.hpp"
 #include "Register.hpp"
 #include "Utility.hpp"  // for string_split
+
+#include <iostream>  // for temp debugging
 
 namespace ELMO2
 {
@@ -54,65 +57,6 @@ namespace Internal
 class Execution
 {
 private:
-    //! @class Pipeline_Value_Base
-    //! @brief This class, along with Pipeline_Value exist
-    //! in order to facilitate storing values of varying types within the
-    //! Execution class. This was done as different pipeline stages should
-    //! logically be stored as different data types. For example in many
-    //! processors when an instruction is fetched from memory it is encoded in a
-    //! numerical form. When this is decoded in a later pipeline stage in no
-    //! longer makes sense to store this as a numerical type.
-    //! This class specifically is used as a base class for the template class,
-    //! Pipeline_Value, so that values of that type can be stored in the
-    //! Execution class without making Execution a template class.
-    // TODO: All of this can be converted to std::any
-    struct Pipeline_Value_Base
-    {
-        //! @brief Virtual destructor to ensure proper memory cleanup.
-        //! @see https://stackoverflow.com/a/461224
-        virtual ~Pipeline_Value_Base() = default;
-
-        //! @brief Retrieves the value stored in the derived class,
-        //! Pipeline_Value. as the template type requested.
-        //! @returns The requested value.
-        //! @throws std::bad_cast This is thrown when this object cannot be
-        //! dynamically cast to an instance of Pipeline_Value with the requested
-        //! template type. Often this is because the requested template type
-        //! does not match the type the data was originally stored as.
-        template <typename T_Value_Type> const T_Value_Type& get() const;
-    };
-
-    //! @class Pipeline_Value
-    //! @brief This class, along with Pipeline_Value_Base exist
-    //! in order to facilitate storing values of varying types within the
-    //! Execution class. This was done as different pipeline stages should
-    //! logically be stored as different data types. For example in many
-    //! processors when an instruction is fetched from memory it is encoded in a
-    //! numerical form. When this is decoded in a later pipeline stage in no
-    //! longer makes sense to store this as a numerical type.
-    //! This class specifically is a template class that wraps a variable of the
-    //! templated type. This allows any type to be stored in an instance of this
-    //! class.
-    template <typename T_Value_Type>
-    struct Pipeline_Value : public Pipeline_Value_Base
-    {
-    public:
-        //! @brief This constructor initialises the value stored within this
-        //! object to be the same as the value given by p_value.
-        //! @param p_value The value to be stored.
-        explicit Pipeline_Value(const T_Value_Type& p_value) : m_value(p_value)
-        {
-        }
-
-        //! @brief An accessor that enables retrieving the value stored within
-        //! this object.
-        //! @returns The value stored within this object.
-        const T_Value_Type& get() const { return m_value; }
-
-    private:
-        T_Value_Type m_value;
-    };
-
     //! @brief A data structure for storing the per clock cycle pipeline of any
     //! given processor. The values are indexed by clock cycle and then by
     //! pipeline stage. For each clock cycle (stored as a vector) there will be
@@ -127,9 +71,7 @@ private:
     //! containers. Resizing of the vector caused the copy constructor to be
     //! called on unique_ptr causing a compile error.
     // TODO: const correctness
-    std::vector<
-        std::map<const std::string, std::shared_ptr<const Pipeline_Value_Base>>>
-        m_pipeline;
+    std::vector<std::map<const std::string, std::any>> m_pipeline;
 
     // TODO: const correctness
     //! The state of the processor registers during each cycle of the execution
@@ -205,11 +147,8 @@ public:
              cycle < p_pipeline_stage.size();
              ++cycle)
         {
-            // Construct a new Pipeline_Value object and add it to
-            // m_pipeline.
-            m_pipeline[cycle][p_pipeline_stage_name] =
-                std::make_shared<Pipeline_Value<T_Value_Type>>(
-                    Pipeline_Value<T_Value_Type>(p_pipeline_stage[cycle]));
+            // Add it to m_pipeline.
+            m_pipeline[cycle][p_pipeline_stage_name] = p_pipeline_stage[cycle];
         }
     }
 
@@ -234,11 +173,8 @@ public:
                    const std::string& p_pipeline_stage_name,
                    const T_Value_Type p_value)
     {
-        // Construct a new Pipeline_Value object and add it to
-        // m_pipeline.
-        m_pipeline[p_cycle][p_pipeline_stage_name] =
-            std::make_shared<Pipeline_Value<T_Value_Type>>(
-                Pipeline_Value<T_Value_Type>(p_value));
+        // Add it to m_pipeline.
+        m_pipeline[p_cycle][p_pipeline_stage_name] = p_value;
     }
 
     //! @brief Retrieves the state of the pipeline stage given by
@@ -247,7 +183,7 @@ public:
     //! to receive. The type stored will be dynamically cast into the
     //! requested type where possible. When this is not possible, an
     //! exception will be thrown.
-    //! @throws std::bad_cast This is thrown when dynamically casting the
+    //! @throws std::bad_any_cast This is thrown when dynamically casting the
     //! requested value to the requested type fails.
     //! @param p_cycle The clock cycle number from which to retrieve the
     //! pipeline state.
@@ -260,17 +196,15 @@ public:
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
     template <typename T_Value_Type>
-    const T_Value_Type&
-    Get_Value(const uint32_t p_cycle,
-              const std::string& p_pipeline_stage_name) const
+    const T_Value_Type Get_Value(const uint32_t p_cycle,
+                                 const std::string& p_pipeline_stage_name) const
     {
         try
         {
-            return m_pipeline.at(p_cycle)
-                .at(p_pipeline_stage_name)
-                ->get<T_Value_Type>();
+            return std::any_cast<T_Value_Type>(
+                m_pipeline.at(p_cycle).at(p_pipeline_stage_name));
         }
-        catch (const std::bad_cast& exception)
+        catch (const std::bad_any_cast& exception)
         {
             throw std::invalid_argument("The requested pipeline state is "
                                         "not stored as the requested type");
@@ -297,11 +231,10 @@ public:
     {
         try
         {
-            return m_pipeline.at(p_cycle)
-                .at(p_pipeline_stage_name)
-                ->get<State>();
+            return std::any_cast<State>(
+                m_pipeline.at(p_cycle).at(p_pipeline_stage_name));
         }
-        catch (const std::bad_cast& exception)
+        catch (const std::bad_any_cast& exception)
         {
             // if the cast failed then it is not a state and instead a value
             // therefore the state is implicitly normal.
@@ -448,7 +381,8 @@ public:
         const ELMO2::Internal::Assembly_Instruction& p_instruction,
         const std::size_t p_operand_number) const
     {
-        return Get_Operand_Value(p_cycle, p_instruction.Get_Operand(1));
+        return Get_Operand_Value(p_cycle,
+                                 p_instruction.Get_Operand(p_operand_number));
     }
 
     //! @brief Retrieves the total number of clock cycles that occurred
@@ -472,14 +406,5 @@ public:
 };
 }  // namespace Internal
 }  // namespace ELMO2
-
-template <typename T_Value_Type>
-const T_Value_Type& ELMO2::Internal::Execution::Pipeline_Value_Base::get() const
-{
-    return dynamic_cast<
-               const ELMO2::Internal::Execution::Pipeline_Value<T_Value_Type>&>(
-               *this)
-        .get();
-}
 
 #endif  // EXECUTION_HPP
