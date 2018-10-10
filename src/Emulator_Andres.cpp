@@ -40,9 +40,9 @@ const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Andres::Run_Code()
     sim.run(m_program_path);
 
     // Retrieve the results from the simulator
-    const auto& fetch = Simulator_Debug::Debug::Get_Fetch();
-    const auto& decode = Simulator_Debug::Debug::Get_Decode();
-    const auto& execute = Simulator_Debug::Debug::Get_Execute();
+    const auto& fetch     = Simulator_Debug::Debug::Get_Fetch();
+    const auto& decode    = Simulator_Debug::Debug::Get_Decode();
+    const auto& execute   = Simulator_Debug::Debug::Get_Execute();
     const auto& registers = Simulator_Debug::Debug::Get_Registers();
 
     // Create an Execution object and add the required data to it.
@@ -65,10 +65,6 @@ const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Andres::Run_Code()
         {
             execution.Add_Value(
                 i, "Execute", ELMO2::Internal::Execution::State::Stalled);
-        }
-        else
-        {
-            execution.Add_Value(i, "Execute", execute[i]);
         }
     }
     return execution;
