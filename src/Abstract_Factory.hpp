@@ -28,6 +28,7 @@
 #define ABSTRACT_FACTORY_HPP
 
 #include <memory>         // for unique_ptr
+#include <stdexcept>      // for invalid_argument
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
 
@@ -72,9 +73,11 @@ public:
     static std::unique_ptr<Base> Construct(const std::string& p_type,
                                            Args... p_args)
     {
-        if (Get_All().end() != Get_All().find(p_type))
+        // If p_type is registered.
+        if (auto& all = Get_All(); all.end() != all.find(p_type))
         {
-            return Get_All()[p_type](p_args...);
+            // Construct and return an instance of p_type.
+            return all[p_type](p_args...);
         }
 
         throw std::invalid_argument("Unknown type: " + p_type);
@@ -94,9 +97,10 @@ public:
     static bool Register(const std::string& p_type,
                          const Create_Function& p_constructor)
     {
-        if (Get_All().end() == Get_All().find(p_type))
+        // Don't register if this is already registered.
+        if (auto& all = Get_All(); all.end() == all.find(p_type))
         {
-            Get_All()[p_type] = p_constructor;
+            all[p_type] = p_constructor;
             return true;
         }
         return false;
