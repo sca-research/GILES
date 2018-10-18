@@ -32,6 +32,7 @@
 #ifndef MODEL_HAMMING_WEIGHT_HPP
 #define MODEL_HAMMING_WEIGHT_HPP
 
+#include <cstdint>        // for size_t
 #include <string>         // for string
 #include <unordered_set>  // for unordered_set
 
@@ -76,9 +77,9 @@ private:
     //! types in one function.
     //! @returns The hamming weight of p_input as the same type as the input.
     //! @see https://en.wikipedia.org/wiki/Hamming_weight
-    template <typename T> const size_t hamming_weight(T p_input) const
+    template <typename T> std::size_t hamming_weight(T p_input) const
     {
-        T count = p_input ? 1 : 0;
+        std::size_t count = p_input ? 1 : 0;
         while (p_input &= (p_input - 1))
         {
             ++count;
