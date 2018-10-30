@@ -25,11 +25,11 @@
 */
 
 #include <algorithm>  // for move
+#include <cstdlib>    // for exit, EXIT_FAILURE
 #include <iostream>   // for operator<<, cout, endl, ostream, basic_ostream
 #include <memory>     // for __shared_ptr_access
 #include <optional>   // for optional
 #include <stdexcept>  // for invalid_argument
-#include <stdlib.h>   // for exit
 #include <string>     // for string, operator<<
 #include <vector>     // for vector
 
@@ -52,11 +52,11 @@ void parse_command_line_flags(int& argc, char**& argv)
 {
     cxxopts::Options options(argv[0], "Side channel leakage emulation tool");
 
-    options.positional_help("[--input] EXECUTABLE [--file] "
-                            "COEFFICIENTS");
+    // clang-format off
+    options.positional_help("[--input] EXECUTABLE "
+                            "[--file] COEFFICIENTS");
 
     // Adds the command line options.
-    // clang-format off
     options.add_options()
         ("h,help", "Print help")
         ("r,runs", "Number of traces to generate", cxxopts::value<int>(), "N")
@@ -71,14 +71,33 @@ void parse_command_line_flags(int& argc, char**& argv)
 
     // Input can be specified without -i/--input flag
     // Coefficients File can be specified without -f/--file flag
-    options.parse_positional(std::vector<std::string>{"input", "file"});
+    const auto& result = [&] {
+        try
+        {
+            options.parse_positional(std::vector<std::string>{"input", "file"});
 
-    const auto& result = options.parse(argc, argv);
+            return options.parse(argc,
+                                 argv);  // TODO: Invalid input exception comes
+                                         // from this line not try catch below.
+        }
+        catch (const cxxopts::OptionParseException& exception)
+        {
+            std::cout << exception.what() << std::endl
+                      << "Please use option --help or -h to see proper usage"
+                      << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
+    }();
 
     if (result.count("help"))  // if help flag is passed
     {
         std::cout << options.help() << std::endl;
-        exit(0);
+        std::exit(EXIT_FAILURE);
+    }
+
+    if (!result.count("output"))  // if output flag is NOT passed
+    {
+        m_traces_path = result["output"].as<std::string>();
     }
 
     if (result.count("input"))  // if input flag is passed
@@ -87,9 +106,12 @@ void parse_command_line_flags(int& argc, char**& argv)
     }
     else
     {
-        throw std::invalid_argument("Input option is required. (-i / --input "
-                                    "\"Path to Executable\"). See "
-                                    "--help for more.");
+        std::cout << "Input option is required. "
+                     "(-i / --input \"Path to Executable\")"
+                  << std::endl
+                  << "Please use option --help or -h to see proper usage"
+                  << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     if (result.count("output"))  // if output flag is passed

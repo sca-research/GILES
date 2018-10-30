@@ -25,9 +25,10 @@
 
 #include "IO.hpp"
 
-#include <fstream>                     // for ifstream
-#include <iostream>                    // for operator<<, endl
-#include <stdexcept>                   // for invalid_argument
+#include <cstdlib>    // for exit, EXIT_FAILURE
+#include <fstream>    // for ifstream
+#include <iostream>   // for operator<<, endl, cerr
+#include <stdexcept>  // for invalid_argument
 
 #include <json.hpp>           // for json, basic_json<>::exception
 
@@ -58,12 +59,12 @@ const ELMO2::Internal::Coefficients ELMO2::Internal::IO::Load_Coefficients(
     {
         json = nlohmann::json::parse(file);
     }
-    catch (nlohmann::json::exception& e)
+    catch (nlohmann::detail::parse_error& e)
     {
-        std::cerr << e.what() << std::endl;
-        throw std::invalid_argument("Coefficients file '" +
-                                    p_coefficients_path +
-                                    "' is not a valid JSON file");
+        // TODO: Replace this with proper excepetion handling?
+        std::cout << "Coefficients file '" << p_coefficients_path
+                  << "' is not a valid JSON file" << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     // This will throw an exception if validation fails.
@@ -82,7 +83,7 @@ bool ELMO2::Internal::IO::Output_Traces(const std::string& p_traces_path,
                                         const ELMO2::Internal::Traces& p_traces,
                                         const Output_Format& p_format) const
 {
-    return false; // TODO: Implement this
+    return false;  // TODO: Implement this
 }
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
