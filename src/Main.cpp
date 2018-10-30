@@ -95,7 +95,7 @@ void parse_command_line_flags(int& argc, char**& argv)
         std::exit(EXIT_FAILURE);
     }
 
-    if (!result.count("output"))  // if output flag is NOT passed
+    if (result.count("output"))  // if output flag is passed
     {
         m_traces_path = result["output"].as<std::string>();
     }
