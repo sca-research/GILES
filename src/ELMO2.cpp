@@ -117,10 +117,11 @@ public:
     //! saved to a file.
     ELMO_2(const std::string& p_program_path,
            const std::string& p_coefficients_path,
-           const std::optional<std::string>& p_traces_path)
         : emulator_Interface(
               std::make_unique<ELMO2::Internal::Unicorn_Interface>(
                   ELMO2::Internal::Unicorn_Interface(p_program_path))),
+           const std::optional<std::string>& p_traces_path,
+           const std::uint32_t p_number_of_runs)
           io(ELMO2::Internal::IO())
     {
         // parse_options(p_options);

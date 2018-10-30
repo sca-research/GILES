@@ -41,9 +41,11 @@
 //! building not as a library.
 namespace
 {
+// TODO: Put this all in a class
 std::string m_program_path;
 std::string m_coefficients_path;
 std::optional<std::string> m_traces_path;
+std::uint32_t m_number_of_runs;
 
 //! @brief Interprets the command line flags.
 //! @param p_options The options as contained within a string.
@@ -59,7 +61,9 @@ void parse_command_line_flags(int& argc, char**& argv)
     // Adds the command line options.
     options.add_options()
         ("h,help", "Print help")
-        ("r,runs", "Number of traces to generate", cxxopts::value<int>(), "N")
+        ("r,runs", "Number of traces to generate",
+             cxxopts::value<std::uint32_t>()->default_value("1"),
+             "N")
         ("f,file", "Coefficients file",
              cxxopts::value<std::string>()->default_value("./coeffs.json"),
              "COEFFICIENTS")
@@ -121,6 +125,10 @@ void parse_command_line_flags(int& argc, char**& argv)
 
     // default "./coeffs.json" is used if flag is not passed
     m_coefficients_path = result["file"].as<std::string>();
+
+    // default 1 is used if flag is not passed
+    // TODO: Remove this default?
+    m_number_of_runs = result["runs"].as<std::uint32_t>();
 }
 }  // namespace
 
@@ -129,7 +137,7 @@ int main(int argc, char* argv[])
 {
     parse_command_line_flags(argc, argv);
 
-    ELMO2::ELMO_2 elmo2 =
-        ELMO2::ELMO_2(m_program_path, m_coefficients_path, m_traces_path);
+    ELMO2::ELMO_2 elmo2 = ELMO2::ELMO_2(
+        m_program_path, m_coefficients_path, m_traces_path, m_number_of_runs);
     return 0;
 }
