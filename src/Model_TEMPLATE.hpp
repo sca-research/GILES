@@ -33,6 +33,7 @@
 
 #include <string>         // for string
 #include <unordered_set>  // for unordered_set
+#include <vector>         // for vector
 
 #include "Model.hpp"                   // for Model
 #include "Model_Factory_Register.hpp"  // for Model_Factory_Register
@@ -97,7 +98,7 @@ public:
         }
     }
 
-    const ELMO2::Internal::Traces Generate_Traces() const override;
+    const std::vector<float> Generate_Traces() const override;
 
     //! @brief Retrieves the name of this Model.
     //! @returns The name as a string.

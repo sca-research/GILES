@@ -43,12 +43,12 @@ const std::unordered_set<std::string>
 //! @brief This function contains the mathematical calculations that generate
 //! the Traces.
 //! @returns The generated Traces for the target program.
-const ELMO2::Internal::Traces
+const std::vector<float>
 ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
 {
     // TODO: If traces are serialised upon generation then do we need a
     // traces object?
-    ELMO2::Internal::Traces traces;
+    std::vector<float> traces;
     for (std::size_t i = 0; i < m_execution.Get_Cycle_Count(); ++i)
     {
         // Prevents trying to calculate the hamming weight of stalls and
@@ -56,8 +56,8 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
         if (!m_execution.Is_Normal_State(i, "Execute"))
         {
             std::cout << "Abnormal state reached" << std::endl;
-            traces.Append<std::uint32_t>(
-                0);  // TODO: What to do in this situation?
+            // TODO: What to do in this situation?
+            traces.push_back(0);
             continue;
         }
 
@@ -94,7 +94,7 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
         // Calculates the Hamming weight of the second operand and appends
         // it to the traces object
         // TODO: Can smaller than uint32_t be used?
-        traces.Append<std::uint32_t>(hamming_weight(operand_value));
+        traces.push_back(hamming_weight(operand_value));
     }
     std::cout << "Number of traces: " << traces.Get_Number_Of_Traces()
               << std::endl

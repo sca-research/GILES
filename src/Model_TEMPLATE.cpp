@@ -26,6 +26,8 @@
 
 #include "Model_TEMPLATE.hpp"
 
+#include <vector>  // for vector
+
 //! The list of interaction terms used by this model in order to generate
 //! traces.
 const std::unordered_set<std::string>
@@ -52,10 +54,11 @@ const std::unordered_set<std::string>
 //! @brief This function contains the mathematical calculations that generate
 //! the Traces.
 //! @returns The generated Traces for the target program.
-const ELMO2::Internal::Traces
+const std::vector<float>
 ELMO2::Internal::Model_TEMPLATE::Generate_Traces() const
 {
     // *** Place your code here ***
     //! @note m_coefficients and m_execution can be made use of to generate the
     //! traces.
+    return std::vector<float>();  // temp placeholder for debugging reasons
 }

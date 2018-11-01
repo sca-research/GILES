@@ -27,6 +27,7 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
+#include <vector>         // for vector
 #include "Coefficients.hpp"
 #include "Execution.hpp"
 #include "Traces.hpp"
@@ -87,7 +88,7 @@ public:
     //! @brief In derived classes, this function should contain the mathematical
     //! calculations that generate the Traces.
     //! @returns The generated Traces for the target program.
-    virtual const ELMO2::Internal::Traces Generate_Traces() const = 0;
+    virtual const std::vector<float> Generate_Traces() const = 0;
 
     //! @brief Ensures that all the interaction terms used within the model
     //! are provided by the Coefficients.
