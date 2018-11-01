@@ -27,7 +27,11 @@
 #ifndef MODEL_HPP
 #define MODEL_HPP
 
+#include <algorithm>      // for all_of
+#include <string>         // for string
+#include <unordered_set>  // for unordered_set
 #include <vector>         // for vector
+
 #include "Coefficients.hpp"
 #include "Execution.hpp"
 #include "Traces.hpp"
@@ -54,7 +58,7 @@ protected:
     //! background noise that would be picked up in real traces.
     //! @param p_traces The Traces to have the noise added to.
     //! @returns The Traces with the added noise.
-    const ELMO2::Internal::Traces& addNoise(ELMO2::Internal::Traces& p_traces);
+    const ELMO2::Internal::Traces& addNoise(ELMO2::Internal::Traces* p_traces);
 
     //! @brief The constructor needs to be provided with the recorded
     //! Execution of the target program and the details from real world
@@ -99,16 +103,18 @@ public:
         const auto& models_terms       = Get_Interaction_Terms();
         const auto& coefficients_terms = m_coefficients.Get_Interaction_Terms();
 
+        // If there are less terms in the Coefficients then there are missing
+        // terms.
         return models_terms.size() <= coefficients_terms.size() &&
                // For each term the model uses, check it is contained within the
                // set of terms provided by the Coefficients.
                std::all_of(models_terms.begin(),
                            models_terms.end(),
-                           // A function for checking if an individual element
-                           // is in coefficients_terms.
-                           [&coefficients_terms](const auto& x) {
+                           // A lambda function for checking if an individual
+                           // element is in coefficients_terms.
+                           [&coefficients_terms](const auto& term) {
                                return coefficients_terms.end() !=
-                                      coefficients_terms.find(x);
+                                      coefficients_terms.find(term);
                            });
     }
 };
