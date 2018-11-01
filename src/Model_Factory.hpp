@@ -32,11 +32,6 @@
 #include "Abstract_Factory.hpp"  // for Abstract_Factory
 #include "Model.hpp"             // for Model
 
-//! This is a complete list of all models to be compiled. Anything not listed
-//! here will not self register and consequently not be useable.
-#include "Model_Hamming_Weight.hpp"
-#include "Model_TEMPLATE.hpp"
-
 namespace ELMO2
 {
 namespace Internal
