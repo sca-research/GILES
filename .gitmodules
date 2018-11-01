@@ -1,15 +1,20 @@
 [submodule "external/Traces-Serialiser"]
+	branch = master
 	path = external/Traces_Serialiser
 	url = https://github.com/bristol-sca/Traces-Serialiser.git
 [submodule "external/cxxopts"]
+	branch = master
 	path = external/cxxopts
 	url = https://github.com/jarro2783/cxxopts.git
 [submodule "external/json"]
+	branch = master
 	path = external/json
 	url = https://github.com/nlohmann/json.git
 [submodule "external/Catch2"]
+	branch = master
 	path = external/Catch2
 	url = https://github.com/catchorg/Catch2.git
 [submodule "external/thumb-sim"]
+	branch = master
 	path = external/thumb-sim
 	url = https://github.com/bristol-sca/thumb-sim.git
