@@ -299,6 +299,20 @@ public:
         return Assembly_Instruction(opcode, operands);
     }
 
+    //! @brief Adds the state of all registers as they were during every clock
+    //! cycle.
+    //! @param p_registers A vector of a map of registers. The vector indicates
+    //! he current clock cycle number and the map contains all registers for one
+    //! cycle. The value in those registers is stored indexed by the register's
+    //! name.
+    //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
+    //! @see https://en.wikipedia.org/wiki/Clock_cycle
+    void Add_Registers_All(
+        const std::vector<std::map<std::string, size_t>> p_registers)
+    {
+        m_registers = p_registers;
+    }
+
     //! @brief Adds the state of all registers as they were during the clock
     //! cycle indicated by p_cycle.
     //! @param p_cycle The clock cycle number from which to retrieve the
@@ -307,8 +321,8 @@ public:
     //! stored indexed by the register's name.
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
-    void Add_Registers(const size_t p_cycle,
-                       const std::map<std::string, size_t>& p_registers)
+    void Add_Registers_Cycle(const size_t p_cycle,
+                             const std::map<std::string, size_t>& p_registers)
     {
         m_registers[p_cycle] = p_registers;
     }
