@@ -81,9 +81,9 @@ protected:  // TODO: Should this be protected?
     //! factory before main() is called.
     static bool m_is_registered;
 
-    //! @brief This has been made protected to ensure the constructor and the
-    //! copy constructor cannot be called directly as this class is designed to
-    //! be inherited from and not instantiated directly.
+    //! @brief This has been made protected to ensure the constructor and
+    //! the copy constructor cannot be called directly as this class is
+    //! designed to be inherited from and not instantiated directly.
     Abstract_Factory_Register() = default;
 
     //! @brief Virtual destructor to ensure proper memory cleanup.
@@ -95,6 +95,7 @@ protected:  // TODO: Should this be protected?
 
 //! @todo Does this inherit the doxygen comments from m_is_registered? - if not,
 //! add doxygen comments.
+//! @todo Add comment explaining why this is outside the class.
 template <class Base, class Derived, typename... Args>
 bool ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
     m_is_registered =

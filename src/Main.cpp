@@ -68,9 +68,11 @@ void parse_command_line_flags(int& argc, char**& argv)
              cxxopts::value<std::string>()->default_value("./coeffs.json"),
              "COEFFICIENTS")
         ("i,input", "Executable to be ran in the emulator",
-             cxxopts::value<std::string>(), "EXECUTABLE")
+             cxxopts::value<std::string>(),
+             "EXECUTABLE")
         ("o,output", "Generated traces output file",
-             cxxopts::value<std::string>(), "FILE");
+             cxxopts::value<std::string>(),
+             "FILE");
     // clang-format on
 
     // Input can be specified without -i/--input flag
