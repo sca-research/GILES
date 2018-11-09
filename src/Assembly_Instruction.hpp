@@ -77,7 +77,7 @@ public:
     //! would be encoded on real hardware.
     //! @todo Remove temp constructors
     //! @todo A disassembler is needed to get opcode as well as binary form of
-    //! full instruction and binary form of opcode and seperate operands
+    //! full instruction and binary form of opcode and separate operands
     Assembly_Instruction(const std::string& p_opcode,  // TODO: Maybe refactor?
                          std::vector<std::string> p_operands)
         : m_opcode(p_opcode)
@@ -116,7 +116,7 @@ public:
     //! the first operand.
     const std::string& Get_Operand(const uint8_t p_operand_index) const
     {
-        if (p_operand_index > m_operands.size() + 1)
+        if (p_operand_index > m_operands.size())
         {
             throw std::overflow_error(
                 "Cannot retrieve operand. This " +
@@ -135,4 +135,5 @@ public:
 };
 }  // namespace Internal
 }  // namespace ELMO2
-#endif
+
+#endif  // EXECUTION_HPP
