@@ -81,12 +81,20 @@ public:
                    const ELMO2::Internal::Coefficients& p_coefficients)
         : ELMO2::Internal::Model(p_execution, p_coefficients)
     {
-        // This is required to be "used" somewhere in order to prevent the
-        // compiler from optimising it away, thus preventing self registration.
-        // Section 6.6.4.1, point 2 states that this statement will not be
-        // optimised away as this is static.
+        // This statement registers this class in the factory, allowing access
+        // from elsewhere. Do not delete this or else this class will not appear
+        // in the factory. If you wish to make this class inaccessible, a better
+        // method would be to remove the corresponding cpp file from the build
+        // script.
+        // This is required to be "used" somewhere in order to prevent
+        // the compiler from optimising it away, thus preventing self
+        // registration.
+        // Section 6.6.4.1, point 2 of the linked document states that this
+        // statement will not be optimised away.
         // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
-        m_is_registered;
+        // The void cast does nothing functionally but prevents the compiler
+        // warning about an unused result.
+        (void)m_is_registered;
 
         // TODO: This can be moved up into Model if CTRP is used. CTRP can work
         // if a non template interface class is introduced.

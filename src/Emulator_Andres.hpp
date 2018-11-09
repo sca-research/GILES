@@ -42,12 +42,20 @@ public:
     explicit Emulator_Andres(const std::string& p_program_path)
         : ELMO2::Internal::Emulator_Interface(p_program_path)
     {
-        // This is required to be "used" somewhere in order to prevent the
-        // compiler from optimising it away, thus preventing self registration.
+        // This statement registers this class in the factory, allowing access
+        // from elsewhere. Do not delete this or else this class will not appear
+        // in the factory. If you wish to make this class inaccessible, a better
+        // method would be to remove the corresponding cpp file from the build
+        // script.
+        // This is required to be "used" somewhere in order to prevent
+        // the compiler from optimising it away, thus preventing self
+        // registration.
+        // Section 6.6.4.1, point 2 of the linked document states that this
+        // statement will not be optimised away.
         // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
-        // Section 6.6.4.1, point 2 states that this statement will not be
-        // optimised away.
-        m_is_registered;
+        // The void cast does nothing functionally but prevents the compiler
+        // warning about an unused result.
+        (void)m_is_registered;
     }
 
     const ELMO2::Internal::Execution Run_Code() override;
