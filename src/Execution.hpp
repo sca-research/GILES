@@ -378,14 +378,15 @@ public:
 
     //! @brief Retrieves the value of an operand in numerical form. If that
     //! operand is a register then the value contained within that register is
-    //! retrieved instead
+    //! retrieved instead. If that operand does not exist, 0 is returned.
     //! @param p_cycle The cycle number at which to retrieve the operand
     //! from.
     //! @param p_instruction The instruction to retrieve the operand from.
     //! @param p_operand_number The index of the operand to retrieve the value
     //! from.
-    //! @ returns The value stored in the operand, or the value in the register
-    //! pointed to by the operand in numeric form.
+    //! @returns The value stored in the operand, or the value in the register
+    //! pointed to by the operand in numeric form or, if there is not operand at
+    //! that index, 0.
     //! @note This function is not zero indexed. Get_Operand_Value(x, y, 1) will
     //! retrieve the first operand.
     //! @note Offsets do not need to be considered as they offset the loaded
@@ -395,8 +396,15 @@ public:
         const ELMO2::Internal::Assembly_Instruction& p_instruction,
         const std::size_t p_operand_number) const
     {
-        return Get_Operand_Value(p_cycle,
-                                 p_instruction.Get_Operand(p_operand_number));
+        try
+        {
+            return Get_Operand_Value(
+                p_cycle, p_instruction.Get_Operand(p_operand_number));
+        }
+        catch (const std::runtime_error&)
+        {
+            return 0;
+        }
     }
 
     //! @brief Retrieves the total number of clock cycles that occurred
