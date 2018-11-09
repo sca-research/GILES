@@ -29,7 +29,7 @@
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
 #include <unordered_set>  // for unordered_set
-#include <utility>        // for pair
+#include <utility>        // for pair, move
 
 #include <Traces_Serialiser.hpp>
 
@@ -41,7 +41,6 @@
 #include "Execution.hpp"           // for Execution
 #include "IO.hpp"                  // for IO
 #include "Model_Factory.hpp"       // for Model_Factory
-#include "Unicorn_Interface.hpp"   // for Unicorn_Interface
 namespace ELMO2
 {
 // Forward Declarations
@@ -56,31 +55,11 @@ class Model;
 class ELMO_2
 {
 private:
-    const ELMO2::Internal::IO io;
-
-    //! @brief Re-orders the assembly instructions.
-    //! Re-ordering of the instructions is necessary as the order they are
-    //! executed in is not the order that they were written in/compiled into.
-    //! @note Out of order execution is supported by certain simulators making
-    //! this redundant.
-    //! TODO: Maybe look into using a disassembler e.g. capstone to work around
-    //! this issue?
-    //! TODO: Should optionally accept the target program (Using the decided
-    //! upon format (binary/assembly)) as overloaded function
-    void re_order_assembly(const std::string& p_program_path)
-    {
-        throw("Function not yet implemented");
-    }
-
-    //! @brief Interprets options passed to ELMO2.
-    //! @param p_options The options as contained within an unordered map. The
-    //! key is the option and the value is what that option is set to.
-    //! TODO: Change the return type? At least to bool i.e. successful or not?
-    void
-    parse_options(const std::unordered_map<std::string, std::string>& p_options)
-    {
-        // throw("Function not yet implemented");
-    }
+    const ELMO2::Internal::Coefficients m_coefficients;
+    const std::string m_program_path;
+    const std::optional<std::string>& m_traces_path;
+    const std::uint32_t m_number_of_runs;
+    std::vector<std::vector<float>> m_traces;
 
     //! @todo Optimise this using std methods. Can be reduced down to
     //! std::remove_if or something similar.
@@ -95,13 +74,15 @@ private:
         {
             std::cout << "Found Model: " << model.first << std::endl;
             // if this model is enabled.
-            if (model.second)  // TODO: model.second is currently a function
-                               // pointer to the constructor, not is_enabled
-                               // bool.
-            {
-                // Add it to the list of models in use.
-                models_in_use.insert(model.first);
-            }
+            /*tor_TE
+             *if (model.second)  // TODO: model.second is currently a function
+             *                   // pointer to the constructor, not is_enabled
+             *                   // bool.
+             *{
+             */
+            // Add it to the list of models in use.
+            models_in_use.insert(model.first);
+            //}
         }
         return models_in_use;
     }
@@ -116,19 +97,20 @@ public:
     //! @param p_traces_path The path to save the Traces to. This is an
     //! optional parameter and omitting it will cause the traces to not be
     //! saved to a file.
-    ELMO_2(const std::string& p_program_path,
+    ELMO_2(std::string p_program_path,
            const std::string& p_coefficients_path,
            const std::optional<std::string>& p_traces_path,
            const std::uint32_t p_number_of_runs)
-        : io(ELMO2::Internal::IO())
+        : m_coefficients(
+              ELMO2::Internal::IO().Load_Coefficients(p_coefficients_path)),
+          m_program_path(std::move(p_program_path)),
+          m_traces_path(p_traces_path), m_number_of_runs(p_number_of_runs)
     {
-        // parse_options(p_options);
+    }
 
-        // TODO: Move all of this out of the constructor?
-
-        const ELMO2::Internal::Coefficients coefficients =
-            io.Load_Coefficients(p_coefficients_path);
-
+    //! @todo Document
+    void run()
+    {
         // Initialise all emulators.
         for (const auto& emulator_interface :
              ELMO2::Internal::Emulator_Factory::Get_All())
@@ -136,41 +118,45 @@ public:
             std::cout << "Found Emulator: " << emulator_interface.first
                       << std::endl;
 
-            std::vector<std::vector<float>> traces;
+            // Run the emulator and save the results to m_traces.
+            Run_Simulator(emulator_interface.first);
 
-            for (std::size_t i = 0; i < p_number_of_runs; ++i)
-            {
-                // Construct the simulator, ready for use
-                const auto simulator =
-                    ELMO2::Internal::Emulator_Factory::Construct(
-                        emulator_interface.first, p_program_path);
-
-                const auto execution = simulator->Run_Code();
-
-                // Initialise all models.
-                for (const auto& model_interface :
-                     ELMO2::Internal::Model_Factory::Get_All())
-                {
-                    std::cout << "Found Model: " << model_interface.first
-                              << std::endl;
-
-                    // Construct the model, ready for use
-                    const auto model =
-                        ELMO2::Internal::Model_Factory::Construct(
-                            model_interface.first, execution, coefficients);
-
-                    traces.emplace_back(model->Generate_Traces());
-                }
-            }
-
-            // If a path was provided then save
-            if (p_traces_path)
+            // If a path was provided then save.
+            if (m_traces_path)
             {
                 // Save to file.
-                Traces_Serialiser::Serialiser serialiser({traces});
-                serialiser.Save(p_traces_path.value());
+                Traces_Serialiser::Serialiser serialiser({m_traces});
+                serialiser.Save(m_traces_path.value());
             }
         }
+    }
+
+    //! @brief Runs the simulator given by p_simulator_name and TODO:
+    decltype(m_traces) Run_Simulator(const std::string& p_simulator_name)
+    {
+        for (std::size_t i = 0; i < m_number_of_runs; ++i)
+        {
+            // Construct the simulator, ready for use.
+            const auto simulator = ELMO2::Internal::Emulator_Factory::Construct(
+                p_simulator_name, m_program_path);
+
+            const auto execution = simulator->Run_Code();
+
+            // Initialise all models.
+            for (const auto& model_interface :
+                 ELMO2::Internal::Model_Factory::Get_All())
+            {
+                std::cout << "Found Model: " << model_interface.first
+                          << std::endl;
+
+                // Construct the model, ready for use.
+                const auto model = ELMO2::Internal::Model_Factory::Construct(
+                    model_interface.first, execution, m_coefficients);
+
+                m_traces.emplace_back(model->Generate_Traces());
+            }
+        }
+        return m_traces;
     }
 };
 }  // namespace ELMO2

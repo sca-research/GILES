@@ -139,5 +139,7 @@ int main(int argc, char* argv[])
 
     ELMO2::ELMO_2 elmo2 = ELMO2::ELMO_2(
         m_program_path, m_coefficients_path, m_traces_path, m_number_of_runs);
+
+    elmo2.run();
     return 0;
 }
