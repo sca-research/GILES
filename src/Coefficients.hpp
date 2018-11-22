@@ -70,6 +70,26 @@ public:
     Get_Coefficients(const std::string& p_opcode,
                      const std::string& p_interaction_term) const;
 
+    //! @todo document
+    //! @brief Retrieves an individual coefficient value by name. This is used
+    //! for retrieving name/value pairs.
+    //! @todo: Merge common code with above function?
+    //! @see https://en.cppreference.com/w/cpp/language/fold
+    template <typename... T_args>
+    double Get_Coefficient(const std::string& p_opcode,
+                           const T_args&... p_args) const
+    {
+        // Get all of the Coefficents for that opcode.
+        auto coefficients = m_coefficients.at(
+            get_instruction_category(p_opcode))["Coefficients"];
+
+        // Recursively go down through all the sub levels as given by the
+        // parameters in p_args.
+        ((coefficients = coefficients.at(p_args)), ...);
+
+        return coefficients.get<double>();
+    }
+
     double Get_Constant(const std::string& p_opcode) const;
 };
 }  // namespace Internal
