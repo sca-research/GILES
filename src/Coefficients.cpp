@@ -45,7 +45,7 @@ namespace Internal
 //! given by p_opcode is not found within any category in the coefficients.
 //! @see https://eprint.iacr.org/2016/517 Section 4.2 for more on the
 //! categories.
-const std::string ELMO2::Internal::Coefficients::get_instruction_category(
+const std::string& ELMO2::Internal::Coefficients::Get_Instruction_Category(
     const std::string& p_opcode) const
 {
     for (const auto& category : m_coefficients.items())
@@ -59,13 +59,14 @@ const std::string ELMO2::Internal::Coefficients::get_instruction_category(
 
         // If the instruction is in this category, return the name of the
         // category.
-        if (std::find(category.value().at("Instructions").begin(),
-                      category.value().at("Instructions").end(),
-                      p_opcode) != category.value().at("Instructions").end())
+        if (const auto& instructions = category.value().at("Instructions");
+            instructions.end() !=
+            std::find(instructions.begin(), instructions.end(), p_opcode))
         {
             return category.key();
         }
     }
+    return m_coefficients.items().begin().key();
     throw std::out_of_range("This instruction (" + p_opcode +
                             ") was not found within the Coefficients");
 }
@@ -98,14 +99,10 @@ ELMO2::Internal::Coefficients::Get_Interaction_Terms() const
 //! @param p_interaction_term The interaction term from within the model
 //! that the Coefficients are required for.
 //! @returns An ordered vector of the coefficient values.
-//! @exception nlohmann::json::out_of_range This is thrown when the interaction
-//! term given by p_interaction_term is not found.
 const std::vector<double> ELMO2::Internal::Coefficients::Get_Coefficients(
     const std::string& p_opcode, const std::string& p_interaction_term) const
 {
-    return m_coefficients.at(get_instruction_category(p_opcode))["Coefficients"]
-        .at(p_interaction_term)
-        .get<std::vector<double>>();
+    return get_coefficient<std::vector<double>>(p_opcode, p_interaction_term);
 }
 
 //! @brief Retrieves the Constant for the Instruction Category that contains
@@ -117,8 +114,7 @@ const std::vector<double> ELMO2::Internal::Coefficients::Get_Coefficients(
 double
 ELMO2::Internal::Coefficients::Get_Constant(const std::string& p_opcode) const
 {
-    return m_coefficients.at(get_instruction_category(p_opcode))["Constant"]
-        .get<double>();
+    return get_value<double>(Get_Instruction_Category(p_opcode), "Constant");
 }
 }  // namespace Internal
 }  // namespace ELMO2
