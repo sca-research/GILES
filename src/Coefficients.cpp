@@ -66,7 +66,6 @@ const std::string& ELMO2::Internal::Coefficients::Get_Instruction_Category(
             return category.key();
         }
     }
-    return m_coefficients.items().begin().key();
     throw std::out_of_range("This instruction (" + p_opcode +
                             ") was not found within the Coefficients");
 }
