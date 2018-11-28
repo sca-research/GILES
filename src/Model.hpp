@@ -94,6 +94,93 @@ public:
     //! @returns The generated Traces for the target program.
     virtual const std::vector<float> Generate_Traces() const = 0;
 
+    //! @todo Move this to a Model_Maths class
+    //! @brief Calculates the hamming weight of the given input.
+    //! @param p_input The value to find the hamming weight of.
+    //! @tparam T This is a template in order to support multiple integer based
+    //! types in one function.
+    //! @returns The hamming weight of p_input.
+    //! @see https://en.wikipedia.org/wiki/Hamming_weight
+    /*
+     *    template <typename T> constexpr std::size_t hamming_weight(T p_input)
+     *const
+     *    {
+     * // Use non standard accelerated function if it is available.
+     *#ifdef __GNUC_
+     *        return __builtin_popcount(p_input);
+     *#else
+     *        std::size_t count = p_input ? 1 : 0;
+     *        while (p_input &= (p_input - 1))
+     *        {
+     *            ++count;
+     *        }
+     *        return count;
+     *#endif
+     *    }
+     */
+
+    template <std::uint32_t N> struct Hamming
+    {
+        constexpr Hamming() : Weights()
+        {
+            for (std::size_t i = 0; i < N; ++i)
+            {
+                Weights[i] = hamming_weight(i);
+            }
+        }
+        std::size_t Weights[N];
+
+    private:
+        template <typename T>
+        constexpr std::size_t hamming_weight(T p_input) const
+        {
+// Use non standard accelerated function if it is available.
+#ifdef __GNUC_
+            __builtin_popcount(p_input);
+#else
+            std::size_t count = p_input ? 1 : 0;
+            while (p_input &= (p_input - 1))
+            {
+                ++count;
+            }
+            return count;
+#endif
+        }
+    };
+
+    // TODO: Work out why this optimisation had no performance impact...
+    static constexpr std::size_t hamming_weight(const std::uint32_t p_input)
+    {
+        constexpr auto hammings = Hamming<255>();
+
+        union {
+            std::uint32_t original;
+            std::uint8_t bytes[4];
+        } split_input = {p_input};
+
+        // Split the 32 bit number into an array of 4 8 bit numbers
+        // const auto split_input = (std::uint8_t*)&p_input;
+
+        return hammings.Weights[split_input.bytes[0]] +
+               hammings.Weights[split_input.bytes[1]] +
+               hammings.Weights[split_input.bytes[2]] +
+               hammings.Weights[split_input.bytes[3]];
+    }
+
+    //! @todo Move this to a Model_Maths class
+    //! @brief Calculates the hamming distance between the two given inputs.
+    //! @param p_input_1 The value to find the hamming distance from.
+    //! @param p_input_2 The value to find the hamming distance to.
+    //! @tparam T This is a template in order to support multiple integer
+    //! based types in one function.
+    //! @returns The hamming distance between the inputs.
+    //! @see https://en.wikipedia.org/wiki/Hamming_distance
+    template <typename T>
+    constexpr std::size_t hamming_distance(T p_input_1, T p_input_2) const
+    {
+        return hamming_weight(p_input_1 ^ p_input_2);
+    }
+
     //! @brief Ensures that all the interaction terms used within the model
     //! are provided by the Coefficients.
     //! @returns True if the all the interaction terms required by the model
@@ -103,15 +190,15 @@ public:
         const auto& models_terms       = Get_Interaction_Terms();
         const auto& coefficients_terms = m_coefficients.Get_Interaction_Terms();
 
-        // If there are less terms in the Coefficients then there are missing
-        // terms.
+        // If there are less terms in the Coefficients then there are
+        // missing terms.
         return models_terms.size() <= coefficients_terms.size() &&
-               // For each term the model uses, check it is contained within the
-               // set of terms provided by the Coefficients.
+               // For each term the model uses, check it is contained within
+               // the set of terms provided by the Coefficients.
                std::all_of(models_terms.begin(),
                            models_terms.end(),
-                           // A lambda function for checking if an individual
-                           // element is in coefficients_terms.
+                           // A lambda function for checking if an
+                           // individual element is in coefficients_terms.
                            [&coefficients_terms](const auto& term) {
                                return coefficients_terms.end() !=
                                       coefficients_terms.find(term);

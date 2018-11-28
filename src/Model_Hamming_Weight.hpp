@@ -72,22 +72,6 @@ private:
         return m_required_interaction_terms;
     }
 
-    //! @brief Calculates the hamming weight of the given input.
-    //! @param p_input The value to find the hamming weight of.
-    //! @tparam T This is a template in order to support multiple integer based
-    //! types in one function.
-    //! @returns The hamming weight of p_input as the same type as the input.
-    //! @see https://en.wikipedia.org/wiki/Hamming_weight
-    template <typename T> std::size_t hamming_weight(T p_input) const
-    {
-        std::size_t count = p_input ? 1 : 0;
-        while (p_input &= (p_input - 1))
-        {
-            ++count;
-        }
-        return count;
-    }
-
 public:
     //! @brief The constructor makes use of the base Model constructor to assist
     //! with initialisation of private member variables.
