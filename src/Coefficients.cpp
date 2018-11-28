@@ -113,7 +113,7 @@ const std::vector<double> ELMO2::Internal::Coefficients::Get_Coefficients(
 double
 ELMO2::Internal::Coefficients::Get_Constant(const std::string& p_opcode) const
 {
-    return get_value<double>(Get_Instruction_Category(p_opcode), "Constant");
+    return get_value_opcode<double>(p_opcode, "Constant");
 }
 }  // namespace Internal
 }  // namespace ELMO2

@@ -126,7 +126,14 @@ private:
         }
     }
 
-    //! @todo merge with get_constant
+    template <typename T_return, typename... T_categories>
+    T_return get_value_opcode(const std::string& p_opcode,
+                              const T_categories&... p_categories) const
+    {
+        return get_value<T_return>(Get_Instruction_Category(p_opcode),
+                                   p_categories...);
+    }
+
     //! @brief Retrieves an individual coefficient value by name, under the
     //! instruction category that contains the instruction given by p_opcode.
     //! p_categories is a variadic parameter that represents a list of sub
@@ -145,9 +152,8 @@ private:
     T_return get_coefficient(const std::string& p_opcode,
                              const T_categories&... p_categories) const
     {
-        return get_value<T_return>(Get_Instruction_Category(p_opcode),
-                                   "Coefficients",
-                                   p_categories...);
+        return get_value_opcode<T_return>(
+            p_opcode, "Coefficients", p_categories...);
     }
 
 public:
