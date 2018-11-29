@@ -156,7 +156,7 @@ public:
         union {
             std::uint32_t original;
             std::uint8_t bytes[4];
-        } split_input = {p_input};
+        } split_input({p_input});
 
         // Split the 32 bit number into an array of 4 8 bit numbers
         // const auto split_input = (std::uint8_t*)&p_input;
