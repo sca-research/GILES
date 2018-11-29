@@ -29,8 +29,6 @@
 #include <any>       // for any
 #include <typeinfo>  //for bad_typeid
 
-#include <iostream>  // TODO: for temp debugging
-
 #ifndef TRACES_HPP
 #define TRACES_HPP
 
@@ -63,9 +61,6 @@ public:
         // Ensure that the template type is arithmetic.
         static_assert(std::is_arithmetic<T_Value_Type>::value,
                       "Traces must be stored as a number");
-
-        std::cout << "Trace: ";
-        std::cout << std::dec << p_value << std::endl;
 
         // This check will seg fault if the samples vector is not initialised,
         // so check it's not empty before checking it's first element..
