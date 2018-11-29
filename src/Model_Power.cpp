@@ -69,13 +69,20 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         instructions_window(
             {get_instruction_terms(0), get_instruction_terms(1)});
 
+    /*
+     *std::cout << instructions_window.front().Get_Opcode() << std::endl;
+     *std::cout << instructions_window[1].Get_Opcode() << std::endl;
+     */
+
     //! @todo : Document
     // The interactions between the instructions stored in instructions_window.
-    std::queue<ELMO2::Internal::Model_Power::Instruction_Terms_Interactions>
-        instruction_interactions_window(
-            {ELMO2::Internal::Model_Power::Instruction_Terms_Interactions(
-                instructions_window.front(),
-                instructions_window[1].Operand_1)});
+    /*
+     *std::queue<ELMO2::Internal::Model_Power::Instruction_Terms_Interactions>
+     *    instruction_interactions_window(
+     *        {ELMO2::Internal::Model_Power::Instruction_Terms_Interactions(
+     *            instructions_window.front(),
+     *            instructions_window[1].Operand_1)});
+     */
 
     std::vector<float> traces;
 
@@ -92,25 +99,35 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         instructions_window.emplace_back(get_instruction_terms(i + 1));
 
         // Add the next set of cross instruction interactions.
-        instruction_interactions_window.emplace(
-            ELMO2::Internal::Model_Power::Instruction_Terms_Interactions(
-                instructions_window[1], instructions_window.back().Operand_1));
+        /*
+         *instruction_interactions_window.emplace(
+         *    ELMO2::Internal::Model_Power::Instruction_Terms_Interactions(
+         *        instructions_window[1],
+         *instructions_window.back().Operand_1));
+         */
 
-        // TODO: Put calculations here, (after emplace, before pop)
-        // m_coefficients;
-        std::cout << instructions_window.size() << std::endl;
-        std::cout << instruction_interactions_window.size() << std::endl;
+        // std::cout << instruction_interactions_window.size() << std::endl;
 
         // Just to simplify the syntax
-        static const auto& previous_instruction = instructions_window.front();
+        // static const auto& previous_instruction =
+        // instructions_window.front();
+        // TODO: Replace with something that isn't a macro
+#define previous_instruction instructions_window.front()
 
-        static const auto& current_instruction = instructions_window[1];
+        // static const auto& current_instruction = instructions_window[1];
+        // TODO: Replace with something that isn't a macro
+#define current_instruction instructions_window[1]
+
+        // TODO: Can/ Should this be made constexpr?
+        // static const auto& next_instruction = instructions_window.back();
+        // TODO: Replace with something that isn't a macro
+#define next_instruction instructions_window.back()
+
         // TODO: Delete this?
         // TODO: Can/ Should this be made constexpr?
-        static const auto& current_opcode = current_instruction.Get_Opcode();
-
-        // TODO: Can/ Should this be made constexpr?
-        static const auto& next_instruction = instructions_window.back();
+        const auto& current_opcode  = current_instruction.Get_Opcode();
+        const auto& previous_opcode = previous_instruction.Get_Opcode();
+        // static const auto& next_opcode     = next_instruction.Get_Opcode();
 
         /*
          *const auto previous_instruction_data =
@@ -142,51 +159,102 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
          */
 
         const auto operand_1 = calculate_term(
-            current_opcode, "Operand1", current_instruction.Get_Operand(1));
+            current_opcode, "Operand1", current_instruction.Operand_1);
 
         const auto operand_2 = calculate_term(
-            current_opcode, "Operand2", current_instruction.Get_Operand(2));
+            current_opcode, "Operand2", current_instruction.Operand_2);
 
-        /*
-         *        const auto operand_1_bit_interactions =
-         *            calculate_term(current_opcode,
-         *                           "Operand1_Bit_Interactions",
-         *                           current_instruction.Operand_1_Bit_Interactions);
-         *
-         *        const auto operand_2_bit_interactions =
-         *            calculate_term(current_opcode,
-         *                           "Operand2_Bit_Interactions",
-         *                           current_instruction.Operand_2_Bit_Interactions);
-         */
-
-        // Linear regression means that nothing is done for ALU???
+        // Linear regression means that nothing is done for ALU
         // 0 is shifts
         // 1 is stores
         // 2 is loads
         // 3 is multiply
-        // TODO: Replace these magic numbers with proper json.
         const auto previous_instruction_term =
-            m_coefficients_path.Get_Coefficient(
-                previous_instruction.Get_Opcode(),
-                "Previous_Instruction",
-                current_opcode);
-        /*
-         *calculate_term(previous_instruction.Get_Opcode(),
-         *               "Previous_Instruction",
-         *               previous_instruction.Get_Opcode());
-         */
-        const auto previous_instruction_term =
-            m_coefficients_path.Get_Coefficient(
-                previous_instruction.Get_Opcode(),
-                "Subsequent_Instruction",
-                current_opcode);
+            Get_Coefficient(current_opcode,
+                            "Previous_Instruction",
+                            Get_Instruction_Category(previous_opcode));
 
-        /*
-         *const auto subsequent_instruction_term =
-         *    calculate_term(next_instruction.Get_Opcode(),
-         *                   "Subsequent_Instruction",
-         *                   next_instruction.Get_Opcode());
-         */
+        const auto subsequent_instruction_term =
+            // TODO: Replace this with a function?
+            Get_Coefficient(current_opcode,
+                            "Subsequent_Instruction",
+                            Get_Instruction_Category(previous_opcode));
+
+        const auto hamming_weight_previous_operand_1 =
+            calculate_hamming_weight(current_instruction,
+                                     1,
+                                     Instruction::Previous,
+                                     Get_Instruction_Category(previous_opcode));
+
+        const auto hamming_weight_subsequent_operand_1 =
+            calculate_hamming_weight(current_instruction,
+                                     1,
+                                     Instruction::Subsequent,
+                                     Get_Instruction_Category(previous_opcode));
+
+        const auto hamming_weight_previous_operand_2 =
+            calculate_hamming_weight(current_instruction,
+                                     2,
+                                     Instruction::Previous,
+                                     Get_Instruction_Category(previous_opcode));
+
+        const auto hamming_weight_subsequent_operand_2 =
+            calculate_hamming_weight(current_instruction,
+                                     2,
+                                     Instruction::Subsequent,
+                                     Get_Instruction_Category(previous_opcode));
+
+        // TODO: Replace this with a function.
+        const auto hamming_distance_previous_operand_1 =
+            Get_Coefficient(current_opcode,
+                            "Hamming_Distance_Operand1_Previous_Instruction",
+                            Get_Instruction_Category(previous_opcode)) *
+            hamming_distance(current_instruction.Operand_1,
+                             previous_instruction.Operand_1);
+
+        const auto hamming_distance_subsequent_operand_1 =
+            Get_Coefficient(current_opcode,
+                            "Hamming_Distance_Operand1_Subsequent_Instruction",
+                            Get_Instruction_Category(previous_opcode)) *
+            hamming_distance(current_instruction.Operand_1,
+                             next_instruction.Operand_1);
+
+        const auto hamming_distance_previous_operand_2 =
+            Get_Coefficient(current_opcode,
+                            "Hamming_Distance_Operand2_Previous_Instruction",
+                            Get_Instruction_Category(previous_opcode)) *
+            hamming_distance(current_instruction.Operand_2,
+                             previous_instruction.Operand_2);
+
+        const auto hamming_distance_subsequent_operand_2 =
+            Get_Coefficient(current_opcode,
+                            "Hamming_Distance_Operand2_Subsequent_Instruction",
+                            Get_Instruction_Category(previous_opcode)) *
+            hamming_distance(current_instruction.Operand_2,
+                             next_instruction.Operand_2);
+
+        const auto constant = Get_Constant(current_opcode);
+
+        // clang-format off
+        traces.emplace_back(constant *
+                            previous_instruction_term +
+                            subsequent_instruction_term +
+                            operand_1 +
+                            operand_2 +
+                            hamming_weight_previous_operand_1 +
+                            hamming_weight_previous_operand_2 +
+                            hamming_weight_subsequent_operand_1 +
+                            hamming_weight_subsequent_operand_2);
+        // clang-format on
+
+        std::cout << constant * previous_instruction_term +
+                         subsequent_instruction_term + operand_1 + operand_2 +
+                         hamming_weight_previous_operand_1 +
+                         hamming_weight_previous_operand_2 +
+                         hamming_weight_subsequent_operand_1 +
+                         hamming_weight_subsequent_operand_2;
+
+        std::cout << ' ' << current_instruction.Get_Opcode() << std::endl;
 
         // Get rid of the now unneeded instruction 2 cycles before.
         instructions_window.pop_front();
