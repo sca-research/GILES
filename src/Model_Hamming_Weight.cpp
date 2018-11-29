@@ -25,15 +25,15 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include "Assembly_Instruction.hpp"  // for Assembly_Instruction
-#include "Execution.hpp"             // for Execution
-#include <bitset>                    // for bitset
-#include <cstddef>                   // for uint8_t, size_t
-#include <vector>                    // for vector
+#include <cstddef>  // for uint8_t, size_t
+#include <vector>   // for vector
 
 #include <iostream>  // for temp debugging
 
 #include "Model_Hamming_Weight.hpp"
+
+#include "Assembly_Instruction.hpp"  // for Assembly_Instruction
+#include "Execution.hpp"             // for Execution
 
 //! The list of interaction terms used by this model in order to generate
 //! traces.
@@ -55,50 +55,52 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
         // flushes.
         if (!m_execution.Is_Normal_State(i, "Execute"))
         {
-            std::cout << "Abnormal state reached" << std::endl;
+            // std::cout << "Abnormal state reached" << std::endl;
             // TODO: What to do in this situation?
             traces.push_back(0);
             continue;
         }
 
-        // Retrieves what is in the "Execute" pipeline stage at clock cycle "i".
-        auto instruction = m_execution.Get_Instruction(i, "Execute");
-
-        std::cout << instruction.Get_Opcode();
-
-        // ******* DEBUG ONLY: TO BE REMOVED *******************
-        for (const auto& operand : instruction.Get_Operands())
-        {
-            // If the operand is a register look up the value in that register,
-            // else treat it as a raw value.
-            if (!m_execution.Is_Register(operand))
-            {
-                std::cout << "," << operand;
-                continue;
-            }
-            std::cout << ",|" << m_execution.Get_Register_Value(i, operand)
-                      << "|";
-        }
-        std::cout << std::endl;
         // ******* DEBUG ONLY: TO BE REMOVED *******************
 
-        const std::string operand = instruction.Get_Operand(1);
+        /*
+         *        // Retrieves what is in the "Execute" pipeline stage at clock
+         * cycle "i". auto instruction = m_execution.Get_Instruction(i,
+         * "Execute");
+         *
+         *                std::cout << "Cycle: " << i << std::endl;
+         *
+         *                std::cout << instruction.Get_Opcode();
+         *
+         *                for (const auto& operand : instruction.Get_Operands())
+         *                {
+         *                    // If the operand is a register look up the value
+         * in that
+         *                    // register,
+         *                    // else treat it as a raw value.
+         *                    if (!m_execution.Is_Register(operand))
+         *                    {
+         *                        std::cout << "," << operand;
+         *                        continue;
+         *                    }
+         *                    std::cout << ",|" <<
+         * m_execution.Get_Register_Value(i, operand)
+         *                              << "|";
+         *                }
+         *                std::cout << std::endl;
+         */
+        // ******* DEBUG ONLY: TO BE REMOVED *******************
 
-        std::cout << "Operand: " << operand << std::endl;
-
-        // TODO: Convert this to a Get_Operand_Value() function or similar in
-        // Execution.
-        const std::size_t operand_value =
-            m_execution.Get_Operand_Value(i, instruction, 1);
-
-        // Calculates the Hamming weight of the second operand and appends
-        // it to the traces object
-        // TODO: Can smaller than uint32_t be used?
-        traces.push_back(hamming_weight(operand_value));
+        // Calculates the Hamming weight of the first operand of the instruction
+        // at clock cycle 'i' and appends it to the traces object.
+        traces.push_back(hamming_weight(m_execution.Get_Operand_Value(
+            i, m_execution.Get_Instruction(i, "Execute"), 1)));
     }
-    std::cout << "Number of traces: " << traces.Get_Number_Of_Traces()
-              << std::endl
-              << "Number of samples per trace: "
-              << traces.Get_Number_Of_Samples_Per_Trace() << std::endl;
+    /*
+     *std::cout << "Number of traces: " << traces.Get_Number_Of_Traces()
+     *          << std::endl
+     *          << "Number of samples per trace: "
+     *          << traces.Get_Number_Of_Samples_Per_Trace() << std::endl;
+     */
     return traces;
 }
