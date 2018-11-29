@@ -86,19 +86,16 @@ private:
     // related to a specific instruction. This exists for the simple reason of
     // saving the time recalculating the data.
     // TODO: This should inherit from Assembly_Instruction
-    struct Assembly_Instruction_Power
-        : public ELMO2::Internal::Assembly_Instruction,
-          public Instruction_Terms_Helper
+    struct Assembly_Instruction_Power : ELMO2::Internal::Assembly_Instruction,
+                                        Instruction_Terms_Helper
     {
-        // Move constructed
         Assembly_Instruction_Power(
-            const ELMO2::Internal::Assembly_Instruction&& p_instruction,
+            const ELMO2::Internal::Assembly_Instruction& p_instruction,
             const std::size_t p_operand_1,
             const std::size_t p_operand_2)  // TODO: Encode Operand value into
                                             // Assembly_Instruction
-            : m_opcode(std::move(
-                  p_instruction.m_opcode)),  // TODO: should move be exchange?
-              m_omerands(std::move(p_instruction.m_operands)),
+            : ELMO2::Internal::Assembly_Instruction(p_instruction),
+              Operand_1(p_operand_1), Operand_2(p_operand_2),
               Operand_1_Bit_Interactions(calculate_interactions(p_operand_1)),
               Operand_2_Bit_Interactions(calculate_interactions(p_operand_2))
         {
