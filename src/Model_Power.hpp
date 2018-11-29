@@ -171,6 +171,89 @@ private:
         return m_required_interaction_terms;
     }
 
+    //! @brief A wrapper around the Get_Coefficient function that will return 0
+    //! if an instruction is not found.
+    template <typename... T_categories>
+    std::vector<double>
+    Get_Coefficients(const std::string& p_opcode,
+                     const T_categories&... p_categories) const
+    {
+        try
+        {
+            return m_coefficients.Get_Coefficients(p_opcode, p_categories...);
+        }
+        catch (const std::out_of_range& exception_not_found)
+        {
+            return {0};  // TODO: Use the function infinite vector?
+        }
+    }
+
+    //! @brief A wrapper around the Get_Coefficients function that will return 0
+    //! if an instruction is not found.
+    //! @tparam T_categories The type of the names of the sub categories within
+    //! the Coefficients. This is only a template in order to be variadic; this
+    //! is enforced as a string or something that can be static_cast into a
+    //! string.
+    //! @param p_opcode  The opcode of the instruction that the Coefficients are
+    //! required for.
+    //! @param p_categories This is a variadic parameter where each value
+    //! represents a sub level within the Coefficients.
+    //! @returns The value at the end of all the sub levels as type double or 0
+    //! if the instruction was not found.
+    template <typename... T_categories>
+    double Get_Coefficient(const std::string& p_opcode,
+                           const T_categories&... p_categories) const
+    {
+        try
+        {
+            return m_coefficients.Get_Coefficient(p_opcode, p_categories...);
+        }
+        catch (const std::out_of_range& exception_not_found)
+        {
+            return 0;
+        }
+    }
+
+    //! @brief A wrapper around the Get_Constant function that will return 0
+    //! if an instruction is not found.
+    //! @param p_opcode The opcode of the instruction that the Constant is
+    //! required for.
+    //! @returns The value of the constant for the category that the
+    //! instruction belongs to or 0 if the instruction was not found.
+    double Get_Constant(const std::string& p_opcode) const
+    {
+        try
+        {
+            return m_coefficients.Get_Constant(p_opcode);
+        }
+        catch (const std::out_of_range& exception_not_found)
+        {
+            return 0;
+        }
+    }
+
+    //! @brief A wrapper around the Get_Instruction_Category function that
+    //! will return Shifts if an instruction is not found.
+    //! @param p_opcode The opcode of the instruction for which the category
+    //! will be retrieved.
+    //! @returns The name of the category that the instruction is contained
+    //! within. If the coefficients are not categorised then the instruction
+    //! opcode is returned or "Shifts" if the instruction is not found.
+    const std::string
+    Get_Instruction_Category(const std::string& p_opcode) const
+    {
+        try
+        {
+            return m_coefficients.Get_Instruction_Category(p_opcode);
+        }
+        // Instruction was not profiled so return any value that prevents a
+        // crash. This be be zeroed out later on in calculations.
+        catch (const std::out_of_range& exception_not_found)
+        {
+            return "Shifts";
+        }
+    }
+
     const ELMO2::Internal::Model_Power::Assembly_Instruction_Power
     get_instruction_terms(const std::size_t& p_cycle) const
     {
