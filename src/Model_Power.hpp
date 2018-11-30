@@ -256,14 +256,17 @@ private:
     {
         // Prevents trying to calculate the hamming weight of stalls and
         // flushes.
-        // Currently stalls and flushes are stored as zeros in calculations.
         if (!m_execution.Is_Normal_State(p_cycle, "Execute"))
         {
+            // Return a fake instruction to prevent crashing
+            // Currently stalls and flushes are stored as zeros in
+            // calculations.
             return ELMO2::Internal::Model_Power::Assembly_Instruction_Power(
-                m_execution.Get_Instruction(p_cycle, "Execute"), 0, 0);
+                Assembly_Instruction("Abnormal State", {"0", "0"}), 0, 0);
         }
 
-        // Retrieves what is in the "Execute" pipeline stage at clock cycle "i".
+        // Retrieves what is in the "Execute" pipeline stage at clock cycle
+        // "i".
         const auto& instruction =
             m_execution.Get_Instruction(p_cycle, "Execute");
 
