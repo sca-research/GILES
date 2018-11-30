@@ -277,21 +277,69 @@ private:
             m_execution.Get_Operand_Value(p_cycle, instruction, 2));
     }
 
-    const double calculate_term(
-        const std::string& p_opcode,
-        const std::string& p_term_name,
-        const double p_instruction_term) const  // TODO: Why is this type
-                                                // double?? What should it be?
+    //! @todo document
+    //! @brief Multiplies all of the values in p_vector by p_scalar and returns
+    //! the total of all of these multiplications added up.
+    //! @tparam T The type of the values to be multiplied. Any type that
+    //! implements the * and + operators should work.
+    //! @param p_scalar The value to multiply each of the vector values by.
+    //! @param p_vector The vector containing the values to multiply with the
+    //! scalar value.
+    //! @returns The sum of all of the multiplications.
+    //! @see https://en.wikipedia.org/wiki/Scalar_multiplication
+    template <typename T>
+    const T sum_of_scalar_multiply(const T p_scalar,
+                                   const std::vector<T>& p_vector) const
+    {
+        auto total = 0;
+        for (const auto value : p_vector)
+        {
+            total += p_scalar * value;
+        }
+        return total;
+    }
+
+    // TODO: Rename to proper maths terminology
+    const double calculate_term(const std::string& p_opcode,
+                                const std::string& p_term_name,
+                                const double p_instruction_term) const
     {
         // This is based off of what original elmo does to calculate an
         // individual term
-        auto total = 0;
-        for (const auto bit :
-             m_coefficients.Get_Coefficients(p_opcode, p_term_name))
-        {
-            total += p_instruction_term * bit;
-        }
-        return total;
+        return sum_of_scalar_multiply(p_instruction_term,
+                                      Get_Coefficients(p_opcode, p_term_name));
+    }
+
+    //! @brief Used only when calling calculate_hamming_x functions.
+    //! Increases readability for a simple boolean value.
+    enum class Instruction
+    {
+        Previous,
+        Subsequent
+    };
+
+    const double calculate_hamming_weight(
+        const ELMO2::Internal::Model_Power::Assembly_Instruction_Power&
+            p_current_instruction,
+        const std::size_t p_operand_index,
+        const Instruction p_previous_or_next_instruction,
+        const std::string& p_opcode_target)
+        const  // TODO: Why is this type
+               // double?? What should it be?
+    {
+        std::string instruction =
+            Instruction::Previous == p_previous_or_next_instruction
+                ? "Previous"
+                : "Subsequent";
+        // This is based off of what original elmo does to calculate an
+        // individual term
+        return Get_Coefficient(p_current_instruction.Get_Opcode(),
+                               "Hamming_Weight_Operand" +
+                                   std::to_string(p_operand_index) + "_" +
+                                   instruction + "_Instruction",
+                               p_opcode_target) *
+               // hamming_weight(current_instruction.Get_Operand(p_operand_index));
+               hamming_weight(p_current_instruction.Operand_1);
     }
 
 public:
