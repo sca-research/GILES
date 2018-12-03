@@ -73,16 +73,12 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
      *std::cout << instructions_window.front().Get_Opcode() << std::endl;
      *std::cout << instructions_window[1].Get_Opcode() << std::endl;
      */
-
-    //! @todo : Document
-    // The interactions between the instructions stored in instructions_window.
-    /*
-     *std::queue<ELMO2::Internal::Model_Power::Instruction_Terms_Interactions>
-     *    instruction_interactions_window(
-     *        {ELMO2::Internal::Model_Power::Instruction_Terms_Interactions(
-     *            instructions_window.front(),
-     *            instructions_window[1].Operand_1)});
-     */
+    //! The interactions between the instructions stored in instructions_window.
+    //! This constructs the deque and adds one item to it, the interactions
+    //! between the first and second instructions.
+    std::deque<ELMO2::Internal::Model_Power::Instruction_Terms_Interactions>
+        instruction_interactions_window(
+            {{previous_instruction, current_instruction}});
 
     std::vector<float> traces;
 
@@ -99,12 +95,8 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         instructions_window.emplace_back(get_instruction_terms(i + 1));
 
         // Add the next set of cross instruction interactions.
-        /*
-         *instruction_interactions_window.emplace(
-         *    ELMO2::Internal::Model_Power::Instruction_Terms_Interactions(
-         *        instructions_window[1],
-         *instructions_window.back().Operand_1));
-         */
+        instruction_interactions_window.emplace_back(current_instruction,
+                                                     next_instruction);
 
         // std::cout << instruction_interactions_window.size() << std::endl;
 
@@ -247,6 +239,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
 
         // Get rid of the now unneeded instruction 2 cycles before.
         instructions_window.pop_front();
+        instruction_interactions_window.pop_front();
     }
     return traces;
 }
