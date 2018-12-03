@@ -186,24 +186,26 @@ private:
     }
 
     //! @brief A wrapper around the Get_Coefficients function that will return 0
-    //! if an instruction is not found.
-    //! @tparam T_categories The type of the names of the sub categories within
-    //! the Coefficients. This is only a template in order to be variadic; this
-    //! is enforced as a string or something that can be static_cast into a
-    //! string.
+    //! if an instruction is not found and retrieve the instruction category of
+    //! p_target_category before calling Get_Coefficient.
     //! @param p_opcode  The opcode of the instruction that the Coefficients are
     //! required for.
-    //! @param p_categories This is a variadic parameter where each value
-    //! represents a sub level within the Coefficients.
+    //! @param p_instruction_term The term that the coefficients should be
+    //! retrieved for.
+    //! @param p_target_category The instruction category of the target
+    //! instruction representing another sub level within the Coefficients.
     //! @returns The value at the end of all the sub levels as type double or 0
     //! if the instruction was not found.
-    template <typename... T_categories>
     double Get_Coefficient(const std::string& p_opcode,
-                           const T_categories&... p_categories) const
+                           const std::string& p_instruction_term,
+                           const std::string& p_target_category) const
     {
         try
         {
-            return m_coefficients.Get_Coefficient(p_opcode, p_categories...);
+            return m_coefficients.Get_Coefficient(
+                p_opcode,
+                p_instruction_term,
+                Get_Instruction_Category(p_target_category));
         }
         catch (const std::out_of_range& exception_not_found)
         {

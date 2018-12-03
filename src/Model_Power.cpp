@@ -163,22 +163,11 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
 
         const auto operand_2 = calculate_term(
             current_opcode, "Operand2", current_instruction.Operand_2);
+        const auto previous_instruction_term = Get_Coefficient(
+            current_opcode, "Previous_Instruction", previous_opcode);
 
-        // Linear regression means that nothing is done for ALU
-        // 0 is shifts
-        // 1 is stores
-        // 2 is loads
-        // 3 is multiply
-        const auto previous_instruction_term =
-            Get_Coefficient(current_opcode,
-                            "Previous_Instruction",
-                            Get_Instruction_Category(previous_opcode));
-
-        const auto subsequent_instruction_term =
-            // TODO: Replace this with a function?
-            Get_Coefficient(current_opcode,
-                            "Subsequent_Instruction",
-                            Get_Instruction_Category(previous_opcode));
+        const auto subsequent_instruction_term = Get_Coefficient(
+            current_opcode, "Subsequent_Instruction", previous_opcode);
 
         const auto hamming_weight_previous_operand_1 =
             calculate_hamming_weight(current_instruction,
@@ -208,28 +197,28 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         const auto hamming_distance_previous_operand_1 =
             Get_Coefficient(current_opcode,
                             "Hamming_Distance_Operand1_Previous_Instruction",
-                            Get_Instruction_Category(previous_opcode)) *
+                            previous_opcode) *
             hamming_distance(current_instruction.Operand_1,
                              previous_instruction.Operand_1);
 
         const auto hamming_distance_subsequent_operand_1 =
             Get_Coefficient(current_opcode,
                             "Hamming_Distance_Operand1_Subsequent_Instruction",
-                            Get_Instruction_Category(previous_opcode)) *
+                            previous_opcode) *
             hamming_distance(current_instruction.Operand_1,
                              next_instruction.Operand_1);
 
         const auto hamming_distance_previous_operand_2 =
             Get_Coefficient(current_opcode,
                             "Hamming_Distance_Operand2_Previous_Instruction",
-                            Get_Instruction_Category(previous_opcode)) *
+                            previous_opcode) *
             hamming_distance(current_instruction.Operand_2,
                              previous_instruction.Operand_2);
 
         const auto hamming_distance_subsequent_operand_2 =
             Get_Coefficient(current_opcode,
                             "Hamming_Distance_Operand2_Subsequent_Instruction",
-                            Get_Instruction_Category(previous_opcode)) *
+                            previous_opcode) *
             hamming_distance(current_instruction.Operand_2,
                              next_instruction.Operand_2);
 
