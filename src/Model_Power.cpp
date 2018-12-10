@@ -82,6 +82,8 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
 
     std::vector<float> traces;
 
+    float constant;
+
     // Start at 1 as we are taking the previous cycle into account in the
     // calculations.
     // Finish at size - 1 As we are taking the next cycle into account in the
@@ -98,7 +100,16 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         instruction_interactions_window.emplace_back(current_instruction,
                                                      next_instruction);
 
+        // if the constant of the previous instruction was 0 then it was either
+        // unprofiled or an abnormal state. In this case we do not want to use
+        // it in calculations so for the sake of these calculations we will
+        // pretend it didn't occur.
+        // TODO: This should only be the case for abnormal states. Unprofiled
+        // instructions should not be captured by this.
+        if (0 != constant)
+        {
             const auto previous_instruction = instructions_window.front();
+        }
         const auto current_instruction = instructions_window[1];
         const auto next_instruction    = instructions_window.back();
 
@@ -202,7 +213,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
             hamming_distance(current_instruction.Operand_2,
                              next_instruction.Operand_2);
 
-        const auto constant = Get_Constant(current_opcode);
+        constant = Get_Constant(current_opcode);
 
         // clang-format off
         traces.emplace_back(constant *
