@@ -69,10 +69,10 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         instructions_window(
             {get_instruction_terms(0), get_instruction_terms(1)});
 
-    /*
-     *std::cout << instructions_window.front().Get_Opcode() << std::endl;
-     *std::cout << instructions_window[1].Get_Opcode() << std::endl;
-     */
+    const auto previous_instruction = instructions_window.front();
+    const auto current_instruction  = instructions_window[1];
+    const auto next_instruction     = instructions_window.back();
+
     //! The interactions between the instructions stored in instructions_window.
     //! This constructs the deque and adds one item to it, the interactions
     //! between the first and second instructions.
@@ -98,22 +98,10 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         instruction_interactions_window.emplace_back(current_instruction,
                                                      next_instruction);
 
-        // std::cout << instruction_interactions_window.size() << std::endl;
+            const auto previous_instruction = instructions_window.front();
+        const auto current_instruction = instructions_window[1];
+        const auto next_instruction    = instructions_window.back();
 
-        // Just to simplify the syntax
-        // static const auto& previous_instruction =
-        // instructions_window.front();
-        // TODO: Replace with something that isn't a macro
-#define previous_instruction instructions_window.front()
-
-        // static const auto& current_instruction = instructions_window[1];
-        // TODO: Replace with something that isn't a macro
-#define current_instruction instructions_window[1]
-
-        // TODO: Can/ Should this be made constexpr?
-        // static const auto& next_instruction = instructions_window.back();
-        // TODO: Replace with something that isn't a macro
-#define next_instruction instructions_window.back()
 
         // TODO: Delete this?
         // TODO: Can/ Should this be made constexpr?
