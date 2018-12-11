@@ -153,7 +153,23 @@ public:
                 const auto model = ELMO2::Internal::Model_Factory::Construct(
                     model_interface.first, execution, m_coefficients);
 
-                m_traces.emplace_back(model->Generate_Traces());
+                // If this is not the first trace gathered then ensure that all
+                // traces are the same length (Meaning the target algorithm runs
+                // in constant time). This is a requirement for using the TRS
+                // trace format.
+                const auto trace = model->Generate_Traces();
+                if (0 < i && trace.size() != m_traces.front().size())
+                {
+                    std::cerr << "Error: The target program did not run in a "
+                                 "constant amount of cycles. (This is "
+                                 "considered insecure.)\n"
+                              << "First trace took: " << m_traces.front().size()
+                              << " cycles.\n Trace number " << i
+                              << " took: " << trace.size() << " cycles."
+                              << std::endl;
+                    exit(1);
+                }
+                m_traces.emplace_back(trace);
             }
         }
         return m_traces;
