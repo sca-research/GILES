@@ -216,7 +216,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         constant = Get_Constant(current_opcode);
 
         // clang-format off
-        traces.emplace_back(constant *
+        traces.emplace_back(constant * (
                             previous_instruction_term +
                             subsequent_instruction_term +
                             operand_1 +
@@ -224,7 +224,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
                             hamming_weight_previous_operand_1 +
                             hamming_weight_previous_operand_2 +
                             hamming_weight_subsequent_operand_1 +
-                            hamming_weight_subsequent_operand_2);
+                            hamming_distance_subsequent_operand_2));
         // clang-format on
 
         std::cout << constant * previous_instruction_term +
