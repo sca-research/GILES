@@ -15,6 +15,9 @@
     along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
 #]=]
 
+# TODO: Look into replacing this with DoxygenTargets from https://github.com/rpavlik/cmake-modules
+# Maybe auto download?
+
 find_package(Doxygen)
 
 option(${PROJECT_NAME}_BUILD_DOCUMENTATION
@@ -24,7 +27,7 @@ option(${PROJECT_NAME}_BUILD_DOCUMENTATION
 # if option is selected then build the documentation with target "all".
 if(${PROJECT_NAME}_BUILD_DOCUMENTATION)
     set(ALL_OPTION ALL)
-endif(${PROJECT_NAME}_BUILD_DOCUMENTATION)
+endif()
 
 if(DOXYGEN_FOUND)
     # Replace directories with those of the current build directory etc.
@@ -38,4 +41,4 @@ if(DOXYGEN_FOUND)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen" VERBATIM
     )
-endif(DOXYGEN_FOUND)
+endif()

@@ -28,6 +28,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include("${PROJECT_SOURCE_DIR}/cmake/External.cmake")
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/thumb-sim/library/include)
 include_directories(${EXTERNAL_PROJECT_DIR}/thumb-sim/library)
 include_directories(${EXTERNAL_PROJECT_DIR}/thumb-sim/include)
 include_directories(${EXTERNAL_PROJECT_DIR}/Traces_Serialiser/src)
@@ -39,7 +40,9 @@ add_library(lib${PROJECT_NAME} SHARED
     Coefficients.cpp
     IO.cpp
     Model_Hamming_Weight.cpp
-    Model_TEMPLATE.cpp
+    #Model_Power.cpp
+    #Model_TEMPLATE.cpp
+    #Emulator_TEMPLATE.cpp
     Emulator_Andres.cpp
     Validator_Coefficients.cpp
 )
@@ -48,7 +51,10 @@ add_library(lib${PROJECT_NAME} SHARED
 target_include_external_project(lib${PROJECT_NAME} Traces_Serialiser src)
 target_include_external_project(lib${PROJECT_NAME} json single_include/nlohmann)
 
-target_include_directories(lib${PROJECT_NAME} SYSTEM PRIVATE ${EXTERNAL_PROJECT_DIR}/json/single_include/nlohmann)
+target_include_directories(lib${PROJECT_NAME}
+    SYSTEM
+    PRIVATE
+    ${EXTERNAL_PROJECT_DIR}/json/single_include/nlohmann)
 
 #TODO: Why does this still work with this commented but not for exe version?
 #target_link_libraries(lib${PROJECT_NAME} libthumb-sim)
@@ -67,4 +73,4 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     target_include_external_project(${PROJECT_NAME} cxxopts include)
     target_include_external_project(${PROJECT_NAME} json single_include/nlohmann)
 
-endif(${PROJECT_NAME}_BUILD_EXECUTABLE)
+endif()
