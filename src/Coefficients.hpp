@@ -53,7 +53,7 @@ private:
     const nlohmann::json m_coefficients;
 
     //! @brief Retrieves a value from the Coefficients. This is a generic
-    //! function that can retrieve anything dependant on its parameters. The
+    //! function that can retrieve anything, dependent on its parameters. The
     //! parameters in p_categories are all evaluated in the order they are
     //! provided, each representing a sub category within the last, all within
     //! the coefficients. Once all the sub categories have been evaluated, what
@@ -88,25 +88,25 @@ private:
         // categories.
         for (const auto& category : categories)
         {
-            std::cout << "cat= " << category << std::endl;
             try
             {
                 coefficients = coefficients.at(category);
             }
             // If one of the categories doesn't exist then throw an error that
             // is slightly easier to understand than a generic json type error.
-            catch (const nlohmann::detail::type_error& exception)
+            catch (const nlohmann::detail::exception& exception)
             {
                 // Make sure this is the type of exception we thought it was.
-                // If "cannot use .at() with array" exception
-                if (304 == exception.id)
+                // If "cannot use .at() with array" exception or "key not found"
+                if (304 == exception.id || 403 == exception.id)
                 {
                     const std::string error_message =
                         "Could not find category at the current place in the "
                         "Coefficients with the given name: " +
                         category;
-                    throw std::invalid_argument(error_message);
+                    throw std::out_of_range(error_message);
                 }
+                throw;  // Re-throw if this is not the expected exception.
             }
         }
 
@@ -120,12 +120,26 @@ private:
         catch (const nlohmann::detail::type_error&)
         {
             const std::string error_message =
-                "Cannot retrieve value from Coefficients as the chosen type: " +
+                "Cannot retrieve value from Coefficients as the chosen "
+                "type: " +
                 boost::core::demangle(typeid(T_return).name());
             throw std::invalid_argument(error_message);
         }
     }
 
+    //! @brief This is a helper function that does nothing other than lookup the
+    //! instruction category of the instruction given by p_opcode, and pass the
+    //! results onto the get_value function.
+    //! @param p_opcode The opcode of the instruction to lookup the category
+    //! for.
+    //! @param p_categories This is a variadic parameter where each value
+    //! represents a sub level within the Coefficients.
+    //! @tparam T_return The return type.
+    //! @tparam T_categories The type of the names of the sub categories. This
+    //! is only a template in order to be variadic; this is enforced as a string
+    //! or something that can be static_cast into a string.
+    //! @returns The value at the end of all the sub levels as the type given by
+    //! T_return.
     template <typename T_return, typename... T_categories>
     T_return get_value_opcode(const std::string& p_opcode,
                               const T_categories&... p_categories) const
@@ -134,6 +148,7 @@ private:
                                    p_categories...);
     }
 
+    //! @todo Change to be style of get_value_opcode comment
     //! @brief Retrieves an individual coefficient value by name, under the
     //! instruction category that contains the instruction given by p_opcode.
     //! p_categories is a variadic parameter that represents a list of sub
@@ -182,7 +197,6 @@ public:
     //! instruction category that contains the instruction given by p_opcode.
     //! p_categories is a variadic parameter that represents a list of sub
     //! categories within the instruction category to retrieve from.
-    //! @tparam T_return The return type.
     //! @tparam T_categories The type of the names of the sub categories. This
     //! is only a template in order to be variadic; this is enforced as a string
     //! or something that can be static_cast into a string.
