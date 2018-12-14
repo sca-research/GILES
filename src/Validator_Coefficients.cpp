@@ -23,9 +23,9 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#include <algorithm> // for find
-#include <iostream>  // for ios_base::failure, ios_base
-#include <string>    // for basic_string, string
+#include <algorithm>  // for find
+#include <iostream>   // for ios_base::failure, ios_base
+#include <string>     // for basic_string, string
 
 #include "Validator_Coefficients.hpp"
 
@@ -60,15 +60,16 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Json(
     Validate_Not_Empty(p_coefficients.front().at("Coefficients"),
                        "There must be at least one interaction term in the "
                        "Coefficients file.");
-    for (const auto& category : p_coefficients.items()) // .items() is used as
+    for (const auto& category : p_coefficients.items())  // .items() is used as
     // Validate_category_Instruction_Unique
     // requires the key as well as the value
     {
         for (const auto& interaction_term : category.value()["Coefficients"])
         {
-            Validate_Not_Empty(interaction_term, "Each interaction term in the "
-                                                 "Coefficients file must "
-                                                 "contain at least one value.");
+            Validate_Not_Empty(interaction_term,
+                               "Each interaction term in the "
+                               "Coefficients file must "
+                               "contain at least one value.");
             Validate_Is_Array(interaction_term);
             for (const auto& value : interaction_term)
             {
@@ -107,8 +108,8 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Json(
         {
             Validate_Category_Instructions_Unique(
                 category.value(), category.key(), p_coefficients);
-            Validate_Category_Header_Unique(category.value(), category.key(),
-                                            p_coefficients);
+            Validate_Category_Header_Unique(
+                category.value(), category.key(), p_coefficients);
         }
     }
 }
@@ -161,6 +162,19 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Is_Number(
 void ELMO2::Internal::Validator_Coefficients::Validate_Is_Array(
     const nlohmann::json& p_json)
 {
+    // TODO: Seperate newly added functionality into different methods.
+    if (p_json.is_object())
+    {
+        for (const auto& item : p_json)
+        {
+            if (!item.is_number())
+            {
+                throw std::ios_base::failure(
+                    "Expected a key value pair, found: " + p_json.dump());
+            }
+        }
+        return;
+    }
     if (!p_json.is_array())
     {
         throw std::ios_base::failure("Expected a JSON array, found: " +
@@ -298,7 +312,8 @@ void ELMO2::Internal::Validator_Coefficients::
 //! validation rule fails. In this case, an instruction was found to have
 //! more than one set of coefficients associated with it.
 void ELMO2::Internal::Validator_Coefficients::Validate_Category_Header_Unique(
-    const nlohmann::json& p_category, const std::string& p_category_key,
+    const nlohmann::json& p_category,
+    const std::string& p_category_key,
     const nlohmann::json& p_coefficients)
 {
     // For each category
@@ -380,5 +395,5 @@ void ELMO2::Internal::Validator_Coefficients::
         }
     }
 }
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
