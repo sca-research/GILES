@@ -27,10 +27,13 @@
 #ifndef MODEL_POWER_HPP
 #define MODEL_POWER_HPP
 
-#include <bitset>   // for bitset
-#include <cstdint>  // for size_t
-#include <string>   // for string
-#include <utility>  // for pair
+#include <bitset>       // for bitset
+#include <cstdint>      // for size_t
+#include <string>       // for string
+#include <string_view>  // for string_view
+#include <type_traits>  // for is_same
+#include <utility>      // for pair
+#include <vector>       // for vector
 
 #include "Assembly_Instruction.hpp"
 #include "Coefficients.hpp"
@@ -62,8 +65,10 @@ private:
         {
             std::size_t result = 0;
 
-            // Loop through all possible combinations of i and j where i and j
-            // are never the same.
+            // TODO: This is just dot product, change to use std function inner
+            // product.
+            // Loop through all possible combinations of i and j where i
+            // and j are never the same.
             for (std::size_t term_1 = 0; term_1 < 32; ++term_1)
             {
                 for (std::size_t term_2 = term_1 + 1; term_2 < 32; ++term_2)
@@ -136,6 +141,8 @@ private:
         // TODO: I think only the hw and hd need to be stored?
         // BitFlip is 32 bools indicating whether a bitflip has occurred between
         // current and previous instruction. BitFlip
+        // TODO: This makes more sense to be stored as a bit set, maybe make a
+        // wrapper get function that does the to_ulong() conversion?
         const std::bitset<32> Operand_1_Bit_Flip;
         const std::bitset<32> Operand_2_Bit_Flip;
         const std::size_t Bit_Flip1_Bit_Interactions;
@@ -250,9 +257,23 @@ private:
         catch (const std::out_of_range& exception_not_found)
         {
             return "Shifts";
+            // Linear regression means that nothing is done for ALU and this is
+            // an invalid value so Shifts is used as the default value
         }
     }
 
+    //! @brief Retrieves the Assembly_Instruction that is in the execute
+    //! pipeline stage in the current cycle, given by p_cycle.
+    //! If the execution stage of the pipeline for the current cycle is not in a
+    //! normal state then a fake instruction with all terms set to be 0 is
+    //! returned. This is to prevent crashing whilst still not adding erroneous
+    //! data to any calculations using its terms.
+    //! @param p_cycle The clock cycle number from which to retrieve the
+    //! pipeline state.
+    //! @returns The requested instruction as an instance of
+    //! Assembly_Instruction_Power.
+    //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
+    //! @see https://en.wikipedia.org/wiki/Clock_cycle
     const ELMO2::Internal::Model_Power::Assembly_Instruction_Power
     get_instruction_terms(const std::size_t& p_cycle) const
     {
@@ -289,27 +310,73 @@ private:
     //! scalar value.
     //! @returns The sum of all of the multiplications.
     //! @see https://en.wikipedia.org/wiki/Scalar_multiplication
+    /*
+     *template <typename T>
+     *const T sum_of_scalar_multiply(const T p_scalar,
+     *                               const std::vector<T>& p_vector) const
+     *{
+     *    auto total = 0;
+     *    for (const auto value : p_vector)
+     *    {
+     *        total += p_scalar * value;
+     *    }
+     *    return total;
+     *}
+     */
+    /*
+     *    template <std::size_t N>
+     *    const double calculate_term(const std::string& p_opcode,
+     *                                const std::string& p_term_name,
+     *                                const std::bitset<N> p_instruction_term)
+     * const
+     *    {
+     *        // This is based off of what original elmo does to calculate an
+     *        // individual term
+     *        const auto coefficients = Get_Coefficients(p_opcode, p_term_name);
+     *
+     *        return std::inner_product(std::begin(p_instruction_term),
+     *                                  std::end(p_instruction_term),
+     *                                  std::begin(coefficients),
+     *                                  std::end(coefficients));
+     *        return sum_of_scalar_multiply(p_instruction_term,
+     *                                      Get_Coefficients(p_opcode,
+     *        p_term_name));
+     *    }
+     */
+
     template <typename T>
-    const T sum_of_scalar_multiply(const T p_scalar,
-                                   const std::vector<T>& p_vector) const
+    const double dot_product(const std::vector<T>& p_vector_1,
+                             const std::vector<T>& p_vector_2)
     {
         auto total = 0;
-        for (const auto value : p_vector)
+        for (std::size_t i = 0; i < p_vector_1.size(); ++i)
         {
-            total += p_scalar * value;
+            total += p_vector_1[i] * p_vector_2[i];
         }
         return total;
     }
 
-    // TODO: Rename to proper maths terminology
+    template <std::size_t N>
     const double calculate_term(const std::string& p_opcode,
                                 const std::string& p_term_name,
-                                const double p_instruction_term) const
+                                const std::bitset<N>& p_instruction_term) const
+    // TODO: Replace bitset with vector of bools everywhere?
     {
         // This is based off of what original elmo does to calculate an
         // individual term
-        return sum_of_scalar_multiply(p_instruction_term,
-                                      Get_Coefficients(p_opcode, p_term_name));
+        const auto coefficients = Get_Coefficients(p_opcode, p_term_name);
+        double total              = 0;
+        for (std::size_t i = 0; i < N; ++i)
+        {
+            // bit = (p_instruction_term >> i) && bool(1);
+            total += p_instruction_term[i] * coefficients[i];
+        }
+        /*
+         *return sum_of_scalar_multiply(p_instruction_term,
+         *                              Get_Coefficients(p_opcode,
+         *p_term_name));
+         */
+        return total;
     }
 
     //! @brief Used only when calling calculate_hamming_x functions.
@@ -384,10 +451,10 @@ public:
 
     //! @brief Retrieves the name of this Model.
     //! @returns The name as a string.
-    //! @note This is needed to ensure self registration in the factory works.
-    //! The factory registration requires this as unique identifier.
+    //! @note This is needed to ensure self registration in the factory
+    //! works. The factory registration requires this as unique identifier.
     static const std::string Get_Name() { return "Power"; }
-};
+};  // namespace Internal
 }  // namespace Internal
 }  // namespace ELMO2
 

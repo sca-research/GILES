@@ -27,7 +27,6 @@
 
 #include <cstdint>  // for size_t
 #include <deque>    // for deque
-#include <queue>    // for queue
 #include <utility>  // for pair, make_pair
 #include <vector>   // for vector
 
@@ -113,6 +112,8 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         const auto current_instruction = instructions_window[1];
         const auto next_instruction    = instructions_window.back();
 
+        // std::cout << instruction_interactions_window.size() <<
+        // std::endl;
 
         // TODO: Delete this?
         // TODO: Can/ Should this be made constexpr?
@@ -133,27 +134,59 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         // Operand 1 and 2 bit interactions are only non 0 for muls and
         // stores
 
+        // TODO: How does this work when the bit flip is based on 2
+        // instructions but the opcode isn't?
+        const auto bit_flip_1 = calculate_term(
+            current_opcode,
+            "Bit_Flip1",  // TODO: This is a typo, why does it not crash???
+            instruction_interactions_window.front().Operand_1_Bit_Flip);
+
+        // TODO: How does this work when the bit flip is based on 2
+        // instructions but the opcode isn't?
+        const auto bit_flip_2 = calculate_term(
+            current_opcode,
+            "Bit_Flip2",
+            instruction_interactions_window.front().Operand_2_Bit_Flip);
+
+        const auto bit_flip_interactions_1 = calculate_term(
+            current_opcode,
+            "Bit_Flip1_Bit_Interactions",
+            std::bitset<32>(instruction_interactions_window.front()
+                                .Bit_Flip1_Bit_Interactions));
+
+        const auto bit_flip_interactions_2 = calculate_term(
+            current_opcode,
+            "Bit_Flip2_Bit_Interactions",
+            std::bitset<32>(instruction_interactions_window.front()
+                                .Bit_Flip2_Bit_Interactions));
+
+        const auto operand_1 =
+            calculate_term(current_opcode,
+                           "Operand1",
+                           std::bitset<32>(current_instruction.Operand_1));
+        // TODO: Which version should be used?
         /*
-         *        // TODO: How does this work when the bit flip is based on 2
-         *        // instructions but the opcode isn't?
-         *        const auto bit_flip_1 =
-         *            calculate_term(current_opcode,
-         *                           "Bitflip1",
-         *                           previous_instruction.Operand_1_Bit_Flip);
-         *
-         *        // TODO: How does this work when the bit flip is based on 2
-         *        // instructions but the opcode isn't?
-         *        const auto bit_flip_2 =
-         *            calculate_term(current_opcode,
-         *                           "Bitflip2",
-         *                           previous_instruction.Operand_2_Bit_Flip);
+         *        const auto operand_1 =
+         *            sum_of_scalar_multiply(current_instruction.Operand_1,
+         *                                   Get_Coefficient(current_opcode,
+         * "Operand1"));
          */
 
-        const auto operand_1 = calculate_term(
-            current_opcode, "Operand1", current_instruction.Operand_1);
+        const auto operand_2 =
+            calculate_term(current_opcode,
+                           "Operand2",
+                           std::bitset<32>(current_instruction.Operand_2));
 
-        const auto operand_2 = calculate_term(
-            current_opcode, "Operand2", current_instruction.Operand_2);
+        const auto operand_1_bit_interactions = calculate_term(
+            current_opcode,
+            "Operand1_Bit_Interactions",
+            std::bitset<32>(current_instruction.Operand_1_Bit_Interactions));
+
+        const auto operand_2_bit_interactions = calculate_term(
+            current_opcode,
+            "Operand2_Bit_Interactions",
+            std::bitset<32>(current_instruction.Operand_2_Bit_Interactions));
+
         const auto previous_instruction_term = Get_Coefficient(
             current_opcode, "Previous_Instruction", previous_opcode);
 
@@ -221,20 +254,78 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
                             subsequent_instruction_term +
                             operand_1 +
                             operand_2 +
+                            operand_1_bit_interactions +
+                            operand_2_bit_interactions +
+                            bit_flip_1 +
+                            bit_flip_2 +
+                            bit_flip_interactions_1 +
+                            bit_flip_interactions_2 +
                             hamming_weight_previous_operand_1 +
                             hamming_weight_previous_operand_2 +
                             hamming_weight_subsequent_operand_1 +
+                            hamming_weight_subsequent_operand_2 +
+                            hamming_distance_previous_operand_1 +
+                            hamming_distance_previous_operand_2 +
+                            hamming_distance_subsequent_operand_1 +
                             hamming_distance_subsequent_operand_2));
         // clang-format on
 
-        std::cout << constant * previous_instruction_term +
-                         subsequent_instruction_term + operand_1 + operand_2 +
-                         hamming_weight_previous_operand_1 +
-                         hamming_weight_previous_operand_2 +
-                         hamming_weight_subsequent_operand_1 +
-                         hamming_weight_subsequent_operand_2;
-
-        std::cout << ' ' << current_instruction.Get_Opcode() << std::endl;
+        /*
+         *        std::cout << constant *
+         *                         (previous_instruction_term +
+         *                          subsequent_instruction_term + operand_1 +
+         * operand_2 + operand_1_bit_interactions + operand_2_bit_interactions +
+         *                          hamming_weight_previous_operand_1 +
+         *                          hamming_weight_previous_operand_2 +
+         *                          hamming_weight_subsequent_operand_1 +
+         * bit_flip_1 + bit_flip_2 + bit_flip_interactions_1 +
+         *                          bit_flip_interactions_2 +
+         *                          hamming_weight_subsequent_operand_2 +
+         *                          hamming_distance_previous_operand_1 +
+         *                          hamming_distance_previous_operand_2 +
+         *                          hamming_distance_subsequent_operand_1 +
+         *                          hamming_distance_subsequent_operand_2);
+         *
+         *        std::cout << ' ' << current_instruction.Get_Opcode() <<
+         * std::endl;
+         *
+         *        std::cout << "    Constant:" << constant << '\n'
+         *                  << "    previous_instruction_term:"
+         *                  << previous_instruction_term << '\n'
+         *                  << "    subsequent_instruction_term:"
+         *                  << subsequent_instruction_term << '\n'
+         *                  << "    operand_1:" << operand_1 << '\n'
+         *                  << "    operand_2:" << operand_2 << '\n'
+         *                  << "    operand_1_bit_interactions:"
+         *                  << operand_1_bit_interactions << '\n'
+         *                  << "    operand_2_bit_interactions:"
+         *                  << operand_2_bit_interactions << '\n'
+         *                  << "    bit_flip_1:" << bit_flip_1 << '\n'
+         *                  << "    bit_flip_2:" << bit_flip_2 << '\n'
+         *                  << "    bit_flip_interactions_1:" <<
+         * bit_flip_interactions_1
+         *                  << '\n'
+         *                  << "    bit_flip_interactions_2:" <<
+         * bit_flip_interactions_2
+         *                  << '\n'
+         *                  << "    hamming_weight_previous_operand_1:"
+         *                  << hamming_weight_previous_operand_1 << '\n'
+         *                  << "    hamming_weight_previous_operand_2:"
+         *                  << hamming_weight_previous_operand_2 << '\n'
+         *                  << "    hamming_weight_subsequent_operand_1:"
+         *                  << hamming_weight_subsequent_operand_1 << '\n'
+         *                  << "    hamming_weight_subsequent_operand_2:"
+         *                  << hamming_weight_subsequent_operand_2 << '\n'
+         *                  << "    hamming_distance_previous_operand_1:"
+         *                  << hamming_distance_previous_operand_1 << '\n'
+         *                  << "    hamming_distance_previous_operand_2:"
+         *                  << hamming_distance_previous_operand_2 << '\n'
+         *                  << "    hamming_distance_subsequent_operand_1:"
+         *                  << hamming_distance_subsequent_operand_1 << '\n'
+         *                  << "    hamming_distance_subsequent_operand_2:"
+         *                  << hamming_distance_subsequent_operand_2 << '\n'
+         *                  << std::endl;
+         */
 
         // Get rid of the now unneeded instruction 2 cycles before.
         instructions_window.pop_front();
