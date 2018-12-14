@@ -26,6 +26,7 @@
 #ifndef ASSEMBLY_INSTRUCTION_HPP
 #define ASSEMBLY_INSTRUCTION_HPP
 
+#include <cstdint>    // for uint32_t
 #include <stdexcept>  // for overflow_error, underflow_error
 #include <string>     // for string
 #include <utility>    // for pair
@@ -46,7 +47,7 @@ namespace Internal
 //! @see https://en.wikipedia.org/wiki/Assembly_language
 class Assembly_Instruction
 {
-private:
+protected:
     //! A pair of the assembly and the binary representation of the opcode.
     //! @see https://en.wikipedia.org/wiki/Opcode
     //! @todo Future improvement: Store whole encoded instruction as well.
@@ -62,6 +63,14 @@ private:
     //! so then std::pair could be used with boost::dynamic_bitset.
     //! @todo Future improvement: Store whole encoded instruction
     std::vector<std::string> m_operands;
+
+    //! The numerical values stored within the operands in m_operands. If the
+    //! operand is a register, then the value within that register is stored.
+    //! @see https://en.wikipedia.org/wiki/Operand#Computer_science
+    //! @todo Does this need to be stored in binary as well? If
+    //! so then std::pair could be used with boost::dynamic_bitset.
+    //! @todo Future improvement: Store whole encoded instruction
+    // std::vector<std::uint32_t> m_operand_values;
 
     // TODO: Future: Should this be stored in Assembly_Instruction or Execution?
     // const std::vector<Register> m_changed_registers;
@@ -89,9 +98,33 @@ public:
         }
     }
 
-    //! @brief Gets the instructions opcode in human readable form e.g. "add".
+    // Copy Constructor
+    Assembly_Instruction(const Assembly_Instruction& other) noexcept
+        : m_opcode(other.m_opcode), m_operands(other.m_operands)
+    {
+    }
+
+    // Move constructor
+    Assembly_Instruction(Assembly_Instruction&& other) noexcept
+        : m_opcode(std::move(other.m_opcode)), m_operands(other.m_operands)
+    {
+    }
+
+    //! @todo document
+    //! Move constructor
+    //// TODO: should move be exchange?
+    /*
+     *Assembly_Instruction(const Assembly_Instruction&& other)
+     *    : m_opcode(std::move(other.m_opcode)),
+     *      m_operands(std::move(other.m_operands))
+     *{
+     *}
+     */
+
+    //! @brief Gets the instructions opcode in human readable form e.g.
+    //! "add".
     //! @return The opcode as a string.
-    const std::string& Get_Opcode() const { return m_opcode; }
+    const std::string& Get_Opcode() const noexcept { return m_opcode; }
 
     //! @brief Gets a list of the instructions operands.
     //! @return A vector of operands.
@@ -132,6 +165,20 @@ public:
         }
         return m_operands.at(p_operand_index - 1);
     }
+
+    /*
+     *const std::size_t Get_Operand_Value(const uint8_t p_operand_index) const
+     *{
+     *    try
+     *    {
+     *        return Get_Operand(p_operand_index);
+     *    }
+     *    catch (const std::runtime_error& exception)
+     *    {
+     *        return 0;
+     *    }
+     *};
+     */
 };
 }  // namespace Internal
 }  // namespace ELMO2
