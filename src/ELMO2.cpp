@@ -97,14 +97,14 @@ public:
     //! @param p_traces_path The path to save the Traces to. This is an
     //! optional parameter and omitting it will cause the traces to not be
     //! saved to a file.
-    ELMO_2(std::string p_program_path,
+    ELMO_2(const std::string& p_program_path,
            const std::string& p_coefficients_path,
            const std::optional<std::string>& p_traces_path,
            const std::uint32_t p_number_of_runs)
         : m_coefficients(
               ELMO2::Internal::IO().Load_Coefficients(p_coefficients_path)),
-          m_program_path(std::move(p_program_path)),
-          m_traces_path(p_traces_path), m_number_of_runs(p_number_of_runs)
+          m_program_path(p_program_path), m_traces_path(p_traces_path),
+          m_number_of_runs(p_number_of_runs)
     {
     }
 
@@ -132,6 +132,9 @@ public:
     }
 
     //! @brief Runs the simulator given by p_simulator_name and TODO:
+    //! @TODO: Why does this store in m_traces??? Store in temp local and return
+    //! and append is better. - Or better yet, add append support to Traces
+    //! Serialiser
     decltype(m_traces) Run_Simulator(const std::string& p_simulator_name)
     {
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
@@ -158,17 +161,24 @@ public:
                 // in constant time). This is a requirement for using the TRS
                 // trace format.
                 const auto trace = model->Generate_Traces();
+
+                // TODO: Future: This should only be checked if TRS files are
+                // being used.
                 if (0 < i && trace.size() != m_traces.front().size())
                 {
-                    std::cerr << "Error: The target program did not run in a "
-                                 "constant amount of cycles. (This is "
-                                 "considered insecure.)\n"
-                              << "First trace took: " << m_traces.front().size()
-                              << " cycles.\n Trace number " << i
-                              << " took: " << trace.size() << " cycles."
-                              << std::endl;
+                    std::cerr
+                        << "Error: The target program did not run in a "
+                           "constant amount of cycles.\nThis is required when "
+                           "saving into a TRS file. (If this was an not "
+                           "intentional countermeasure to timing attacks then "
+                           "this is considered insecure.)\n"
+                        << "Trace number 0 took: " << m_traces.front().size()
+                        << " clock cycles.\nTrace number " << i
+                        << " took: " << trace.size() << " clock cycles."
+                        << std::endl;
                     exit(1);
                 }
+                // Add the generated trace to the list of traces.
                 m_traces.emplace_back(trace);
             }
         }

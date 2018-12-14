@@ -231,6 +231,7 @@ public:
     {
         try
         {
+            // TODO: If entire program is outside of trigger points then this will crash (size=0 out of range)
             return std::any_cast<State>(
                 m_pipeline.at(p_cycle).at(p_pipeline_stage_name));
         }
@@ -295,8 +296,18 @@ public:
         std::vector<std::string> operands =
             ELMO2::Internal::Utility::string_split(instruction, ",");
 
+        /*
+         *std::vector<std::uint32_t> operand_values;
+         *std::transform(operands.begin(),
+         *               operands.end(),
+         *               operand_values.begin(),
+         *               [&](const auto p_operand) {
+         *                   return Get_Operand_Value(p_cycle, p_operand);
+         *               });
+         */
+
         // Create a new instruction and return it.
-        return Assembly_Instruction(opcode, operands);
+        return Assembly_Instruction(opcode, operands /*, operand_values*/);
     }
 
     //! @brief Adds the state of all registers as they were during every clock
