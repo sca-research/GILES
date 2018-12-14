@@ -27,6 +27,7 @@
 #ifndef EMULATOR_INTERFACE_HPP
 #define EMULATOR_INTERFACE_HPP
 
+#include <cstdio>  // for popen
 #include <string>  // for string
 #include <vector>  // for vector
 
@@ -61,6 +62,37 @@ protected:
     explicit Emulator_Interface(const std::string& p_program_path)
         : m_program_path(p_program_path)
     {
+    }
+
+    //! @brief Runs the command provided and returns the stdout output contained
+    //! within a string.
+    //! @todo CHANGE THIS AND DOCUMENT
+    //! @todo Change this to not return a string for speed?
+    //! @see https://stackoverflow.com/q/478898
+    const std::string invoke_emulator(const std::string& p_emulator_command,
+                                      const std::string& p_emulator_path = "")
+    {
+        // A temporary buffer to read the output into.
+        std::array<char, 128> buffer;
+
+        // The result of running p_emulator_command.
+        std::string result;
+
+        // Run the command, and capture the output within a FILE
+        std::shared_ptr<std::FILE> command_output(
+            popen((p_emulator_path + p_emulator_command).c_str(), "r"), pclose);
+
+        if (!command_output)
+            throw std::runtime_error("popen() failed!");
+
+        // While not the end of file, read more data.
+        while (!feof(command_output.get()))
+        {
+            // Read data into the buffer and then append it to result.
+            if (nullptr != fgets(buffer.data(), 128, command_output.get()))
+                result += buffer.data();
+        }
+        return result;
     }
 
 public:
