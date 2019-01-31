@@ -108,6 +108,9 @@ public:
     //! @returns The recorded Execution of the target program as an Execution
     //! object.
     virtual const ELMO2::Internal::Execution Run_Code() = 0;
+
+    //! @todo Document
+    virtual const std::string& Get_Extra_Data() = 0;
 };
 }  // namespace Internal
 }  // namespace ELMO2

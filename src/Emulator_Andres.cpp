@@ -31,24 +31,21 @@
 #include "Emulator_Andres.hpp"
 #include "Execution.hpp"
 
-#include "simulator.cpp"
-#include "simulator/processor.h"
-
 const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Andres::Run_Code()
 {
-    Simulator sim;
-    sim.run(m_program_path);
+    Simulator simulator;
+    simulator.run(m_program_path);
 
-    const auto& execution_recording = sim.Get_Cycle_Recorder();
+    m_execution_recording = simulator.Get_Cycle_Recorder();
 
     // Retrieve the results from the simulator
-    const auto& fetch     = execution_recording.Get_Fetch();
-    const auto& decode    = execution_recording.Get_Decode();
-    const auto& execute   = execution_recording.Get_Execute();
-    const auto& registers = execution_recording.Get_Registers();
+    const auto& fetch     = m_execution_recording.Get_Fetch();
+    const auto& decode    = m_execution_recording.Get_Decode();
+    const auto& execute   = m_execution_recording.Get_Execute();
+    const auto& registers = m_execution_recording.Get_Registers();
 
     // Create an Execution object and add the required data to it.
-    Execution execution(execution_recording.Get_Cycle_Count());
+    Execution execution(m_execution_recording.Get_Cycle_Count());
     execution.Add_Registers_All(registers);
     execution.Add_Pipeline_Stage("Fetch", fetch);
     execution.Add_Pipeline_Stage("Decode", decode);
@@ -65,4 +62,9 @@ const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Andres::Run_Code()
         }
     }
     return execution;
+}
+
+const std::string& ELMO2::Internal::Emulator_Andres::Get_Extra_Data()
+{
+    return m_execution_recording.Get_Extra_Data();
 }

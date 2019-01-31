@@ -61,6 +61,8 @@ private:
     const std::uint32_t m_number_of_runs;
     std::vector<std::vector<float>> m_traces;
 
+    std::vector<std::string> m_extra_data;
+
     //! @todo Optimise this using std methods. Can be reduced down to
     //! std::remove_if or something similar.
     //! @todo This is not needed. Using a lazy approach we can only check the
@@ -111,6 +113,8 @@ public:
     //! @todo Document
     void run()
     {
+        std::vector<std::string> extra_data;
+
         // Initialise all emulators.
         for (const auto& emulator_interface :
              ELMO2::Internal::Emulator_Factory::Get_All())
@@ -125,7 +129,8 @@ public:
             if (m_traces_path)
             {
                 // Save to file.
-                Traces_Serialiser::Serialiser serialiser({m_traces});
+                Traces_Serialiser::Serialiser serialiser(m_extra_data,
+                                                         {m_traces});
                 serialiser.Save(m_traces_path.value());
             }
         }
@@ -144,6 +149,9 @@ public:
                 p_simulator_name, m_program_path);
 
             const auto execution = simulator->Run_Code();
+
+            // Any extra data to be included in the trace.
+            m_extra_data.emplace_back(simulator->Get_Extra_Data());
 
             // Initialise all models.
             for (const auto& model_interface :
@@ -164,6 +172,7 @@ public:
 
                 // TODO: Future: This should only be checked if TRS files are
                 // being used.
+                // TODO: Just trim traces to be the same length and warn.
                 if (0 < i && trace.size() != m_traces.front().size())
                 {
                     std::cerr

@@ -25,6 +25,8 @@
 #include "Emulator_Interface.hpp"         // for Emulator_Interface
 #include "Execution.hpp"                  // for Execution
 
+#include "simulator.cpp"  // for Simulator
+
 namespace ELMO2
 {
 namespace Internal
@@ -34,6 +36,9 @@ class Emulator_Andres : public virtual ELMO2::Internal::Emulator_Interface,
                         public ELMO2::Internal::Emulator_Factory_Register<
                             ELMO2::Internal::Emulator_Andres>
 {
+private:
+    Thumb_Simulator::Debug m_execution_recording;
+
 public:
     //! @brief Constructs an Emulator that will simulate the program given by
     //! p_program_path.
@@ -60,10 +65,12 @@ public:
 
     const ELMO2::Internal::Execution Run_Code() override;
 
+    const std::string& Get_Extra_Data() override;
+
     //! @brief Retrieves the name of this Emulator.
     //! @returns The name as a string.
-    //! @note This is needed to ensure self registration in the factory works.
-    //! The factory registration requires this as unique identifier.
+    //! @note This is needed to ensure self registration in the factory
+    //! works. The factory registration requires this as unique identifier.
     static const std::string Get_Name() { return "Andres"; }
 };
 }  // namespace Internal
