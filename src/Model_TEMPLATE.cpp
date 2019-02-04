@@ -60,6 +60,5 @@ ELMO2::Internal::Model_TEMPLATE::Generate_Traces() const
     // *** Place your code here ***
     //! @note m_coefficients and m_execution can be made use of to generate the
     //! traces.
-    return std::make_pair(
-        "", std::vector<float>());  // temp placeholder for debugging reasons
+    return std::vector<float>();  // temp placeholder for debugging reasons
 }
