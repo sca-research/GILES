@@ -67,6 +67,38 @@ private:
     //! represents a sub level within the Coefficients.
     //! @returns The value at the end of all the sub levels as the type given by
     //! T_return.
+    template <typename T_return,
+              typename T_head_category,
+              typename... T_categories>
+    T_return constexpr static get_value(const nlohmann::json& p_coefficients,
+                                        const T_head_category& p_head,
+                                        const T_categories&... p_categories)
+    {
+        // If there are still more than 1 level left to recurse into.
+        if constexpr (1 <= sizeof...(T_categories))
+        {
+            // Go one level deeper and then recurse.
+            return get_value<T_return>(p_coefficients.at(p_head),
+                                       p_categories...);
+        }
+        else
+        {
+            // This is the last sub level, stop recursing and start returning.
+            return p_coefficients.at(p_head);
+        }
+    }
+
+    //! @brief Retrieves a value from the Coefficients. This is mostly a wrapper
+    //! function around the other get_value function that exists to simplify
+    //! exception handling.
+    //! @tparam T_return The return type.
+    //! @tparam T_categories The type of the names of the sub categories. This
+    //! is only a template in order to be variadic; this is enforced as a string
+    //! or something that can be static_cast into a string.
+    //! @param p_categories This is a variadic parameter where each value
+    //! represents a sub level within the Coefficients.
+    //! @returns The value at the end of all the sub levels as the type given by
+    //! T_return.
     //! @exception std::invalid_argument If the resulting value cannot be cast
     //! to the chosen return type, this exception is thrown.
     //! @exception nlohmann::json::out_of_range This is thrown when any of the
@@ -75,45 +107,9 @@ private:
     template <typename T_return, typename... T_categories>
     T_return get_value(const T_categories&... p_categories) const
     {
-        // Cast the contents of p_categories to a vector of strings. This
-        // enforces the fact that the names of categories must be strings at
-        // compile time.
-        std::vector<std::string> categories = {
-            static_cast<std::string>(p_categories)...};
-
-        // Get all of the Coefficients.
-        auto coefficients = m_coefficients;
-
-        // Go down through all the sub levels as given by the parameters in
-        // categories.
-        for (const auto& category : categories)
-        {
-            try
-            {
-                coefficients = coefficients.at(category);
-            }
-            // If one of the categories doesn't exist then throw an error that
-            // is slightly easier to understand than a generic json type error.
-            catch (const nlohmann::detail::exception& exception)
-            {
-                // Make sure this is the type of exception we thought it was.
-                // If "cannot use .at() with array" exception or "key not found"
-                if (304 == exception.id || 403 == exception.id)
-                {
-                    const std::string error_message =
-                        "Could not find category at the current place in the "
-                        "Coefficients with the given name: " +
-                        category;
-                    throw std::out_of_range(error_message);
-                }
-                throw;  // Re-throw if this is not the expected exception.
-            }
-        }
-
-        // Try and retrieve as the requested type.
         try
         {
-            return coefficients.get<T_return>();
+            return get_value<T_return>(m_coefficients, p_categories...);
         }
         // If retrieval fails then throw an error that is slightly easier to
         // understand than a generic json type error.
@@ -125,21 +121,36 @@ private:
                 boost::core::demangle(typeid(T_return).name());
             throw std::invalid_argument(error_message);
         }
+        // If one of the categories doesn't exist then throw an error that
+        // is slightly easier to understand than a generic json type error.
+        catch (const nlohmann::detail::exception& exception)
+        {
+            // Make sure this is the type of exception we thought it was.
+            // If "cannot use .at() with array" exception or "key not found"
+            if (304 == exception.id || 403 == exception.id)
+            {
+                const std::string error_message =
+                    "Could not find category at the current place in the "
+                    "Coefficients with the given name";
+                throw std::out_of_range(error_message);
+            }
+            throw;  // Re-throw if this is not the expected exception.
+        }
     }
 
-    //! @brief This is a helper function that does nothing other than lookup the
-    //! instruction category of the instruction given by p_opcode, and pass the
-    //! results onto the get_value function.
+    //! @brief This is a helper function that does nothing other than lookup
+    //! the instruction category of the instruction given by p_opcode, and
+    //! pass the results onto the get_value function.
     //! @param p_opcode The opcode of the instruction to lookup the category
     //! for.
     //! @param p_categories This is a variadic parameter where each value
     //! represents a sub level within the Coefficients.
     //! @tparam T_return The return type.
-    //! @tparam T_categories The type of the names of the sub categories. This
-    //! is only a template in order to be variadic; this is enforced as a string
-    //! or something that can be static_cast into a string.
-    //! @returns The value at the end of all the sub levels as the type given by
-    //! T_return.
+    //! @tparam T_categories The type of the names of the sub categories.
+    //! This is only a template in order to be variadic; this is enforced as
+    //! a string or something that can be static_cast into a string.
+    //! @returns The value at the end of all the sub levels as the type
+    //! given by T_return.
     template <typename T_return, typename... T_categories>
     T_return get_value_opcode(const std::string& p_opcode,
                               const T_categories&... p_categories) const
@@ -150,19 +161,20 @@ private:
 
     //! @todo Change to be style of get_value_opcode comment
     //! @brief Retrieves an individual coefficient value by name, under the
-    //! instruction category that contains the instruction given by p_opcode.
-    //! p_categories is a variadic parameter that represents a list of sub
-    //! categories within the instruction category to retrieve from.
+    //! instruction category that contains the instruction given by
+    //! p_opcode. p_categories is a variadic parameter that represents a
+    //! list of sub categories within the instruction category to retrieve
+    //! from.
     //! @tparam T_return The return type.
-    //! @tparam T_categories The type of the names of the sub categories. This
-    //! is only a template in order to be variadic; this is enforced as a string
-    //! or something that can be static_cast into a string.
-    //! @param p_opcode  The opcode of the instruction that the Coefficients are
-    //! required for.
+    //! @tparam T_categories The type of the names of the sub categories.
+    //! This is only a template in order to be variadic; this is enforced as
+    //! a string or something that can be static_cast into a string.
+    //! @param p_opcode  The opcode of the instruction that the Coefficients
+    //! are required for.
     //! @param p_categories This is a variadic parameter where each value
     //! represents a sub level within the Coefficients.
-    //! @returns The value at the end of all the sub levels as the type given by
-    //! T_return.
+    //! @returns The value at the end of all the sub levels as the type
+    //! given by T_return.
     template <typename T_return, typename... T_categories>
     T_return get_coefficient(const std::string& p_opcode,
                              const T_categories&... p_categories) const
@@ -194,14 +206,15 @@ public:
                      const std::string& p_interaction_term) const;
 
     //! @brief Retrieves an individual coefficient value by name, under the
-    //! instruction category that contains the instruction given by p_opcode.
-    //! p_categories is a variadic parameter that represents a list of sub
-    //! categories within the instruction category to retrieve from.
-    //! @tparam T_categories The type of the names of the sub categories. This
-    //! is only a template in order to be variadic; this is enforced as a string
-    //! or something that can be static_cast into a string.
-    //! @param p_opcode  The opcode of the instruction that the Coefficients are
-    //! required for.
+    //! instruction category that contains the instruction given by
+    //! p_opcode. p_categories is a variadic parameter that represents a
+    //! list of sub categories within the instruction category to retrieve
+    //! from.
+    //! @tparam T_categories The type of the names of the sub categories.
+    //! This is only a template in order to be variadic; this is enforced as
+    //! a string or something that can be static_cast into a string.
+    //! @param p_opcode  The opcode of the instruction that the Coefficients
+    //! are required for.
     //! @param p_categories This is a variadic parameter where each value
     //! represents a sub level within the Coefficients.
     //! @returns The value at the end of all the sub levels as type double.
@@ -213,7 +226,7 @@ public:
     }
 
     double Get_Constant(const std::string& p_opcode) const;
-};
+};  // namespace Internal
 }  // namespace Internal
 }  // namespace ELMO2
 
