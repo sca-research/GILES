@@ -119,7 +119,7 @@ public:
         for (const auto& emulator_interface :
              ELMO2::Internal::Emulator_Factory::Get_All())
         {
-            std::cout << "Found Emulator: " << emulator_interface.first
+            std::cout << "Using simulator: " << emulator_interface.first
                       << std::endl;
 
             // Run the emulator and save the results to m_traces.
@@ -142,6 +142,12 @@ public:
     //! Serialiser
     decltype(m_traces) Run_Simulator(const std::string& p_simulator_name)
     {
+        // TODO: Replace this will something a bit more robust.
+        std::cout
+            << "Using model: "
+            << std::begin(ELMO2::Internal::Model_Factory::Get_All())->first
+            << std::endl;
+
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
         {
             // Construct the simulator, ready for use.
@@ -157,8 +163,6 @@ public:
             for (const auto& model_interface :
                  ELMO2::Internal::Model_Factory::Get_All())
             {
-                std::cout << "Found Model: " << model_interface.first
-                          << std::endl;
 
                 // Construct the model, ready for use.
                 const auto model = ELMO2::Internal::Model_Factory::Construct(
@@ -191,6 +195,7 @@ public:
                 m_traces.emplace_back(trace);
             }
         }
+        std::cout << "Done!" << std::endl;
         return m_traces;
     }
 };
