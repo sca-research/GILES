@@ -47,6 +47,8 @@ add_library(lib${PROJECT_NAME} SHARED
     Validator_Coefficients.cpp
 )
 
+find_package(OpenMP)
+
 # Download and include required files from external projects
 target_include_external_project(lib${PROJECT_NAME} Traces_Serialiser src)
 target_include_external_project(lib${PROJECT_NAME} json single_include/nlohmann)
@@ -58,6 +60,9 @@ target_include_directories(lib${PROJECT_NAME}
 
 #TODO: Why does this still work with this commented but not for exe version?
 #target_link_libraries(lib${PROJECT_NAME} libthumb-sim)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(lib${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 set_target_properties(lib${PROJECT_NAME} PROPERTIES PREFIX "")
@@ -68,6 +73,10 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     add_executable(${PROJECT_NAME} Main.cpp)
 
     target_link_libraries(${PROJECT_NAME} lib${PROJECT_NAME} libthumb-sim)
+
+#if(OpenMP_CXX_FOUND)
+    #target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
+#endif()
 
     # Include required files from external projects
     target_include_external_project(${PROJECT_NAME} cxxopts include)

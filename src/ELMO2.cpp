@@ -148,6 +148,7 @@ public:
             << std::begin(ELMO2::Internal::Model_Factory::Get_All())->first
             << std::endl;
 
+#pragma omp target teams distribute parallel for
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
         {
             // Construct the simulator, ready for use.
@@ -179,20 +180,30 @@ public:
                 // TODO: Just trim traces to be the same length and warn.
                 if (0 < i && trace.size() != m_traces.front().size())
                 {
-                    std::cerr
-                        << "Error: The target program did not run in a "
-                           "constant amount of cycles.\nThis is required when "
-                           "saving into a TRS file. (If this was an not "
-                           "intentional countermeasure to timing attacks then "
-                           "this is considered insecure.)\n"
-                        << "Trace number 0 took: " << m_traces.front().size()
-                        << " clock cycles.\nTrace number " << i
-                        << " took: " << trace.size() << " clock cycles."
-                        << std::endl;
+                    fprintf(stderr,
+                            "Error: The target program did not run in a "
+                            "constant amount of cycles.\nThis is required when"
+                            "saving into a TRS file. (If this was not an "
+                            "intentional countermeasure to timing attacks then"
+                            "this is considered insecure.)\n");
+                    // TODO: Find a way of adding this extra data back in
+                    // that works in OpenMP.
+                    /*
+                     *"Trace number 0 took: %lu clock cycles.\n"
+                     *"Trace number %zu took: %lu clock cycles.\n",
+                     *m_traces.front().size(),
+                     *i,
+                     *trace.size());
+                     */
                     exit(1);
                 }
-                // Add the generated trace to the list of traces.
-                m_traces.emplace_back(trace);
+                // This is marked critical to ensure everything gets added and
+                // locks are automatically handled.
+#pragma omp critical
+                {
+                    // Add the generated trace to the list of traces.
+                    m_traces.emplace_back(trace);
+                }
             }
         }
         std::cout << "Done!" << std::endl;
