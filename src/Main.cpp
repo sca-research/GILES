@@ -105,7 +105,7 @@ void parse_command_line_flags(int& argc, char**& argv)
     if (0 != result.count("help"))  // if help flag is passed
     {
         std::cout << options.help() << std::endl;
-        std::exit(EXIT_FAILURE);
+        std::exit(EXIT_SUCCESS);
     }
 
     if (0 != result.count("output"))  // if output flag is passed
