@@ -44,6 +44,8 @@ namespace
 // TODO: Put this all in a class
 std::string m_program_path;
 std::string m_coefficients_path;
+std::string m_model_name;
+std::string m_simulator_name;
 std::optional<std::string> m_traces_path;
 std::uint32_t m_number_of_runs;
 
@@ -67,12 +69,19 @@ void parse_command_line_flags(int& argc, char**& argv)
         ("f,file", "Coefficients file",
              cxxopts::value<std::string>()->default_value("./coeffs.json"),
              "COEFFICIENTS")
-        ("i,input", "Executable to be ran in the emulator",
+        ("i,input", "Executable to be ran in the simulator",
              cxxopts::value<std::string>(),
              "EXECUTABLE")
         ("o,output", "Generated traces output file",
              cxxopts::value<std::string>(),
-             "FILE");
+             "FILE")
+        ("s,simulator", "The name of the simulator that should be used",
+             cxxopts::value<std::string>(),
+             "SIMULATOR NAME")
+        ("m,model", "The name of the mathematical model that should be used to "
+                    "generate traces",
+             cxxopts::value<std::string>(),
+             "MODEL NAME");
     // clang-format on
 
     // Input can be specified without -i/--input flag
@@ -127,6 +136,12 @@ void parse_command_line_flags(int& argc, char**& argv)
 
     // default "./coeffs.json" is used if flag is not passed
     m_coefficients_path = result["file"].as<std::string>();
+
+    // default "Hamming Weight" is used if flag is not passed
+    m_model_name = result["Hamming Weight"].as<std::string>();
+
+    // default "Andres" is used if flag is not passed
+    m_simulator_name = result["Andres"].as<std::string>();
 
     // default 1 is used if flag is not passed
     // TODO: Remove this default?
