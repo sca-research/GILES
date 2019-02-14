@@ -91,9 +91,7 @@ void parse_command_line_flags(int& argc, char**& argv)
         {
             options.parse_positional(std::vector<std::string>{"input", "file"});
 
-            return options.parse(argc,
-                                 argv);  // TODO: Invalid input exception comes
-                                         // from this line not try catch below.
+            return options.parse(argc, argv);
         }
         catch (const cxxopts::OptionParseException& exception)
         {
@@ -104,18 +102,18 @@ void parse_command_line_flags(int& argc, char**& argv)
         }
     }();
 
-    if (result.count("help"))  // if help flag is passed
+    if (0 != result.count("help"))  // if help flag is passed
     {
         std::cout << options.help() << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
-    if (result.count("output"))  // if output flag is passed
+    if (0 != result.count("output"))  // if output flag is passed
     {
         m_traces_path = result["output"].as<std::string>();
     }
 
-    if (result.count("input"))  // if input flag is passed
+    if (0 != result.count("input"))  // if input flag is passed
     {
         m_program_path = result["input"].as<std::string>();
     }
@@ -129,7 +127,7 @@ void parse_command_line_flags(int& argc, char**& argv)
         std::exit(EXIT_FAILURE);
     }
 
-    if (result.count("output"))  // if output flag is passed
+    if (0 != result.count("output"))  // if output flag is passed
     {
         m_traces_path = result["output"].as<std::string>();
     }
