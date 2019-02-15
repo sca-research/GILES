@@ -76,11 +76,11 @@ void parse_command_line_flags(int& argc, char**& argv)
              cxxopts::value<std::string>(),
              "FILE")
         ("s,simulator", "The name of the simulator that should be used",
-             cxxopts::value<std::string>(),
+             cxxopts::value<std::string>()->default_value("Andres"),
              "SIMULATOR NAME")
         ("m,model", "The name of the mathematical model that should be used to "
                     "generate traces",
-             cxxopts::value<std::string>(),
+             cxxopts::value<std::string>()->default_value("Hamming Weight"),
              "MODEL NAME");
     // clang-format on
 
@@ -135,11 +135,11 @@ void parse_command_line_flags(int& argc, char**& argv)
     // default "./coeffs.json" is used if flag is not passed
     m_coefficients_path = result["file"].as<std::string>();
 
-    // default "Hamming Weight" is used if flag is not passed
-    m_model_name = result["Hamming Weight"].as<std::string>();
-
     // default "Andres" is used if flag is not passed
-    m_simulator_name = result["Andres"].as<std::string>();
+    m_simulator_name = result["simulator"].as<std::string>();
+
+    // default "Hamming Weight" is used if flag is not passed
+    m_model_name = result["model"].as<std::string>();
 
     // default 1 is used if flag is not passed
     // TODO: Remove this default?
