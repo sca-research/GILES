@@ -49,6 +49,22 @@ std::string m_simulator_name;
 std::optional<std::string> m_traces_path;
 std::uint32_t m_number_of_runs;
 
+//! @brief Prints an error message and exits. This is to be called when the
+//! program cannot run given the supplied command line arguments.
+//! @note This function is marked as noreturn as it is guaranteed to always halt
+//! the program. (Through std::exit())
+//! @param p_message An error message can optionally be provided. This will be
+//! printed first on a separate line if provided.
+[[noreturn]] void bad_options(const std::string& p_message = "") {
+    if (!p_message.empty())
+    {
+        std::cout << p_message << std::endl;
+    }
+    std::cout << "Please use option --help or -h to see proper usage"
+              << std::endl;
+    std::exit(EXIT_FAILURE);
+}
+
 //! @brief Interprets the command line flags.
 //! @param p_options The options as contained within a string.
 // TODO: Returns tag?
@@ -84,21 +100,18 @@ void parse_command_line_flags(int& argc, char**& argv)
              "MODEL NAME");
     // clang-format on
 
-    // Input can be specified without -i/--input flag
-    // Coefficients File can be specified without -f/--file flag
     const auto& result = [&] {
         try
         {
+            // Input can be specified without -i/--input flag
+            // Coefficients File can be specified without -f/--file flag
             options.parse_positional(std::vector<std::string>{"input", "file"});
 
             return options.parse(argc, argv);
         }
         catch (const cxxopts::OptionParseException& exception)
         {
-            std::cout << exception.what() << std::endl
-                      << "Please use option --help or -h to see proper usage"
-                      << std::endl;
-            std::exit(EXIT_FAILURE);
+            bad_options(exception.what());
         }
     }();
 
@@ -119,12 +132,8 @@ void parse_command_line_flags(int& argc, char**& argv)
     }
     else
     {
-        std::cout << "Input option is required. "
-                     "(-i / --input \"Path to Executable\")"
-                  << std::endl
-                  << "Please use option --help or -h to see proper usage"
-                  << std::endl;
-        std::exit(EXIT_FAILURE);
+        bad_options(
+            "Input option is required.(-i / --input \"Path to Executable\")");
     }
 
     if (0 != result.count("output"))  // if output flag is passed
