@@ -28,7 +28,7 @@
 
 #include <string>  // for string
 
-#include <json.hpp>  // for json
+#include <nlohmann/json.hpp>  // for json
 
 namespace ELMO2
 {

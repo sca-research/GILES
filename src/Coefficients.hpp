@@ -32,7 +32,7 @@
 #include <vector>         // for vector
 
 #include <boost/core/demangle.hpp>  // for demangle
-#include <json.hpp>                 // for json
+#include <nlohmann/json.hpp>        // for json
 
 #include <iostream>
 

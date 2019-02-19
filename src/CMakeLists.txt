@@ -20,7 +20,7 @@ option(${PROJECT_NAME}_BUILD_EXECUTABLE
     ON
 )
 
-# C++17 is required for std::optional
+# C++17 is required for std::optional and init if statements
 # C++14 is required for unique pointers
 # C++11 is required for nlohmann_json
 set(CMAKE_CXX_STANDARD 17)
@@ -34,7 +34,6 @@ include_directories(${EXTERNAL_PROJECT_DIR}/thumb-sim/include)
 include_directories(${EXTERNAL_PROJECT_DIR}/Traces_Serialiser/src)
 
 # Add library that is built from the source files
-# ******************************************************************************
 add_library(lib${PROJECT_NAME} SHARED
     ELMO2.cpp
     Coefficients.cpp
@@ -42,44 +41,29 @@ add_library(lib${PROJECT_NAME} SHARED
     Model_Hamming_Weight.cpp
     Model_Power.cpp
     #Model_TEMPLATE.cpp
-    #Emulator_TEMPLATE.cpp
     Emulator_Andres.cpp
+    #Emulator_TEMPLATE.cpp
     Validator_Coefficients.cpp
 )
 
+# If OpenMP is available then use it.
 find_package(OpenMP)
-
-# Download and include required files from external projects
-target_include_external_project(lib${PROJECT_NAME} Traces_Serialiser src)
-target_include_external_project(lib${PROJECT_NAME} json single_include/nlohmann)
-
-target_include_directories(lib${PROJECT_NAME}
-    SYSTEM
-    PRIVATE
-    ${EXTERNAL_PROJECT_DIR}/json/single_include/nlohmann)
-
-#TODO: Why does this still work with this commented but not for exe version?
-#target_link_libraries(lib${PROJECT_NAME} libthumb-sim)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(lib${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 endif()
 
+# Link to required external projects
+target_link_libraries(lib${PROJECT_NAME} PUBLIC nlohmann_json::nlohmann_json Traces-Serialiser)
+
+#TODO: Why does this still work with this commented but not for exe version?
+#target_link_libraries(lib${PROJECT_NAME} PUBLIC libthumb-sim)
+
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 set_target_properties(lib${PROJECT_NAME} PROPERTIES PREFIX "")
-# ******************************************************************************
 
 if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     # Add executable that is a command line wrapper around the library
     add_executable(${PROJECT_NAME} Main.cpp)
 
-    target_link_libraries(${PROJECT_NAME} lib${PROJECT_NAME} libthumb-sim)
-
-#if(OpenMP_CXX_FOUND)
-    #target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
-#endif()
-
-    # Include required files from external projects
-    target_include_external_project(${PROJECT_NAME} cxxopts include)
-    target_include_external_project(${PROJECT_NAME} json single_include/nlohmann)
-
+    target_link_libraries(${PROJECT_NAME} PUBLIC lib${PROJECT_NAME} libthumb-sim cxxopts)
 endif()
