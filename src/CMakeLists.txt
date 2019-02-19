@@ -40,7 +40,7 @@ add_library(lib${PROJECT_NAME} SHARED
     Coefficients.cpp
     IO.cpp
     Model_Hamming_Weight.cpp
-    #Model_Power.cpp
+    Model_Power.cpp
     #Model_TEMPLATE.cpp
     #Emulator_TEMPLATE.cpp
     Emulator_Andres.cpp

@@ -57,18 +57,21 @@ class ELMO_2
 private:
     const ELMO2::Internal::Coefficients m_coefficients;
     const std::string m_program_path;
+    const std::string m_model_name;
     const std::optional<std::string>& m_traces_path;
     const std::uint32_t m_number_of_runs;
     std::vector<std::vector<float>> m_traces;
 
     std::vector<std::string> m_extra_data;
 
+    // TODO: Future: This has been left in as it will be used in future versions
+    // when running multiple models at once is supported.
     //! @todo Optimise this using std methods. Can be reduced down to
     //! std::remove_if or something similar.
     //! @todo This is not needed. Using a lazy approach we can only check the
     //! constructed model.
     //! @todo maybe move to Model_Factory.hpp
-    const std::unordered_set<std::string> get_models_in_use()
+    /*const std::unordered_set<std::string> get_models_in_use()
     {
         std::unordered_set<std::string> models_in_use;
         // Create a list of models to use from a list of all models compiled
@@ -76,17 +79,31 @@ private:
         {
             std::cout << "Found Model: " << model.first << std::endl;
             // if this model is enabled.
-            /*tor_TE
-             *if (model.second)  // TODO: model.second is currently a function
-             *                   // pointer to the constructor, not is_enabled
-             *                   // bool.
-             *{
-             */
+            tor_TE
+            if (model.second)  // TODO: model.second is currently a function
+                               // pointer to the constructor, not is_enabled
+                               // bool.
+            {
             // Add it to the list of models in use.
             models_in_use.insert(model.first);
             //}
         }
         return models_in_use;
+    }*/
+
+    //! @brief Checks whether or not a model with the given name exists and
+    //! exits if it is not found.
+    //! @param p_model_name The name of the model to be checked.
+    //! @note The program will exit if the model is not found
+    const void check_model(const std::string& p_model_name)
+    {
+        if (const auto all_models = ELMO2::Internal::Model_Factory::Get_All();
+            std::end(all_models) == all_models.find(p_model_name))
+        {
+            std::cerr << "A model with the given name was not found."
+                      << std::endl;
+            std::exit(EXIT_FAILURE);
+        }
     }
 
 public:
@@ -102,19 +119,23 @@ public:
     ELMO_2(const std::string& p_program_path,
            const std::string& p_coefficients_path,
            const std::optional<std::string>& p_traces_path,
-           const std::uint32_t p_number_of_runs)
-        : m_coefficients(
-              ELMO2::Internal::IO().Load_Coefficients(p_coefficients_path)),
-          m_program_path(p_program_path), m_traces_path(p_traces_path),
-          m_number_of_runs(p_number_of_runs)
+           const std::uint32_t p_number_of_runs,
+           const std::string p_model_name =
+               "Hamming Weight")  // TODO: Set the default using cmake
+                                  // configuring a static var in an external
+                                  // file.
+    : m_coefficients(
+          ELMO2::Internal::IO().Load_Coefficients(p_coefficients_path)),
+      m_program_path(p_program_path), m_traces_path(p_traces_path),
+      m_number_of_runs(p_number_of_runs), m_model_name{std::move(p_model_name)}
     {
+        // Check the supplied model name is valid
+        check_model(p_model_name);
     }
 
     //! @todo Document
-    void run()
+    void Run()
     {
-        std::vector<std::string> extra_data;
-
         // Initialise all emulators.
         for (const auto& emulator_interface :
              ELMO2::Internal::Emulator_Factory::Get_All())
@@ -143,10 +164,7 @@ public:
     decltype(m_traces) Run_Simulator(const std::string& p_simulator_name)
     {
         // TODO: Replace this will something a bit more robust.
-        std::cout
-            << "Using model: "
-            << std::begin(ELMO2::Internal::Model_Factory::Get_All())->first
-            << std::endl;
+        std::cout << "Using model: " << m_model_name << std::endl;
 
 #pragma omp target teams distribute parallel for
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
@@ -161,50 +179,56 @@ public:
             m_extra_data.emplace_back(simulator->Get_Extra_Data());
 
             // Initialise all models.
-            for (const auto& model_interface :
+            // TODO: Future: Add support for using multiple models at once using
+            // this code.
+            /*for (const auto& model_interface :
                  ELMO2::Internal::Model_Factory::Get_All())
             {
 
-                // Construct the model, ready for use.
-                const auto model = ELMO2::Internal::Model_Factory::Construct(
-                    model_interface.first, execution, m_coefficients);
+            // Construct the model, ready for use.
+            const auto model = ELMO2::Internal::Model_Factory::Construct(
+                model_interface.first, execution, m_coefficients);*/
 
-                // If this is not the first trace gathered then ensure that all
-                // traces are the same length (Meaning the target algorithm runs
-                // in constant time). This is a requirement for using the TRS
-                // trace format.
-                const auto trace = model->Generate_Traces();
+            // Construct the model, ready for use.
+            const auto model = ELMO2::Internal::Model_Factory::Construct(
+                m_model_name, execution, m_coefficients);
 
-                // TODO: Future: This should only be checked if TRS files are
-                // being used.
-                // TODO: Just trim traces to be the same length and warn.
-                if (0 < i && trace.size() != m_traces.front().size())
-                {
-                    fprintf(stderr,
-                            "Error: The target program did not run in a "
-                            "constant amount of cycles.\nThis is required when"
-                            "saving into a TRS file. (If this was not an "
-                            "intentional countermeasure to timing attacks then"
-                            "this is considered insecure.)\n");
-                    // TODO: Find a way of adding this extra data back in
-                    // that works in OpenMP.
-                    /*
-                     *"Trace number 0 took: %lu clock cycles.\n"
-                     *"Trace number %zu took: %lu clock cycles.\n",
-                     *m_traces.front().size(),
-                     *i,
-                     *trace.size());
-                     */
-                    exit(1);
-                }
-                // This is marked critical to ensure everything gets added and
-                // locks are automatically handled.
-#pragma omp critical
-                {
-                    // Add the generated trace to the list of traces.
-                    m_traces.emplace_back(trace);
-                }
+            // If this is not the first trace gathered then ensure that all
+            // traces are the same length (Meaning the target algorithm runs
+            // in constant time). This is a requirement for using the TRS
+            // trace format.
+            const auto trace = model->Generate_Traces();
+
+            // TODO: Future: This should only be checked if TRS files are
+            // being used.
+            // TODO: Just trim traces to be the same length and warn.
+            if (0 < i && trace.size() != m_traces.front().size())
+            {
+                fprintf(stderr,
+                        "Error: The target program did not run in a "
+                        "constant amount of cycles.\nThis is required when"
+                        "saving into a TRS file. (If this was not an "
+                        "intentional countermeasure to timing attacks then"
+                        "this is considered insecure.)\n");
+                // TODO: Find a way of adding this extra data back in
+                // that works in OpenMP.
+                /*
+                 *"Trace number 0 took: %lu clock cycles.\n"
+                 *"Trace number %zu took: %lu clock cycles.\n",
+                 *m_traces.front().size(),
+                 *i,
+                 *trace.size());
+                 */
+                exit(1);
             }
+            // This is marked critical to ensure everything gets added and
+            // locks are automatically handled.
+#pragma omp critical
+            {
+                // Add the generated trace to the list of traces.
+                m_traces.emplace_back(trace);
+            }
+            //}
         }
         std::cout << "Done!" << std::endl;
         return m_traces;

@@ -41,7 +41,7 @@
 //! building not as a library.
 namespace
 {
-// TODO: Put this all in a class
+// TODO: Put this all in a class?
 std::string m_program_path;
 std::string m_coefficients_path;
 std::string m_model_name;
@@ -161,9 +161,12 @@ int main(int argc, char* argv[])
 {
     parse_command_line_flags(argc, argv);
 
-    ELMO2::ELMO_2 elmo2 = ELMO2::ELMO_2(
-        m_program_path, m_coefficients_path, m_traces_path, m_number_of_runs);
+    ELMO2::ELMO_2 elmo2 = ELMO2::ELMO_2(m_program_path,
+                                        m_coefficients_path,
+                                        m_traces_path,
+                                        m_number_of_runs,
+                                        m_model_name);
 
-    elmo2.run();
+    elmo2.Run();
     return 0;
 }
