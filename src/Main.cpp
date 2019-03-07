@@ -25,17 +25,18 @@
 */
 
 #include <algorithm>  // for move
-#include <cstdlib>    // for exit, EXIT_FAILURE
-#include <iostream>   // for operator<<, cout, endl, ostream, basic_ostream
+#include <cstdlib>    // for exit, EXIT_SUCCESS
 #include <memory>     // for __shared_ptr_access
 #include <optional>   // for optional
 #include <stdexcept>  // for invalid_argument
 #include <string>     // for string, operator<<
 #include <vector>     // for vector
 
-#include <cxxopts.hpp>  // for Options, value, OptionAdder, OptionDetails
+#include <cxxopts.hpp>   // for Options, value, OptionAdder, OptionDetails
+#include <fmt/format.h>  // for print
 
 #include "ELMO2.cpp"  // for ELMO_2
+#include "Error.hpp"  // for Report_Exit
 
 //! Anonymous namespace is used as this functionality is only required when
 //! building not as a library.
@@ -58,11 +59,10 @@ std::uint32_t m_number_of_runs;
 [[noreturn]] void bad_options(const std::string& p_message = "") {
     if (!p_message.empty())
     {
-        std::cout << p_message << std::endl;
+        fmt::print("{}\n", p_message);
     }
-    std::cout << "Please use option --help or -h to see proper usage"
-              << std::endl;
-    std::exit(EXIT_FAILURE);
+    ELMO2::Internal::Error::Report_Exit(
+        "Please use option --help or -h to see proper usage");
 }
 
 //! @brief Interprets the command line flags.
@@ -117,7 +117,7 @@ void parse_command_line_flags(int& argc, char**& argv)
 
     if (0 != result.count("help"))  // if help flag is passed
     {
-        std::cout << options.help() << std::endl;
+        fmt::print("{}\n", options.help());
         std::exit(EXIT_SUCCESS);
     }
 

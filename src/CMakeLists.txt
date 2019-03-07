@@ -53,7 +53,7 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 # Link to required external projects
-target_link_libraries(lib${PROJECT_NAME} PUBLIC nlohmann_json::nlohmann_json Traces-Serialiser)
+target_link_libraries(lib${PROJECT_NAME} PUBLIC nlohmann_json::nlohmann_json fmt::fmt-header-only Traces-Serialiser)
 
 #TODO: Why does this still work with this commented but not for exe version?
 #target_link_libraries(lib${PROJECT_NAME} PUBLIC libthumb-sim)

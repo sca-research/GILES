@@ -33,11 +33,12 @@
 
 #include <Traces_Serialiser.hpp>
 
-#include <iostream>  // for temp debugging TODO: Remove this
+#include <fmt/format.h>  // for print
 
 #include "Coefficients.hpp"        // for Coefficients
 #include "Emulator_Factory.hpp"    // for Emulator_Factory
 #include "Emulator_Interface.hpp"  // for Emulator_Interface
+#include "Error.hpp"               // for Report_Error
 #include "Execution.hpp"           // for Execution
 #include "IO.hpp"                  // for IO
 #include "Model_Factory.hpp"       // for Model_Factory
@@ -58,6 +59,7 @@ private:
     const ELMO2::Internal::Coefficients m_coefficients;
     const std::string m_program_path;
     const std::string m_model_name;
+    const std::string m_simulator_name;
     const std::optional<std::string>& m_traces_path;
     const std::uint32_t m_number_of_runs;
     std::vector<std::vector<float>> m_traces;
@@ -100,9 +102,8 @@ private:
         if (const auto all_models = ELMO2::Internal::Model_Factory::Get_All();
             std::end(all_models) == all_models.find(p_model_name))
         {
-            std::cerr << "A model with the given name was not found."
-                      << std::endl;
-            std::exit(EXIT_FAILURE);
+            ELMO2::Internal::Error::Report_Error(
+                "A model with the given name was not found.");
         }
     }
 
@@ -140,8 +141,7 @@ public:
         for (const auto& emulator_interface :
              ELMO2::Internal::Emulator_Factory::Get_All())
         {
-            std::cout << "Using simulator: " << emulator_interface.first
-                      << std::endl;
+            fmt::print("Using simulator: {}\n", emulator_interface.first);
 
             // Run the emulator and save the results to m_traces.
             Run_Simulator(emulator_interface.first);
@@ -164,7 +164,7 @@ public:
     decltype(m_traces) Run_Simulator(const std::string& p_simulator_name)
     {
         // TODO: Replace this will something a bit more robust.
-        std::cout << "Using model: " << m_model_name << std::endl;
+        fmt::print("Using model: {}\n", m_model_name);
 
 #pragma omp target teams distribute parallel for
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
@@ -204,22 +204,17 @@ public:
             // TODO: Just trim traces to be the same length and warn.
             if (0 < i && trace.size() != m_traces.front().size())
             {
-                fprintf(stderr,
-                        "Error: The target program did not run in a "
-                        "constant amount of cycles.\nThis is required when"
-                        "saving into a TRS file. (If this was not an "
-                        "intentional countermeasure to timing attacks then"
-                        "this is considered insecure.)\n");
-                // TODO: Find a way of adding this extra data back in
-                // that works in OpenMP.
-                /*
-                 *"Trace number 0 took: %lu clock cycles.\n"
-                 *"Trace number %zu took: %lu clock cycles.\n",
-                 *m_traces.front().size(),
-                 *i,
-                 *trace.size());
-                 */
-                exit(1);
+                ELMO2::Internal::Error::Report_Error(
+                    "The target program did not run in a constant amount of "
+                    "cycles.\n"
+                    "This is required when saving into a TRS file. "
+                    "(If this was not an intentional countermeasure to timing "
+                    "attacks then this is considered insecure.)\n"
+                    "Trace number 0 took {} clock cycles.\n"
+                    "Trace number {} took {} clock cycles.",
+                    m_traces.front().size(),
+                    i,
+                    trace.size());
             }
             // This is marked critical to ensure everything gets added and
             // locks are automatically handled.
@@ -230,7 +225,7 @@ public:
             }
             //}
         }
-        std::cout << "Done!" << std::endl;
+        fmt::print("Done!\n");
         return m_traces;
     }
 };

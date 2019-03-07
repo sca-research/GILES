@@ -18,3 +18,7 @@
 	branch = master
 	path = external/thumb-sim
 	url = https://github.com/bristol-sca/thumb-sim.git
+[submodule "external/fmt"]
+	branch = master
+	path = external/fmt
+	url = https://github.com/fmtlib/fmt

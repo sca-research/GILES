@@ -27,12 +27,12 @@
 
 #include <cstdlib>    // for exit, EXIT_FAILURE
 #include <fstream>    // for ifstream
-#include <iostream>   // for operator<<, endl, cerr
 #include <stdexcept>  // for invalid_argument
 
 #include <nlohmann/json.hpp>      // for json, basic_json<>::exception
 
 #include "Coefficients.hpp"            // for Coefficients
+#include "Error.hpp"                   // for Report_Error
 #include "Validator_Coefficients.hpp"  // for Validator_Coefficients
 
 namespace ELMO2
@@ -61,14 +61,13 @@ const ELMO2::Internal::Coefficients ELMO2::Internal::IO::Load_Coefficients(
     }
     catch (nlohmann::detail::parse_error& e)
     {
-        // TODO: Replace this with proper excepetion handling?
-        std::cout << "Coefficients file '" << p_coefficients_path
-                  << "' is not a valid JSON file" << std::endl;
-        std::exit(EXIT_FAILURE);
+        ELMO2::Internal::Error::Report_Error(
+            "Coefficients file '{}' is not a valid JSON file",
+            p_coefficients_path);
     }
 
     // This will throw an exception if validation fails.
-    ELMO2::Internal::Validator_Coefficients::Validate_Json(json);
+    // ELMO2::Internal::Validator_Coefficients::Validate_Json(json);
 
     return ELMO2::Internal::Coefficients(json);
 }

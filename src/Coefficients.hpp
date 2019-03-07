@@ -34,6 +34,8 @@
 #include <boost/core/demangle.hpp>  // for demangle
 #include <nlohmann/json.hpp>        // for json
 
+#include "Error.hpp"  // for Report_Error
+
 #include <iostream>
 
 namespace ELMO2
@@ -115,11 +117,10 @@ private:
         // understand than a generic json type error.
         catch (const nlohmann::detail::type_error&)
         {
-            const std::string error_message =
+            ELMO2::Internal::Error::Report_Error(
                 "Cannot retrieve value from Coefficients as the chosen "
-                "type: " +
-                boost::core::demangle(typeid(T_return).name());
-            throw std::invalid_argument(error_message);
+                "type: {}",
+                boost::core::demangle(typeid(T_return).name()));
         }
         // If one of the categories doesn't exist then throw an error that
         // is slightly easier to understand than a generic json type error.
@@ -129,10 +130,9 @@ private:
             // If "cannot use .at() with array" exception or "key not found"
             if (304 == exception.id || 403 == exception.id)
             {
-                const std::string error_message =
-                    "Could not find category at the current place in the "
-                    "Coefficients with the given name";
-                throw std::out_of_range(error_message);
+                ELMO2::Internal::Error::Report_Error(
+                    "Could not find category at the current place in "
+                    "the Coefficients with the given name");
             }
             throw;  // Re-throw if this is not the expected exception.
         }
