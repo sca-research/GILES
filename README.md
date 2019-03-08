@@ -1,11 +1,13 @@
 # ELMO2
 
-ELMO2 is a simulation tool that generates
-[side channel analysis](https://en.wikipedia.org/wiki/Side-channel_attack)
-leakage without the need for anything other that a target program.
+ELMO2 is designed to help software engineers quickly identify
+[side channel](https://en.wikipedia.org/wiki/Side-channel_attack)
+security risks during development stages.
 
-ELMO2 simulates a processor and gathers leakage traces from this
-simulated processor.
+This tool simulates instruction-level
+[side channel analysis](https://en.wikipedia.org/wiki/Side-channel_attack)
+leakage without the need for anything other that a target program by simulating
+a processor and gathering leakage traces from this simulated processor.
 
 It can support multiple different processors and multiple different methods of 
 generating leakage from these.
@@ -36,7 +38,7 @@ There will be documents describing how to do this at some point.
   * [Building](#building)
   * [Running tests](#running-tests)
     + [Coverage information](#coverage-information)
-- [Configuration Options](#configuration-options)
+- [CMake Configuration Options](#cmake-configuration-options)
   * [ELMO2_BUILD_DOCUMENTATION](#elmo2_build_documentation)
   * [ELMO2_CALCULATE_COVERAGE](#elmo2_calculate_coverage)
 - [Built with](#built-with)
@@ -247,7 +249,7 @@ folder `coverage` which should have been created in your *`build directory`*.
 /path/to/build/directory/coverage/coverage.html
 ```
 
-## Configuration Options
+## CMake Configuration Options
 
 These are all CMake options and can be appended to the CMake generate command.
 For example, from the build directory:
@@ -279,7 +281,7 @@ purposes. Set this to OFF after you are done generating coverage information.**
 - [Thumb Timing Simulator](https://github.com/bristol-sca/thumb-sim)
 - [Boost](https://www.boost.org/)
 - [Gcovr](https://gcovr.com/)
-- [Doxygen](https://www.stack.nl/~dimitri/doxygen)
+- [Doxygen](http://www.doxygen.nl/)
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc)
 
 Thank you to the creators of all these.
