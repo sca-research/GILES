@@ -365,7 +365,7 @@ private:
         // This is based off of what original elmo does to calculate an
         // individual term
         const auto coefficients = Get_Coefficients(p_opcode, p_term_name);
-        double total              = 0;
+        double total            = 0;
         for (std::size_t i = 0; i < N; ++i)
         {
             // bit = (p_instruction_term >> i) && bool(1);
