@@ -72,9 +72,9 @@ private:
     template <typename T_return,
               typename T_head_category,
               typename... T_categories>
-    T_return constexpr static get_value(const nlohmann::json& p_coefficients,
-                                        const T_head_category& p_head,
-                                        const T_categories&... p_categories)
+    T_return static get_value(const nlohmann::json& p_coefficients,
+                              const T_head_category& p_head,
+                              const T_categories&... p_categories)
     {
         // If there are still more than 1 level left to recurse into.
         if constexpr (1 <= sizeof...(T_categories))
@@ -86,7 +86,37 @@ private:
         else
         {
             // This is the last sub level, stop recursing and start returning.
-            return p_coefficients.at(p_head);
+            try
+            {
+                return p_coefficients.at(p_head);
+            }
+            // If retrieval fails then throw an error that is slightly easier to
+            // understand than a generic json type error.
+            catch (const nlohmann::detail::type_error&)
+            {
+                ELMO2::Internal::Error::Report_Error(
+                    "Cannot retrieve value: {} from Coefficients as the chosen "
+                    "type: {}",
+                    p_coefficients.dump(4),
+                    boost::core::demangle(typeid(T_return).name()));
+            }
+            // If one of the categories doesn't exist then throw an error that
+            // is slightly easier to understand than a generic json type error.
+            catch (const nlohmann::detail::exception& exception)
+            {
+                // Make sure this is the type of exception we thought it was.
+                // If "cannot use .at() with array" exception or "key not found"
+                if (304 == exception.id || 403 == exception.id)
+                {
+                    ELMO2::Internal::Error::Report_Error(
+                        "Could not find category at the current place in "
+                        "the Coefficients with the given name: \"{}\".\n"
+                        "Current place in coefficients:\n{}\n ",
+                        p_head,
+                        p_coefficients.dump(4));
+                }
+                throw;  // Re-throw if this is not the expected exception.
+            }
         }
     }
 
@@ -109,33 +139,7 @@ private:
     template <typename T_return, typename... T_categories>
     T_return get_value(const T_categories&... p_categories) const
     {
-        try
-        {
-            return get_value<T_return>(m_coefficients, p_categories...);
-        }
-        // If retrieval fails then throw an error that is slightly easier to
-        // understand than a generic json type error.
-        catch (const nlohmann::detail::type_error&)
-        {
-            ELMO2::Internal::Error::Report_Error(
-                "Cannot retrieve value from Coefficients as the chosen "
-                "type: {}",
-                boost::core::demangle(typeid(T_return).name()));
-        }
-        // If one of the categories doesn't exist then throw an error that
-        // is slightly easier to understand than a generic json type error.
-        catch (const nlohmann::detail::exception& exception)
-        {
-            // Make sure this is the type of exception we thought it was.
-            // If "cannot use .at() with array" exception or "key not found"
-            if (304 == exception.id || 403 == exception.id)
-            {
-                ELMO2::Internal::Error::Report_Error(
-                    "Could not find category at the current place in "
-                    "the Coefficients with the given name");
-            }
-            throw;  // Re-throw if this is not the expected exception.
-        }
+        return get_value<T_return>(m_coefficients, p_categories...);
     }
 
     //! @brief This is a helper function that does nothing other than lookup
