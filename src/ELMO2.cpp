@@ -32,7 +32,6 @@
 #include <utility>        // for pair, move
 
 #include <Traces_Serialiser.hpp>
-
 #include <fmt/format.h>  // for print
 
 #include "Coefficients.hpp"        // for Coefficients
@@ -62,9 +61,14 @@ private:
     const std::string m_simulator_name;
     const std::optional<std::string>& m_traces_path;
     const std::uint32_t m_number_of_runs;
-    std::vector<std::vector<float>> m_traces;
 
+    // Future: This data is stored here as well as in Traces_Serialiser as it
+    // should be able to be accessed programmatically in the future.
+    // TODO: Add getter.
+    std::vector<std::vector<float>> m_traces;
     std::vector<std::string> m_extra_data;
+
+    Traces_Serialiser::Serialiser<float> m_serialiser;
 
     // TODO: Future: This has been left in as it will be used in future versions
     // when running multiple models at once is supported.
@@ -128,7 +132,8 @@ public:
     : m_coefficients(
           ELMO2::Internal::IO().Load_Coefficients(p_coefficients_path)),
       m_program_path(p_program_path), m_traces_path(p_traces_path),
-      m_number_of_runs(p_number_of_runs), m_model_name{std::move(p_model_name)}
+      m_number_of_runs(p_number_of_runs), m_model_name{std::move(p_model_name)},
+      m_serialiser{}
     {
         // Check the supplied model name is valid
         check_model(p_model_name);
@@ -137,6 +142,7 @@ public:
     //! @todo Document
     void Run()
     {
+
         // Initialise all emulators.
         for (const auto& emulator_interface :
              ELMO2::Internal::Emulator_Factory::Get_All())
@@ -150,9 +156,7 @@ public:
             if (m_traces_path)
             {
                 // Save to file.
-                Traces_Serialiser::Serialiser serialiser(m_extra_data,
-                                                         {m_traces});
-                serialiser.Save(m_traces_path.value());
+                m_serialiser.Save(m_traces_path.value());
             }
         }
     }
@@ -176,7 +180,7 @@ public:
             const auto execution = simulator->Run_Code();
 
             // Any extra data to be included in the trace.
-            m_extra_data.emplace_back(simulator->Get_Extra_Data());
+            const auto extra_data = simulator->Get_Extra_Data();
 
             // Initialise all models.
             // TODO: Future: Add support for using multiple models at once using
@@ -208,8 +212,8 @@ public:
                     "The target program did not run in a constant amount of "
                     "cycles.\n"
                     "This is required when saving into a TRS file. "
-                    "(If this was not an intentional countermeasure to timing "
-                    "attacks then this is considered insecure.)\n"
+                    "(If this was not an intentional countermeasure to timing"
+                    " attacks then this is considered insecure.)\n"
                     "Trace number 0 took {} clock cycles.\n"
                     "Trace number {} took {} clock cycles.",
                     m_traces.front().size(),
@@ -222,6 +226,12 @@ public:
             {
                 // Add the generated trace to the list of traces.
                 m_traces.emplace_back(trace);
+
+                // Add any extra informaton given by the simulator to the
+                // traces.
+                m_extra_data.emplace_back(extra_data);
+
+                m_serialiser.Add_Trace(trace, extra_data);
             }
             //}
         }
