@@ -205,6 +205,19 @@ public:
             // in constant time). This is a requirement for using the TRS
             // trace format.
             const auto trace = model->Generate_Traces();
+// This is marked critical to ensure everything gets added and
+// locks are automatically handled.
+#pragma omp critical
+            {
+                // Add the generated trace to the list of traces.
+                m_traces.emplace_back(trace);
+
+                // Add any extra informaton given by the simulator to the
+                // traces.
+                m_extra_data.emplace_back(extra_data);
+
+                m_serialiser.Add_Trace(trace, extra_data);
+            }
 
             // TODO: Move this to separate function.
             // TODO: Future: This should only be checked if TRS files are
@@ -226,18 +239,8 @@ public:
                     trace.size());
                 warning_printed = true;
             }
-            // This is marked critical to ensure everything gets added and
-            // locks are automatically handled.
 #pragma omp critical
             {
-                // Add the generated trace to the list of traces.
-                m_traces.emplace_back(trace);
-
-                // Add any extra informaton given by the simulator to the
-                // traces.
-                m_extra_data.emplace_back(extra_data);
-
-                m_serialiser.Add_Trace(trace, extra_data);
             }
             //}
         }
