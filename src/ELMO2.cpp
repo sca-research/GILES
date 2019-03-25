@@ -131,7 +131,7 @@ private:
 
         // TODO: Add a report warning function.
         // ELMO2::Internal::Error::Report_Error(
-        fmt::print("Warning: "
+        fmt::print("\nWarning: "
                    "The target program did not run in a constant number of "
                    "cycles.\n"
                    "If this was not an intentional countermeasure to timing"
@@ -206,6 +206,10 @@ public:
         // Enusres that the constant time warning is not printed over and over.
         bool warning_printed{false};
 
+        // Used to indicate progress to the user. 'i' is not used as it is not
+        // thread safe. This is.
+        uint32_t steps_completed{0};
+
 #pragma omp target teams distribute parallel for
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
         {
@@ -238,6 +242,11 @@ public:
             // in constant time). This is a requirement for using the TRS
             // trace format.
             const auto trace = model->Generate_Traces();
+
+            // Increment the counter of number of traces generated.
+#pragma omp atomic
+            ++steps_completed;
+
 // This is marked critical to ensure everything gets added and
 // locks are automatically handled.
 #pragma omp critical
@@ -245,11 +254,16 @@ public:
                 // Add the generated trace to the list of traces.
                 m_traces.emplace_back(trace);
 
-                // Add any extra informaton given by the simulator to the
+                // Add any extra information given by the simulator to the
                 // traces.
                 m_extra_data.emplace_back(extra_data);
 
                 m_serialiser.Add_Trace(trace, extra_data);
+
+                fmt::print("\rGenerated: {} of {} traces. ({}%)",
+                           steps_completed,
+                           m_number_of_runs,
+                           100.0 * steps_completed / m_number_of_runs);
             }
 
             // If this warning hasn't been printed before.
@@ -257,13 +271,11 @@ public:
             {
                 // Will print a warning if the target program is not constant
                 // time.
-#pragma omp critical
-            {
                 warning_printed = warn_if_not_constant_time(i);
             }
             //}
         }
-        fmt::print("Done!\n");
+        fmt::print("\nDone!\n");
         return m_traces;
     }
 };
