@@ -170,6 +170,9 @@ public:
         // TODO: Replace this will something a bit more robust.
         fmt::print("Using model: {}\n", m_model_name);
 
+        // Enusres that the constant time warning is not printed over and over.
+        bool warning_printed = false;
+
 #pragma omp target teams distribute parallel for
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
         {
@@ -203,22 +206,25 @@ public:
             // trace format.
             const auto trace = model->Generate_Traces();
 
+            // TODO: Move this to separate function.
             // TODO: Future: This should only be checked if TRS files are
             // being used.
-            // TODO: Just trim traces to be the same length and warn.
-            if (0 < i && trace.size() != m_traces.front().size())
+            if (0 < i && !warning_printed &&
+                trace.size() != m_traces.front().size())
             {
-                ELMO2::Internal::Error::Report_Error(
-                    "The target program did not run in a constant amount of "
+                // ELMO2::Internal::Error::Report_Error(
+                fmt::print(
+                    "Warning: "
+                    "The target program did not run in a constant number of "
                     "cycles.\n"
-                    "This is required when saving into a TRS file. "
-                    "(If this was not an intentional countermeasure to timing"
-                    " attacks then this is considered insecure.)\n"
+                    "If this was not an intentional countermeasure to timing"
+                    " attacks then this is considered insecure.\n"
                     "Trace number 0 took {} clock cycles.\n"
-                    "Trace number {} took {} clock cycles.",
+                    "Trace number {} took {} clock cycles.\n",
                     m_traces.front().size(),
                     i,
                     trace.size());
+                warning_printed = true;
             }
             // This is marked critical to ensure everything gets added and
             // locks are automatically handled.
