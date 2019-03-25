@@ -111,6 +111,39 @@ private:
         }
     }
 
+    //! @brief Prints a warning if the target program does not run in a constant
+    //! number of clock cycles each time it is executed.
+    //! @returns true if a warning was printed, false if not.
+    //! @param p_trace_index The index of the current trace to have its size
+    //! checked.
+    //! @see https://en.wikipedia.org/wiki/Clock_cycle
+    //! @todo: Future: This should only be checked if TRS files are being used.
+    bool warn_if_not_constant_time(const std::size_t p_trace_index) const
+    {
+        const auto current_size = m_traces[p_trace_index].size();
+        const auto first_size   = m_traces.front().size();
+
+        // If there is no size difference then return false.
+        if (first_size == current_size)
+        {
+            return false;
+        }
+
+        // TODO: Add a report warning function.
+        // ELMO2::Internal::Error::Report_Error(
+        fmt::print("Warning: "
+                   "The target program did not run in a constant number of "
+                   "cycles.\n"
+                   "If this was not an intentional countermeasure to timing"
+                   " attacks then this is considered insecure.\n"
+                   "Trace number 0 took {} clock cycles.\n"
+                   "Trace number {} took {} clock cycles.\n",
+                   first_size,
+                   p_trace_index,
+                   current_size);
+        return true;
+    }
+
 public:
     // TODO: Separate out some of the functionality in here into an API
     //! @brief The main entry point to the ELMO2 library. This controls the
@@ -171,7 +204,7 @@ public:
         fmt::print("Using model: {}\n", m_model_name);
 
         // Enusres that the constant time warning is not printed over and over.
-        bool warning_printed = false;
+        bool warning_printed{false};
 
 #pragma omp target teams distribute parallel for
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
@@ -219,28 +252,14 @@ public:
                 m_serialiser.Add_Trace(trace, extra_data);
             }
 
-            // TODO: Move this to separate function.
-            // TODO: Future: This should only be checked if TRS files are
-            // being used.
-            if (0 < i && !warning_printed &&
-                trace.size() != m_traces.front().size())
+            // If this warning hasn't been printed before.
+            if (!warning_printed)
             {
-                // ELMO2::Internal::Error::Report_Error(
-                fmt::print(
-                    "Warning: "
-                    "The target program did not run in a constant number of "
-                    "cycles.\n"
-                    "If this was not an intentional countermeasure to timing"
-                    " attacks then this is considered insecure.\n"
-                    "Trace number 0 took {} clock cycles.\n"
-                    "Trace number {} took {} clock cycles.\n",
-                    m_traces.front().size(),
-                    i,
-                    trace.size());
-                warning_printed = true;
-            }
+                // Will print a warning if the target program is not constant
+                // time.
 #pragma omp critical
             {
+                warning_printed = warn_if_not_constant_time(i);
             }
             //}
         }
