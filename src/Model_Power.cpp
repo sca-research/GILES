@@ -126,6 +126,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
             const std::string& previous_opcode{
                 previous_instruction.Get_Opcode()};
 
+            const std::string& next_opcode{next_instruction.Get_Opcode()};
             // static const auto& next_opcode     =
             // next_instruction.Get_Opcode();
 
@@ -201,8 +202,9 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
                 current_opcode, "Previous_Instruction", previous_opcode);
 
             const auto subsequent_instruction_term = Get_Coefficient(
-                current_opcode, "Subsequent_Instruction", previous_opcode);
+                current_opcode, "Subsequent_Instruction", next_opcode);
 
+            // TODO: All hamming functions can be improved.
             const auto hamming_weight_previous_operand_1 =
                 calculate_hamming_weight(
                     current_instruction,
@@ -211,11 +213,10 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
                     Get_Instruction_Category(previous_opcode));
 
             const auto hamming_weight_subsequent_operand_1 =
-                calculate_hamming_weight(
-                    current_instruction,
-                    1,
-                    Instruction::Subsequent,
-                    Get_Instruction_Category(previous_opcode));
+                calculate_hamming_weight(current_instruction,
+                                         1,
+                                         Instruction::Subsequent,
+                                         Get_Instruction_Category(next_opcode));
 
             const auto hamming_weight_previous_operand_2 =
                 calculate_hamming_weight(
@@ -225,11 +226,10 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
                     Get_Instruction_Category(previous_opcode));
 
             const auto hamming_weight_subsequent_operand_2 =
-                calculate_hamming_weight(
-                    current_instruction,
-                    2,
-                    Instruction::Subsequent,
-                    Get_Instruction_Category(previous_opcode));
+                calculate_hamming_weight(current_instruction,
+                                         2,
+                                         Instruction::Subsequent,
+                                         Get_Instruction_Category(next_opcode));
 
             // TODO: Replace this with a function.
             const auto hamming_distance_previous_operand_1 =
