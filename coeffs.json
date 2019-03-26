@@ -2,12 +2,14 @@
   "ALU": {
     "Coefficients": {
       "Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.01935888796261833,
         "Stores": 0.030503006073268127,
         "Loads": 0.0012133737528895944,
         "Multiplies": 0.028664237604692538
       },
       "Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.005941223345655281,
         "Stores": -0.01342467154292496,
         "Loads": -0.004340656853353665,
@@ -150,48 +152,56 @@
         0.00015447690061561858
       ],
       "Hamming_Weight_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 1.541770979753884e-05,
         "Stores": -2.15216333539524e-06,
         "Loads": -3.902774347988272e-05,
         "Multiplies": -0.00019130479881928144
       },
       "Hamming_Weight_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 9.068835620003405e-05,
         "Stores": 2.644578225785719e-05,
         "Loads": -0.0003244827548330412,
         "Multiplies": -0.00014955739382671755
       },
       "Hamming_Distance_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 5.689992251056425e-05,
         "Stores": 0.00022500217026342903,
         "Loads": -0.0002709785475806876,
         "Multiplies": -0.00027291744648159233
       },
       "Hamming_Distance_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 1.00060036867477e-05,
         "Stores": 4.139454429900611e-05,
         "Loads": -9.347186237912143e-05,
         "Multiplies": -0.00015834733560527407
       },
       "Hamming_Weight_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00010661407337925354,
         "Stores": 0.00011404280715934735,
         "Loads": -9.20613340729348e-06,
         "Multiplies": -1.000754002845786e-05
       },
       "Hamming_Weight_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00030465066680287534,
         "Stores": -2.100946272546511e-05,
         "Loads": -3.257899233123564e-05,
         "Multiplies": 1.545407681728611e-05
       },
       "Hamming_Distance_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.0003126939879693222,
         "Stores": -8.712108308102007e-05,
         "Loads": 5.26790198806022e-06,
         "Multiplies": -4.342982854013636e-05
       },
       "Hamming_Distance_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00015452636251195152,
         "Stores": 6.189134083154077e-05,
         "Loads": -3.055897766214045e-05,
@@ -2204,12 +2214,14 @@
   "Shifts": {
     "Coefficients": {
       "Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": -0.008662618177285081,
         "Stores": 0.018611698778954393,
         "Loads": -0.008515043006151397,
         "Multiplies": 0.015393273298477424
       },
       "Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": -0.014070620748710625,
         "Stores": -0.01939943442527185,
         "Loads": -0.011549994788804717,
@@ -2352,48 +2364,56 @@
         7.066621464353662e-05
       ],
       "Hamming_Weight_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": -4.595999309696821e-05,
         "Stores": -2.615593256664698e-05,
         "Loads": 1.350327462591526e-05,
         "Multiplies": 4.148437132177622e-05
       },
       "Hamming_Weight_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.0003154269142050689,
         "Stores": -3.968290299379411e-05,
         "Loads": -0.0003308194057116667,
         "Multiplies": -5.104990084973291e-05
       },
       "Hamming_Distance_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 9.720083433860528e-05,
         "Stores": 0.00022736237863406404,
         "Loads": -0.00035418660308771387,
         "Multiplies": -0.00012523218536855983
       },
       "Hamming_Distance_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 6.860891279964929e-05,
         "Stores": 8.213043837600392e-05,
         "Loads": -6.655191240044096e-05,
         "Multiplies": -1.010252468342378e-05
       },
       "Hamming_Weight_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": -0.00021987748105242483,
         "Stores": -2.06017055386718e-05,
         "Loads": -1.007002760226044e-05,
         "Multiplies": 7.21059815610848e-05
       },
       "Hamming_Weight_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00016898973359585158,
         "Stores": 0.00013036675921747467,
         "Loads": -4.493511787560238e-05,
         "Multiplies": 4.99951281306782e-06
       },
       "Hamming_Distance_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00022894180926200547,
         "Stores": 2.460618390859024e-05,
         "Loads": -3.040765926504591e-05,
         "Multiplies": 4.796034590210535e-05
       },
       "Hamming_Distance_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00012425901789807353,
         "Stores": 9.87145798521369e-05,
         "Loads": -1.68887022134371e-05,
@@ -4402,12 +4422,14 @@
   "Stores": {
     "Coefficients": {
       "Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.0021584424764498683,
         "Stores": -0.01066052927699918,
         "Loads": -0.028682056805763474,
         "Multiplies": 0.0019047730756426642
       },
       "Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.006020779433198939,
         "Stores": 0.009853972627960254,
         "Loads": 0.01144921589783361,
@@ -4550,48 +4572,56 @@
         0.00012571964994721028
       ],
       "Hamming_Weight_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 1.372110787768977e-05,
         "Stores": -4.959109266687887e-05,
         "Loads": 1.855170285072217e-05,
         "Multiplies": 2.54488293380801e-06
       },
       "Hamming_Weight_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": -1.899189226143341e-05,
         "Stores": -5.05677838711788e-06,
         "Loads": -2.238733785281469e-05,
         "Multiplies": 3.752951483684748e-05
       },
       "Hamming_Distance_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 4.402739022630707e-05,
         "Stores": 0.0001995467491064139,
         "Loads": 4.957072676584712e-05,
         "Multiplies": -0.00013884187613449433
       },
       "Hamming_Distance_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": -2.611473375039784e-05,
         "Stores": -2.541747884695007e-05,
         "Loads": 4.004737106569754e-05,
         "Multiplies": 4.368148865380126e-05
       },
       "Hamming_Weight_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 5.649335165904141e-05,
         "Stores": -1.013806601424258e-05,
         "Loads": -3.37259349334473e-06,
         "Multiplies": -2.628047700181116e-05
       },
       "Hamming_Weight_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 4.443840187905611e-05,
         "Stores": 0.0002229192951040999,
         "Loads": -9.486514467816606e-05,
         "Multiplies": 1.351960998628225e-05
       },
       "Hamming_Distance_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 4.219598480637469e-05,
         "Stores": 0.00039323368334906797,
         "Loads": -9.677735713675497e-05,
         "Multiplies": -5.285298650264339e-05
       },
       "Hamming_Distance_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 5.130346128237631e-05,
         "Stores": 1.429859701025025e-05,
         "Loads": -2.834828461693794e-05,
@@ -6600,12 +6630,14 @@
   "Loads": {
     "Coefficients": {
       "Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.006594230570959476,
         "Stores": 0.012175865379513841,
         "Loads": -0.02316112835588163,
         "Multiplies": 0.01144399852412448
       },
       "Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.0011006318121187875,
         "Stores": -0.02408811379742454,
         "Loads": -0.016916527244837776,
@@ -6748,48 +6780,56 @@
         -5.31857301877532e-06
       ],
       "Hamming_Weight_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 1.131360381229759e-05,
         "Stores": 3.549390951116146e-05,
         "Loads": -4.367492770304149e-05,
         "Multiplies": 1.122858242124538e-05
       },
       "Hamming_Weight_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 5.482131634029e-06,
         "Stores": 0.0001330257193047242,
         "Loads": -7.9926900778659e-07,
         "Multiplies": 0.00012778919599758573
       },
       "Hamming_Distance_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 5.357769532192383e-05,
         "Stores": 1.606163787409498e-05,
         "Loads": -1.06373661860184e-05,
         "Multiplies": -4.719154869664531e-05
       },
       "Hamming_Distance_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 5.39366093872241e-06,
         "Stores": 2.6456488618795e-06,
         "Loads": -4.735756807786239e-05,
         "Multiplies": 1.13281307567194e-06
       },
       "Hamming_Weight_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 1.002680285300311e-05,
         "Stores": -0.00010573837085499782,
         "Loads": -7.6168650859334e-06,
         "Multiplies": -5.38690557524877e-06
       },
       "Hamming_Weight_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 3.612210495623246e-05,
         "Stores": -1.498934490951911e-05,
         "Loads": 1.279855835420038e-05,
         "Multiplies": 0.00010983178812366067
       },
       "Hamming_Distance_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 3.181286710595699e-05,
         "Stores": -5.484650354245283e-05,
         "Loads": 2.03112571427348e-05,
         "Multiplies": 9.282993463331753e-05
       },
       "Hamming_Distance_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": -1.069774223441171e-05,
         "Stores": 9.834747217833525e-05,
         "Loads": -1.830779902319248e-05,
@@ -8798,12 +8838,14 @@
   "Multiplies": {
     "Coefficients": {
       "Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00014378409494577346,
         "Stores": 0.010587584755032603,
         "Loads": -0.017428413671772582,
         "Multiplies": -0.0013000100002522636
       },
       "Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.0018692923149319406,
         "Stores": -0.019777990144583157,
         "Loads": -0.012569544886605846,
@@ -8946,48 +8988,56 @@
         3.49034857466654e-06
       ],
       "Hamming_Weight_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 5.106314350042998e-05,
         "Stores": 7.51045722577102e-06,
         "Loads": 2.592857557054565e-05,
         "Multiplies": 4.273959065862521e-05
       },
       "Hamming_Weight_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00018847400561398643,
         "Stores": -1.24990320249705e-05,
         "Loads": -0.00021819360671328979,
         "Multiplies": 5.670050059480369e-05
       },
       "Hamming_Distance_Operand1_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.0001536587756810665,
         "Stores": 0.0001625429996337275,
         "Loads": -0.00022647403035652648,
         "Multiplies": -0.0001241845282720361
       },
       "Hamming_Distance_Operand2_Previous_Instruction": {
+        "ALU": 0.0,
         "Shifts": -0.00018501346450709106,
         "Stores": -7.407686722558515e-05,
         "Loads": 0.00016680476287291165,
         "Multiplies": 0.0001268094750867033
       },
       "Hamming_Weight_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": -8.019772277197377e-05,
         "Stores": -0.0001424464184119901,
         "Loads": 4.709755851007656e-05,
         "Multiplies": -1.873042868572433e-05
       },
       "Hamming_Weight_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 8.733555603292546e-05,
         "Stores": 4.685042402096687e-05,
         "Loads": -2.037826662787737e-05,
         "Multiplies": -4.911181741366054e-05
       },
       "Hamming_Distance_Operand1_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": 0.00012310535641908327,
         "Stores": -8.116365865711058e-05,
         "Loads": 3.665455652851981e-05,
         "Multiplies": -3.08031997547773e-05
       },
       "Hamming_Distance_Operand2_Subsequent_Instruction": {
+        "ALU": 0.0,
         "Shifts": -0.0002615473343454824,
         "Stores": -0.0002539144112172528,
         "Loads": -6.33077983691412e-06,
