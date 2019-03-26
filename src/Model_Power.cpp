@@ -33,7 +33,7 @@
 //! The list of interaction terms used by this model in order to generate
 //! traces.
 const std::unordered_set<std::string>
-    ELMO2::Internal::Model_Power::m_required_interaction_terms = {
+    ELMO2::Internal::Model_Power::m_required_interaction_terms{
         "Bit_Flip1",
         "Bit_Flip1_Bit_Interactions",
         "Bit_Flip2",
@@ -67,8 +67,8 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
     //! This is done in advance as the loop below only adds the next
     //! instruction.
     std::deque<ELMO2::Internal::Model_Power::Assembly_Instruction_Power>
-        instructions_window(
-            {get_instruction_terms(0), get_instruction_terms(1)});
+        instructions_window{
+            {get_instruction_terms(0), get_instruction_terms(1)}};
 
     const auto previous_instruction = instructions_window.front();
     const auto current_instruction  = instructions_window[1];
@@ -88,7 +88,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
     // Finish at size - 1 As we are taking the next cycle into account in the
     // calculations.
     {
-        float constant;
+        float constant{0};
 
         const std::size_t size{m_execution.Get_Cycle_Count() - 1};
         for (std::size_t i{1}; i < size; ++i)
@@ -121,8 +121,11 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
 
             // TODO: Delete this?
             // TODO: Can/ Should this be made constexpr?
-            const auto& current_opcode  = current_instruction.Get_Opcode();
-            const auto& previous_opcode = previous_instruction.Get_Opcode();
+            const std::string& current_opcode{current_instruction.Get_Opcode()};
+
+            const std::string& previous_opcode{
+                previous_instruction.Get_Opcode()};
+
             // static const auto& next_opcode     =
             // next_instruction.Get_Opcode();
 

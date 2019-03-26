@@ -63,15 +63,15 @@ private:
     protected:
         static std::size_t calculate_interactions(const std::bitset<32>& p_term)
         {
-            std::size_t result = 0;
+            std::size_t result{0};
 
             // TODO: This is just dot product, change to use std function inner
             // product.
             // Loop through all possible combinations of i and j where i
             // and j are never the same.
-            for (std::size_t term_1 = 0; term_1 < 32; ++term_1)
+            for (std::size_t term_1{0}; term_1 < 32; ++term_1)
             {
-                for (std::size_t term_2 = term_1 + 1; term_2 < 32; ++term_2)
+                for (std::size_t term_2{term_1 + 1}; term_2 < 32; ++term_2)
                 {
                     result += p_term[term_1] *
                               p_term[term_2];  // TODO: What is this doing?
@@ -154,7 +154,7 @@ private:
                            const std::bitset<32>& p_instruction_2_operand)
         {
             std::bitset<32> result;
-            for (std::size_t i = 0; i < result.size(); ++i)
+            for (std::size_t i{0}; i < result.size(); ++i)
             {
                 result[i] =
                     p_instruction_1_operand[i] != p_instruction_2_operand[i];
@@ -348,8 +348,8 @@ private:
     const double dot_product(const std::vector<T>& p_vector_1,
                              const std::vector<T>& p_vector_2)
     {
-        auto total = 0;
-        for (std::size_t i = 0; i < p_vector_1.size(); ++i)
+        T total{0};
+        for (std::size_t i{0}; i < p_vector_1.size(); ++i)
         {
             total += p_vector_1[i] * p_vector_2[i];
         }
@@ -365,8 +365,8 @@ private:
         // This is based off of what original elmo does to calculate an
         // individual term
         const auto coefficients = Get_Coefficients(p_opcode, p_term_name);
-        double total            = 0;
-        for (std::size_t i = 0; i < N; ++i)
+        double total{0};
+        for (std::size_t i{0}; i < N; ++i)
         {
             // bit = (p_instruction_term >> i) && bool(1);
             total += p_instruction_term[i] * coefficients[i];
@@ -396,10 +396,10 @@ private:
         const  // TODO: Why is this type
                // double?? What should it be?
     {
-        std::string instruction =
-            Instruction::Previous == p_previous_or_next_instruction
-                ? "Previous"
-                : "Subsequent";
+        std::string instruction{Instruction::Previous ==
+                                        p_previous_or_next_instruction
+                                    ? "Previous"
+                                    : "Subsequent"};
         // This is based off of what original elmo does to calculate an
         // individual term
         return Get_Coefficient(p_current_instruction.Get_Opcode(),
