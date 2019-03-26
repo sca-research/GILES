@@ -188,7 +188,8 @@ private:
         }
         catch (const std::out_of_range& exception_not_found)
         {
-            return {0};  // TODO: Use the function infinite vector?
+            // 32 0s is large enough to be accessed without segfaulting.
+            return std::vector<double>(32, 0);
         }
     }
 
