@@ -120,8 +120,8 @@ private:
     //! @todo: Future: This should only be checked if TRS files are being used.
     bool warn_if_not_constant_time(const std::size_t p_trace_index) const
     {
-        const auto current_size = m_traces[p_trace_index].size();
-        const auto first_size   = m_traces.front().size();
+        const auto current_size      = m_traces[p_trace_index].size();
+        static const auto first_size = m_traces.front().size();
 
         // If there is no size difference then return false.
         if (first_size == current_size)
