@@ -65,11 +65,7 @@ add_subdirectory(test)
 add_subdirectory(doc)
 
 # Build external projects
-add_subdirectory(${EXTERNAL_PROJECT_DIR}/thumb-sim)
-add_subdirectory(${EXTERNAL_PROJECT_DIR}/Traces_Serialiser)
-add_subdirectory(${EXTERNAL_PROJECT_DIR}/json)
-add_subdirectory(${EXTERNAL_PROJECT_DIR}/cxxopts)
-add_subdirectory(${EXTERNAL_PROJECT_DIR}/fmt)
+add_subdirectory(${EXTERNAL_PROJECT_DIR})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Custom_Flags}")
 add_subdirectory(src)

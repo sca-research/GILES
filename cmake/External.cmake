@@ -68,7 +68,18 @@ macro(get_submodule NAME)
 endmacro()
 
 macro(update_external_submodules)
-        # Update all submodules to their latest commit.
-        execute_process(COMMAND git submodule update --quiet --recursive --init --remote
-                        WORKING_DIRECTORY ${EXTERNAL_PROJECT_DIR})
+        if(${PROJECT_NAME}_UPDATE_EXTERNAL_PROJECTS)
+            # Git is required to clone the submodules. Ensure this is found first.
+            find_package(Git REQUIRED)
+
+            # Checks whether the directory given by EXTERNAL_PROJECT_DIR exists, if it
+            # does not then CMake will create it.
+            if(NOT EXISTS ${EXTERNAL_PROJECT_DIR})
+                file(MAKE_DIRECTORY ${EXTERNAL_PROJECT_DIR})
+            endif()
+
+            # Update all submodules to their latest commit.
+            execute_process(COMMAND git submodule update --quiet --recursive --init --remote
+                            WORKING_DIRECTORY ${EXTERNAL_PROJECT_DIR})
+        endif()
 endmacro()
