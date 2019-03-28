@@ -175,7 +175,6 @@ public:
     //! @todo Document
     void Run()
     {
-
         // Initialise all emulators.
         for (const auto& emulator_interface :
              ELMO2::Internal::Emulator_Factory::Get_All())
@@ -210,7 +209,7 @@ public:
         // thread safe. This is.
         uint32_t steps_completed{0};
 
-#pragma omp target teams distribute parallel for
+#pragma omp parallel for
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
         {
             // Construct the simulator, ready for use.
@@ -260,19 +259,19 @@ public:
 
                 m_serialiser.Add_Trace(trace, extra_data);
 
-                fmt::print("\rGenerated: {} of {} traces. ({}%)",
-                           steps_completed,
-                           m_number_of_runs,
-                           100.0 * steps_completed / m_number_of_runs);
+                // If this warning hasn't been printed before.
+                if (!warning_printed)
+                {
+                    // Will print a warning if the target program is not
+                    // constant time.
+                    warning_printed = warn_if_not_constant_time();
+                }
             }
 
-            // If this warning hasn't been printed before.
-            if (!warning_printed)
-            {
-                // Will print a warning if the target program is not constant
-                // time.
-                warning_printed = warn_if_not_constant_time(i);
-            }
+            fmt::print("\rGenerated: {} of {} traces. ({}%)",
+                       steps_completed,
+                       m_number_of_runs,
+                       100.0 * steps_completed / m_number_of_runs);
             //}
         }
         fmt::print("\nDone!\n");
