@@ -29,7 +29,7 @@
 #include <fstream>    // for ifstream
 #include <stdexcept>  // for invalid_argument
 
-#include <nlohmann/json.hpp>      // for json, basic_json<>::exception
+#include <nlohmann/json.hpp>  // for json, basic_json<>::exception
 
 #include "Coefficients.hpp"            // for Coefficients
 #include "Error.hpp"                   // for Report_Error
@@ -67,22 +67,9 @@ const ELMO2::Internal::Coefficients ELMO2::Internal::IO::Load_Coefficients(
     }
 
     // This will throw an exception if validation fails.
-    // ELMO2::Internal::Validator_Coefficients::Validate_Json(json);
+    ELMO2::Internal::Validator_Coefficients::Validate_Json(json);
 
     return ELMO2::Internal::Coefficients(json);
-}
-
-//! @brief Saves the generated Traces to the file as specified by
-//! p_traces_path. The p_format parameter specifies which format the Traces
-//! should be saved in.
-//! @param p_traces_path The destination to save the Traces to.
-//! @param p_traces The Traces to be saved.
-//! @param p_format The format in which the Traces are to be saved.
-bool ELMO2::Internal::IO::Output_Traces(const std::string& p_traces_path,
-                                        const ELMO2::Internal::Traces& p_traces,
-                                        const Output_Format& p_format) const
-{
-    return false;  // TODO: Implement this
 }
 }  // namespace Internal
 }  // namespace ELMO2

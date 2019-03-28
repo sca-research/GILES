@@ -26,38 +26,31 @@
 #ifndef IO_HPP
 #define IO_HPP
 
-#include <string> // for string
+#include <string>  // for string
 
-#include "Coefficients.hpp"
+#include "Coefficients.hpp"  // for Coefficients
+#include "Traces.hpp"        // for Traces
 
 namespace ELMO2
 {
 namespace Internal
 {
-// Forward Declarations
-class Traces;
-
 //! @class IO
 //! @brief This contains all Input and Output functions for ELMO2. This includes
-//! loading the Coefficients file and saving generated Traces.
-class IO // TODO: Maybe have an option to output just one trace (or a few) to a
-         // seperate file?
+//! loading the Coefficients file.
+class IO
 {
 public:
     //! All possible output formats for the generated traces to be saved as.
-    enum class Output_Format : uint8_t // TODO: Should this be size_t instead?
+    enum class Output_Format : uint8_t
     {
         Riscure
     };
 
     const ELMO2::Internal::Coefficients
     Load_Coefficients(const std::string& p_coefficients_path) const;
-
-    bool Output_Traces(const std::string& p_traces_path,
-                       const ELMO2::Internal::Traces& p_traces,
-                       const Output_Format& p_format) const;
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif
