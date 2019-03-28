@@ -166,6 +166,8 @@ public:
         return m_operands.at(p_operand_index - 1);
     }
 
+    std::size_t Get_Number_of_Operands() const { return m_operands.size(); }
+
     /*
      *const std::size_t Get_Operand_Value(const uint8_t p_operand_index) const
      *{
