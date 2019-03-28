@@ -53,7 +53,7 @@ const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Andres::Run_Code()
 
     // Correctly place stalls and flushes so that they can be easily identified.
     // TODO: Flushes
-    for (size_t i = 0; i < execute.size(); ++i)
+    for (std::size_t i{0}; i < execute.size(); ++i)
     {
         if ("Stalled, pending decode" == execute[i])
         {
