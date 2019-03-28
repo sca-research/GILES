@@ -90,7 +90,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
     {
         float constant{0};
 
-        const std::size_t size{m_execution.Get_Cycle_Count() - 1};
+        const std::size_t size{m_execution.Get_Cycle_Count()};
         for (std::size_t i{1}; i < size; ++i)
         {
             // TODO: Add a special case for when i = 0 and i = last (and i = 1?/
