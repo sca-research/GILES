@@ -38,6 +38,7 @@
 #include <boost/algorithm/string.hpp>  // TODO: Convert Uility.h over to boost algorithms (or the other way around?)
 
 #include "Assembly_Instruction.hpp"
+#include "Error.hpp"  // for Report_Error
 #include "Register.hpp"
 #include "Utility.hpp"  // for string_split
 
@@ -231,7 +232,8 @@ public:
     {
         try
         {
-            // TODO: If entire program is outside of trigger points then this will crash (size=0 out of range)
+            // TODO: If entire program is outside of trigger points then this
+            // will crash (size=0 out of range)
             return std::any_cast<State>(
                 m_pipeline.at(p_cycle).at(p_pipeline_stage_name));
         }
@@ -240,6 +242,14 @@ public:
             // if the cast failed then it is not a state and instead a value
             // therefore the state is implicitly normal.
             return State::Normal;
+        }
+        catch (const std::out_of_range&)
+        {
+            ELMO2::Internal::Error::Report_Error(
+                "Could not find a value in the pipeline stage \"{}\" "
+                "during clock cycle {}",
+                p_pipeline_stage_name,
+                p_cycle);
         }
     }
 
