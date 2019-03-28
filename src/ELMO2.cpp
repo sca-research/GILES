@@ -118,9 +118,9 @@ private:
     //! checked.
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
     //! @todo: Future: This should only be checked if TRS files are being used.
-    bool warn_if_not_constant_time(const std::size_t p_trace_index) const
+    bool warn_if_not_constant_time() const
     {
-        const auto current_size      = m_traces[p_trace_index].size();
+        const auto current_size      = m_traces.back().size();
         static const auto first_size = m_traces.front().size();
 
         // If there is no size difference then return false.
@@ -139,7 +139,7 @@ private:
                    "Trace number 0 took {} clock cycles.\n"
                    "Trace number {} took {} clock cycles.\n",
                    first_size,
-                   p_trace_index,
+                   m_traces.size() - 1,  // Trace index
                    current_size);
         return true;
     }
