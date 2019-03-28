@@ -19,7 +19,7 @@
     @file Assembly_Instruction.hpp
     @brief The internal representation of an individual assembly instruction.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

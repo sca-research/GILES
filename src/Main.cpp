@@ -20,7 +20,7 @@
     @brief This file contains a command line entry executable that invokes ELMO2
     with the correct options.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

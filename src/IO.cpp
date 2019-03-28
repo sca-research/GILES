@@ -19,7 +19,7 @@
     @file IO.cpp
     @brief This file contains all input and output functions for ELMO2.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

@@ -22,7 +22,7 @@
     exists only to simplify the synatx of using the Abstract_Factory_Register
     class.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

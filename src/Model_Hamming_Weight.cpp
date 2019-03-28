@@ -21,7 +21,7 @@
     @brief This file is a template. This can be used as a base for implementing
     a mathematical model for generating traces of a given target program.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

@@ -24,7 +24,7 @@
     well as the comments. The code that needs to be changed is mainly contained
     to the corresponding .cpp file.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

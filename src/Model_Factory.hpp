@@ -22,7 +22,7 @@
     Abstract_Factory class and ensure that all models are included in the
     compilation.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

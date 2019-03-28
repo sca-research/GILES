@@ -19,7 +19,7 @@
     @file Validator_Coefficients.cpp
     @brief Contains the validation rules for validating a Coefficients file.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

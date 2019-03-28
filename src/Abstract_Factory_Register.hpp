@@ -21,7 +21,7 @@
     @brief This file contains the Abstract_Factory_Register class, which is used
     to assist with registering classes within the Abstract_Factory class.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

@@ -20,7 +20,7 @@
     @brief This file contains the Utility class. A simple class with a few
     static helper functions that is otherwise empty.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

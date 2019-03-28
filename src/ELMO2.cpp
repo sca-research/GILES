@@ -20,7 +20,7 @@
     @brief This file contains the entry point for ELMO2 and invokes other
     operations.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 

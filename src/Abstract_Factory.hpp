@@ -20,7 +20,7 @@
     @brief Contains the Abstract_Factory class; a factory class for
     initialisation of objects.
     @author Scott Egerton
-    @date 2017-2018
+    @date 2017-2019
     @copyright GNU Affero General Public License Version 3+
 */
 
