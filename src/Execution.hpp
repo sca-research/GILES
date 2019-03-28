@@ -383,8 +383,9 @@ public:
     std::size_t Get_Operand_Value(const std::size_t p_cycle,
                                   const std::string& p_operand) const
     {
-        return Is_Register(p_operand) ? Get_Register_Value(p_cycle, p_operand)
-                                      : std::stoi(p_operand);
+        return Is_Register(p_operand)
+                   ? Get_Register_Value(p_cycle, p_operand)
+                   : static_cast<std::size_t>(std::stoi(p_operand));
     }
 
     //! @brief Retrieves the value of an operand in numerical form. If that
@@ -405,7 +406,7 @@ public:
     std::size_t Get_Operand_Value(
         const std::size_t p_cycle,
         const ELMO2::Internal::Assembly_Instruction& p_instruction,
-        const std::size_t p_operand_number) const
+        const std::uint8_t p_operand_number) const
     {
         try
         {
