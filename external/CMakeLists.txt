@@ -21,8 +21,8 @@ include("${PROJECT_SOURCE_DIR}/cmake/External.cmake")
 update_external_submodules()
 
 # Build external projects
-add_subdirectory(thumb-sim)
-add_subdirectory(Traces_Serialiser)
-add_subdirectory(json)
-add_subdirectory(cxxopts)
-add_subdirectory(fmt)
+add_subdirectory(thumb-sim EXCLUDE_FROM_ALL)
+add_subdirectory(Traces_Serialiser EXCLUDE_FROM_ALL)
+add_subdirectory(json EXCLUDE_FROM_ALL)
+add_subdirectory(cxxopts EXCLUDE_FROM_ALL)
+add_subdirectory(fmt EXCLUDE_FROM_ALL)
