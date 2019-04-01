@@ -280,7 +280,7 @@ private:
     {
         // Prevents trying to calculate the hamming weight of stalls and
         // flushes.
-        if (!m_execution.Is_Normal_State(p_cycle, "Execute"))
+        if (!m_execution.Is_Normal_State_Unsafe(p_cycle, "Execute"))
         {
             // Return a fake instruction to prevent crashing
             // Currently stalls and flushes are stored as zeros in

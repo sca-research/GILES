@@ -57,6 +57,20 @@ namespace Internal
 //! @see https://en.wikipedia.org/wiki/Clock_cycle
 class Execution
 {
+public:
+    //! The states that a processor pipeline stage can be in. These are needed
+    //! to be stored as if the pipeline stage is not running smoothly (i.e.
+    //! Normal state) then it could prevent leakage from being calculated in a
+    //! normal fashion.
+    //! @see https://en.wikipedia.org/wiki/Pipeline_stall
+    //! @see https://en.wikipedia.org/wiki/Pipeline_flush
+    enum class State
+    {
+        Normal,
+        Stalled,
+        Flushing
+    };
+
 private:
     //! @brief A data structure for storing the per clock cycle pipeline of any
     //! given processor. The values are indexed by clock cycle and then by
@@ -80,20 +94,40 @@ private:
     //! @see https://en.wikipedia.org/wiki/Processor_register
     std::vector<std::map<std::string, size_t>> m_registers;
 
-public:
-    //! The states that a processor pipeline stage can be in. These are needed
-    //! to be stored as if the pipeline stage is not running smoothly (i.e.
-    //! Normal state) then it could prevent leakage from being calculated in a
-    //! normal fashion.
+    //! @brief Retrieves the type of state of the pipeline stage given by
+    //! p_pipeline_stage_name at the clock cycle given by p_cycle. This is
+    //! different from retrieving the value as this will return an enum
+    //! representing the type of value. If the pipeline stage was behaving in a
+    //! regular fashion at the given clock cycle, 'Normal' will be returned.
+    //! Other states such as 'Stalled' may also be returned.
+    //! @param p_cycle The clock cycle number from which to retrieve the
+    //! pipeline state.
+    //! @param p_pipeline_stage_name The pipeline stage from which to
+    //! retrieve the state.
+    //! @returns The requested type of state using the State enum.
+    //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
+    //! @see https://en.wikipedia.org/wiki/Clock_cycle
     //! @see https://en.wikipedia.org/wiki/Pipeline_stall
-    //! @see https://en.wikipedia.org/wiki/Pipeline_flush
-    enum class State
+    ELMO2::Internal::Execution::State
+    get_state(const uint32_t p_cycle,
+              const std::string& p_pipeline_stage_name) const
     {
-        Normal,
-        Stalled,
-        Flushing
-    };
+        try
+        {
+            // TODO: If entire program is outside of trigger points then this
+            // will crash (size=0 out of range)
+            return std::any_cast<State>(
+                m_pipeline.at(p_cycle).at(p_pipeline_stage_name));
+        }
+        catch (const std::bad_any_cast&)
+        {
+            // if the cast failed then it is not a state and instead a value
+            // therefore the state is implicitly normal.
+            return State::Normal;
+        }
+    }
 
+public:
     //! @brief The constructor for the Execution class.
     //! This initialises the pipeline and the registers to be of the size
     //! given by the parameter p_number_of_cycles, so that a value can be
@@ -216,9 +250,41 @@ public:
     //! p_pipeline_stage_name at the clock cycle given by p_cycle. This is
     //! different from retrieving the value as this will return an enum
     //! representing the type of value. If the pipeline stage was behaving in a
-    //! regular fashion at the given clock cycle, 'Normal' will be returned
-    //! instead of the value. Other states such as 'Stalled' may also be
-    //! returned.
+    //! regular fashion at the given clock cycle, 'Normal' will be returned.
+    //! Other states such as 'Stalled' may also be returned.
+    //! In the case that there is nothing in the pipeline stage at the given
+    //! clock cycle, then the stage "Stalled" will be returned. This is marked
+    //! as unsafe as it will hide out of bounds access.
+    //! @param p_cycle The clock cycle number from which to retrieve the
+    //! pipeline state.
+    //! @param p_pipeline_stage_name The pipeline stage from which to
+    //! retrieve the state.
+    //! @returns The requested type of state using the State enum.
+    //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
+    //! @see https://en.wikipedia.org/wiki/Clock_cycle
+    //! @see https://en.wikipedia.org/wiki/Pipeline_stall
+    State Get_State_Unsafe(const uint32_t p_cycle,
+                           const std::string& p_pipeline_stage_name) const
+    {
+        try
+        {
+            return get_state(p_cycle, p_pipeline_stage_name);
+        }
+        catch (const std::out_of_range&)
+        {
+            return State::Stalled;
+        }
+    }
+
+    //! @brief Retrieves the type of state of the pipeline stage given by
+    //! p_pipeline_stage_name at the clock cycle given by p_cycle. This is
+    //! different from retrieving the value as this will return an enum
+    //! representing the type of value. If the pipeline stage was behaving in a
+    //! regular fashion at the given clock cycle, 'Normal' will be returned.
+    //! Other states such as 'Stalled' may also be returned.
+    //! In the case that there is nothing in the pipeline stage at the given
+    //! clock cycle, then an out of bounds error message will be printed and the
+    //! program will exit.
     //! @param p_cycle The clock cycle number from which to retrieve the
     //! pipeline state.
     //! @param p_pipeline_stage_name The pipeline stage from which to
@@ -232,16 +298,7 @@ public:
     {
         try
         {
-            // TODO: If entire program is outside of trigger points then this
-            // will crash (size=0 out of range)
-            return std::any_cast<State>(
-                m_pipeline.at(p_cycle).at(p_pipeline_stage_name));
-        }
-        catch (const std::bad_any_cast&)
-        {
-            // if the cast failed then it is not a state and instead a value
-            // therefore the state is implicitly normal.
-            return State::Normal;
+            return get_state(p_cycle, p_pipeline_stage_name);
         }
         catch (const std::out_of_range&)
         {
@@ -253,13 +310,13 @@ public:
         }
     }
 
-    //! @todo document
     //! @brief Checks to see if the type of state of the pipeline stage given by
     //! p_pipeline_stage_name at the clock cycle given by p_cycle is Normal.
     //! @param p_cycle The clock cycle number from which to retrieve the
     //! pipeline state.
     //! @param p_pipeline_stage_name The pipeline stage from which to
     //! retrieve the state.
+    //! @returns Returns true if the state is normal, false if not.
     //! @returns The requested type of state using the State enum.
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
@@ -269,6 +326,26 @@ public:
     {
         return ELMO2::Internal::Execution::State::Normal ==
                Get_State(p_cycle, p_pipeline_stage_name);
+    }
+
+    //! @brief Checks to see if the type of state of the pipeline stage given by
+    //! p_pipeline_stage_name at the clock cycle given by p_cycle is Normal.
+    //! This is marked an unsafe because it will not report an error in the case
+    //! of out of bounds access, it will return false instead.
+    //! @param p_cycle The clock cycle number from which to retrieve the
+    //! pipeline state.
+    //! @param p_pipeline_stage_name The pipeline stage from which to
+    //! retrieve the state.
+    //! @returns Returns true if the state is normal, false if not.
+    //! @returns The requested type of state using the State enum.
+    //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
+    //! @see https://en.wikipedia.org/wiki/Clock_cycle
+    //! @see https://en.wikipedia.org/wiki/Pipeline_stall
+    bool Is_Normal_State_Unsafe(const std::uint32_t p_cycle,
+                                const std::string& p_pipeline_stage_name) const
+    {
+        return ELMO2::Internal::Execution::State::Normal ==
+               Get_State_Unsafe(p_cycle, p_pipeline_stage_name);
     }
 
     //! @brief Retrieves the instruction in the pipeline stage given by
