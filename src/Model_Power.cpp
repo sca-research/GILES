@@ -91,7 +91,10 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
         float constant{0};
 
         const std::size_t size{m_execution.Get_Cycle_Count()};
-        for (std::size_t i{1}; i < size; ++i)
+
+        // Start at 1 and end at size -1 as this takes into account the previous
+        // and next instructions.
+        for (std::size_t i{1}; i < size - 1; ++i)
         {
             // TODO: Add a special case for when i = 0 and i = last (and i = 1?/
             // last-1?).
@@ -127,16 +130,6 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
                 previous_instruction.Get_Opcode()};
 
             const std::string& next_opcode{next_instruction.Get_Opcode()};
-            // static const auto& next_opcode     =
-            // next_instruction.Get_Opcode();
-
-            /*
-             *const auto previous_instruction_data =
-             *    instructions_window.front() *
-             *    m_coefficients.Get_Coefficients(
-             *        m_execution.Get_Instruction(p_cycle,
-             *"Execute").Get_Opcode());
-             */
 
             // TODO: Bit flip 1 and 2 bit interactions is always 0 in the coeffs
             // file. Can these be removed? Is this a bug when turning into json?
