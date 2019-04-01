@@ -237,7 +237,7 @@ public:
             return std::any_cast<State>(
                 m_pipeline.at(p_cycle).at(p_pipeline_stage_name));
         }
-        catch (const std::bad_any_cast& exception)
+        catch (const std::bad_any_cast&)
         {
             // if the cast failed then it is not a state and instead a value
             // therefore the state is implicitly normal.
