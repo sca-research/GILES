@@ -104,11 +104,12 @@ private:
     const void check_model(const std::string& p_model_name)
     {
         if (const auto all_models = ELMO2::Internal::Model_Factory::Get_All();
-            std::end(all_models) == all_models.find(p_model_name))
+            std::end(all_models) != all_models.find(p_model_name))
         {
-            ELMO2::Internal::Error::Report_Error(
-                "A model with the given name was not found.");
+            return;
         }
+        ELMO2::Internal::Error::Report_Error(
+            "A model with the name '{}' was not found.\n", p_model_name);
     }
 
     //! @brief Prints a warning if the target program does not run in a constant
@@ -158,7 +159,7 @@ public:
            const std::string& p_coefficients_path,
            const std::optional<std::string>& p_traces_path,
            const std::uint32_t p_number_of_runs,
-           const std::string p_model_name =
+           const std::string& p_model_name =
                "Hamming Weight")  // TODO: Set the default using cmake
                                   // configuring a static var in an external
                                   // file.
@@ -194,12 +195,8 @@ public:
     }
 
     //! @brief Runs the simulator given by p_simulator_name and TODO:
-    //! @TODO: Why does this store in m_traces??? Store in temp local and return
-    //! and append is better. - Or better yet, add append support to Traces
-    //! Serialiser
     decltype(m_traces) Run_Simulator(const std::string& p_simulator_name)
     {
-        // TODO: Replace this will something a bit more robust.
         fmt::print("Using model: {}\n", m_model_name);
 
         // Enusres that the constant time warning is not printed over and over.
