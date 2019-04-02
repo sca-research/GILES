@@ -39,9 +39,12 @@ const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Andres::Run_Code()
     m_execution_recording = simulator.Get_Cycle_Recorder();
 
     // Retrieve the results from the simulator
-    const auto& fetch     = m_execution_recording.Get_Fetch();
-    const auto& decode    = m_execution_recording.Get_Decode();
-    const auto& execute   = m_execution_recording.Get_Execute();
+    const auto& fetch   = m_execution_recording.Get_Fetch();
+    const auto& decode  = m_execution_recording.Get_Decode();
+    const auto& execute = m_execution_recording.Get_Execute();
+
+    // TODO: When are the registers recorded? Should it be once or between every
+    // stage?
     const auto& registers = m_execution_recording.Get_Registers();
 
     // Create an Execution object and add the required data to it.

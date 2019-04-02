@@ -82,6 +82,12 @@ protected:
     //! derived class.
     virtual const std::unordered_set<std::string>&
     Get_Interaction_Terms() const = 0;
+    /*
+     *static const std::unordered_set<std::string>& Get_Interaction_Terms()
+     *{
+     *    return Derived::get_interaction_terms();
+     *};
+     */
 
 public:
     //! @brief Virtual destructor to ensure proper memory cleanup.
