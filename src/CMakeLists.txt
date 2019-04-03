@@ -26,43 +26,34 @@ option(${PROJECT_NAME}_BUILD_EXECUTABLE
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/thumb-sim/library/include)
-include_directories(${EXTERNAL_PROJECT_DIR}/thumb-sim/library)
-include_directories(${EXTERNAL_PROJECT_DIR}/thumb-sim/include)
-include_directories(${EXTERNAL_PROJECT_DIR}/Traces_Serialiser/src)
-
-file(GLOB MODEL_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/Models/Power/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Models/Hamming_Weight/*.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/Models/TEMPLATE/*.cpp
-)
-
-file(GLOB SIMULATOR_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/thumb-sim/*.cpp
-    #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE/*.cpp
-)
-
 # Add library that is built from the source files
 add_library(lib${PROJECT_NAME} SHARED
     ELMO2.cpp
     Coefficients.cpp
     IO.cpp
     Validator_Coefficients.cpp
-    ${MODEL_FILES}
-    ${SIMULATOR_FILES}
+
+    # Model files
+    ${CMAKE_CURRENT_SOURCE_DIR}/Models/Hamming_Weight/Model_Hamming_Weight.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Models/Power/Model_Power.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/Models/TEMPLATE/Model_TEMPLATE.cpp
+
+    # Simulator files
+    ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/thumb-sim/Emulator_Andres.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE/Emulator_TEMPLATE.cpp
 )
 
-target_include_directories(lib${PROJECT_NAME} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/Factory
-    ${CMAKE_CURRENT_SOURCE_DIR}/Models
-    ${CMAKE_CURRENT_SOURCE_DIR}/Models/Hamming_Weight
-    ${CMAKE_CURRENT_SOURCE_DIR}/Models/Power
-    #${CMAKE_CURRENT_SOURCE_DIR}/Model/Models/TEMPLATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/Simulators
-    ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/thumb-sim
-    #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE
+target_include_directories(lib${PROJECT_NAME}
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/Factory
+        ${CMAKE_CURRENT_SOURCE_DIR}/Models
+        ${CMAKE_CURRENT_SOURCE_DIR}/Models/Hamming_Weight
+        ${CMAKE_CURRENT_SOURCE_DIR}/Models/Power
+        #${CMAKE_CURRENT_SOURCE_DIR}/Model/Models/TEMPLATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/Simulators
+        ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/thumb-sim
+        #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE
 )
 
 # If OpenMP is available then use it.
@@ -72,10 +63,13 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 # Link to required external projects
-target_link_libraries(lib${PROJECT_NAME} PUBLIC nlohmann_json::nlohmann_json fmt::fmt-header-only Traces-Serialiser)
-
-#TODO: Why does this still work with this commented but not for exe version?
-#target_link_libraries(lib${PROJECT_NAME} PUBLIC libthumb-sim)
+target_link_libraries(lib${PROJECT_NAME}
+    PUBLIC
+        Traces-Serialiser
+        nlohmann_json::nlohmann_json
+        fmt::fmt-header-only
+        libthumb-sim
+)
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 set_target_properties(lib${PROJECT_NAME} PROPERTIES PREFIX "")
@@ -84,5 +78,10 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     # Add executable that is a command line wrapper around the library
     add_executable(${PROJECT_NAME} Main.cpp)
 
-    target_link_libraries(${PROJECT_NAME} PUBLIC lib${PROJECT_NAME} libthumb-sim cxxopts)
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC
+            lib${PROJECT_NAME}
+            cxxopts
+    )
 endif()
+
