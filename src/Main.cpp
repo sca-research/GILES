@@ -92,7 +92,7 @@ void parse_command_line_flags(int& argc, char**& argv)
              cxxopts::value<std::string>(),
              "FILE")
         ("s,simulator", "The name of the simulator that should be used",
-             cxxopts::value<std::string>()->default_value("Andres"),
+             cxxopts::value<std::string>()->default_value("Thumb Sim"),
              "SIMULATOR NAME")
         ("m,model", "The name of the mathematical model that should be used to "
                     "generate traces",
@@ -144,7 +144,7 @@ void parse_command_line_flags(int& argc, char**& argv)
     // default "./coeffs.json" is used if flag is not passed
     m_coefficients_path = result["file"].as<std::string>();
 
-    // default "Andres" is used if flag is not passed
+    // default "Thumb Sim" is used if flag is not passed
     m_simulator_name = result["simulator"].as<std::string>();
 
     // default "Hamming Weight" is used if flag is not passed

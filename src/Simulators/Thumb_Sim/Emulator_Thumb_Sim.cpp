@@ -16,7 +16,7 @@
 */
 
 /*!
-    @file Emulator_Andres.hpp
+    @file Emulator_Thumb_Sim.hpp
     @todo add brief
     @author Scott Egerton
     @date 2017-2019
@@ -28,10 +28,10 @@
 
 #include <iostream>  // for temp debugging
 
-#include "Emulator_Andres.hpp"
+#include "Emulator_Thumb_Sim.hpp"
 #include "Execution.hpp"
 
-const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Andres::Run_Code()
+const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Thumb_Sim::Run_Code()
 {
     Simulator simulator;
     simulator.run(m_program_path);
@@ -67,7 +67,7 @@ const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Andres::Run_Code()
     return execution;
 }
 
-const std::string& ELMO2::Internal::Emulator_Andres::Get_Extra_Data()
+const std::string& ELMO2::Internal::Emulator_Thumb_Sim::Get_Extra_Data()
 {
     return m_execution_recording.Get_Extra_Data();
 }

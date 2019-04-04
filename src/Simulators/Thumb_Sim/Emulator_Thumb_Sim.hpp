@@ -15,8 +15,8 @@
     along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef EMULATOR_ANDRES_HPP
-#define EMULATOR_ANDRES_HPP
+#ifndef EMULATOR_THUMB_SIM_HPP
+#define EMULATOR_THUMB_SIM_HPP
 
 #include <string>  // for string
 #include <vector>  // for vector
@@ -32,9 +32,9 @@ namespace ELMO2
 namespace Internal
 {
 // Doxygen comments are inherited from Emulator_Interface.hpp
-class Emulator_Andres : public virtual ELMO2::Internal::Emulator_Interface,
-                        public ELMO2::Internal::Emulator_Factory_Register<
-                            ELMO2::Internal::Emulator_Andres>
+class Emulator_Thumb_Sim : public virtual ELMO2::Internal::Emulator_Interface,
+                           public ELMO2::Internal::Emulator_Factory_Register<
+                               ELMO2::Internal::Emulator_Thumb_Sim>
 {
 private:
     Thumb_Simulator::Debug m_execution_recording;
@@ -44,7 +44,7 @@ public:
     //! p_program_path.
     //! @param p_program_path The path to the program to be loaded into the
     //! simulator.
-    explicit Emulator_Andres(const std::string& p_program_path)
+    explicit Emulator_Thumb_Sim(const std::string& p_program_path)
         : ELMO2::Internal::Emulator_Interface(p_program_path)
     {
         // This statement registers this class in the factory, allowing access
@@ -71,9 +71,9 @@ public:
     //! @returns The name as a string.
     //! @note This is needed to ensure self registration in the factory
     //! works. The factory registration requires this as unique identifier.
-    static const std::string Get_Name() { return "Andres"; }
+    static const std::string Get_Name() { return "Thumb Sim"; }
 };
 }  // namespace Internal
 }  // namespace ELMO2
 
-#endif  // EMULATOR_ANDRES_HPP
+#endif  // EMULATOR_THUMB_SIM_HPP

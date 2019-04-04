@@ -39,7 +39,7 @@ add_library(lib${PROJECT_NAME} SHARED
     #${CMAKE_CURRENT_SOURCE_DIR}/Models/TEMPLATE/Model_TEMPLATE.cpp
 
     # Simulator files
-    ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/thumb-sim/Emulator_Andres.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/Thumb_Sim/Emulator_Thumb_Sim.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE/Emulator_TEMPLATE.cpp
 )
 
@@ -52,7 +52,7 @@ target_include_directories(lib${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/Models/Power
         #${CMAKE_CURRENT_SOURCE_DIR}/Model/Models/TEMPLATE
         ${CMAKE_CURRENT_SOURCE_DIR}/Simulators
-        ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/thumb-sim
+        ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/Thumb_Sim
         #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE
 )
 
