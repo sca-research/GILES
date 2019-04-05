@@ -40,17 +40,13 @@ namespace Internal
 struct Error
 {
 private:
-    //! @brief Prints "Error: " followed by a formatted error message and stops
-    //! execution.
-    //! @note This function is marked as noreturn as it is guaranteed to always
-    //! halt the program. (Through std::exit())
+    //! @brief Prints a formatted error message followed by a newline.
     //! @param p_format The format string to be printed.
     //! @param p_args The arguments to be printed in the format string.
-    [[noreturn]] static void vreport_error(const char* p_format,
-                                           fmt::format_args p_args)
+    static void vreport(const char* p_format, fmt::format_args p_args)
     {
-        fmt::print("Error: ");
-        vreport_exit(p_format, p_args);
+        fmt::vprint(p_format, p_args);
+        fmt::print("\n");
     }
 
     //! @brief Prints formatted message and stops execution.
@@ -61,9 +57,31 @@ private:
     [[noreturn]] static void vreport_exit(const char* p_format,
                                           fmt::format_args p_args)
     {
-        fmt::vprint(p_format, p_args);
-        fmt::print("\n");
+        vreport(p_format, p_args);
         std::exit(EXIT_FAILURE);
+    }
+
+    //! @brief Prints a new line followed by: "Error: ", followed by a formatted
+    //! error message and stops execution.
+    //! @note This function is marked as noreturn as it is guaranteed to always
+    //! halt the program. (Through std::exit())
+    //! @param p_format The format string to be printed.
+    //! @param p_args The arguments to be printed in the format string.
+    [[noreturn]] static void vreport_error(const char* p_format,
+                                           fmt::format_args p_args)
+    {
+        fmt::print("\nError: ");
+        vreport_exit(p_format, p_args);
+    }
+
+    //! @brief Prints a new line followed by: "Warning: ", followed by a
+    //! formatted error message.
+    //! @param p_format The format string to be printed.
+    //! @param p_args The arguments to be printed in the format string.
+    static void vreport_warning(const char* p_format, fmt::format_args p_args)
+    {
+        fmt::print("\nWarning: ");
+        vreport(p_format, p_args);
     }
 
 public:
@@ -90,6 +108,16 @@ public:
                                                    const Args&... p_args)
     {
         vreport_exit(p_format, fmt::make_format_args(p_args...));
+    }
+
+    //! @brief Prints "Warning: " followed by a formatted message.
+    //! @param p_format The format string to be printed.
+    //! @param p_args The arguments to be printed in the format string.
+    template <typename... Args>
+    static constexpr void Report_Warning(const char* p_format,
+                                         const Args&... p_args)
+    {
+        vreport_warning(p_format, fmt::make_format_args(p_args...));
     }
 };
 }  // namespace Internal

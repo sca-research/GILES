@@ -115,18 +115,15 @@ private:
             return false;
         }
 
-        // TODO: Add a report warning function.
-        // ELMO2::Internal::Error::Report_Error(
-        fmt::print("\nWarning: "
-                   "The target program did not run in a constant number of "
-                   "cycles.\n"
-                   "If this was not an intentional countermeasure to timing"
-                   " attacks then this is considered insecure.\n"
-                   "Trace number 0 took {} clock cycles.\n"
-                   "Trace number {} took {} clock cycles.\n",
-                   first_size,
-                   m_traces.size() - 1,  // Trace index
-                   current_size);
+        ELMO2::Internal::Error::Report_Warning(
+            "The target program did not run in a constant number of cycles.\n"
+            "If this was not an intentional countermeasure to timing attacks "
+            "then this is considered insecure.\n"
+            "Trace number 0 took {} clock cycles.\n"
+            "Trace number {} took {} clock cycles.\n",
+            first_size,
+            m_traces.size() - 1,  // Trace index
+            current_size);
         return true;
     }
 
