@@ -32,6 +32,8 @@
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
 
+#include "Error.hpp"  // for Report_Error
+
 namespace ELMO2
 {
 namespace Internal
@@ -45,17 +47,34 @@ namespace Internal
 //! @note The exact classes that this can construct are not stored here and are
 //! added at runtime using self-registering techniques. This simplifies the
 //! process of adding and removing classes and allows objects to be selectively
-//! compiled as a way to completely remove those as options. This si also a
+//! compiled as a way to completely remove those as options. This is also a
 //! template class allowing it to construct any object and not just those of a
 //! fixed type.
 //! @see https://en.wikipedia.org/wiki/Factory_method_pattern
 //! @see https://www.bfilipek.com/2018/02/factory-selfregister.html
-template <class Base, typename... Args> class Abstract_Factory
+template <typename Base, typename... Args> class Abstract_Factory
 {
 public:
     //! A function pointer used to point to the function that calls the
     //! constructor for objects in the factory.
     using Create_Function = std::unique_ptr<Base> (*)(Args...);
+
+    //! @brief Retrieves an object's constructor from the factory by name.
+    //! If an object with the given name is not found then an error message will
+    //! be reported and execution will halt.
+    //! @param p_type The name of the object to be retrieved.
+    //! @returns A function pointer, pointing at the constructor of the class
+    //! corresponding to the name given by p_type.
+    static Create_Function Find(const std::string& p_type)
+    {
+        // If p_type is registered.
+        if (auto& all = Get_All(); all.end() != all.find(p_type))
+        {
+            // Construct and return an instance of p_type.
+            return all[p_type];
+        }
+        ELMO2::Internal::Error::Report_Error("Could not find '{}'.\n", p_type);
+    }
 
     //! @brief This function assists with the initialisation of the objects in
     //! the factory. This will be passed the parameters to be passed on to the
@@ -73,14 +92,7 @@ public:
     static std::unique_ptr<Base> Construct(const std::string& p_type,
                                            Args... p_args)
     {
-        // If p_type is registered.
-        if (auto& all = Get_All(); all.end() != all.find(p_type))
-        {
-            // Construct and return an instance of p_type.
-            return all[p_type](p_args...);
-        }
-
-        throw std::invalid_argument("Unknown type: " + p_type);
+        return Find(p_type)(p_args...);
     }
 
     //! @brief This registers classes in the list available to the factory,

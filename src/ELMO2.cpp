@@ -97,21 +97,6 @@ private:
         return models_in_use;
     }*/
 
-    //! @brief Checks whether or not a model with the given name exists and
-    //! exits if it is not found.
-    //! @param p_model_name The name of the model to be checked.
-    //! @note The program will exit if the model is not found
-    const void check_model(const std::string& p_model_name)
-    {
-        if (const auto all_models = ELMO2::Internal::Model_Factory::Get_All();
-            std::end(all_models) != all_models.find(p_model_name))
-        {
-            return;
-        }
-        ELMO2::Internal::Error::Report_Error(
-            "A model with the name '{}' was not found.\n", p_model_name);
-    }
-
     //! @brief Prints a warning if the target program does not run in a constant
     //! number of clock cycles each time it is executed.
     //! @returns true if a warning was printed, false if not.
@@ -170,7 +155,7 @@ public:
       m_serialiser{}
     {
         // Check the supplied model name is valid
-        check_model(p_model_name);
+        ELMO2::Internal::Model_Factory::Find(p_model_name);
     }
 
     //! @todo Document
