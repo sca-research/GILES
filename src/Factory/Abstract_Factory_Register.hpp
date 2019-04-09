@@ -100,9 +100,7 @@ template <class Base, class Derived, typename... Args>
 bool ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
     m_is_registered =
         ELMO2::Internal::Abstract_Factory<Base, Args...>::Register(
-            Derived::Get_Name(),
-            ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
-                create);
+            Derived::Get_Name(), create);
 }  // namespace Internal
 }  // namespace ELMO2
 

@@ -33,4 +33,5 @@
 #include <catch.hpp>  // for catch
 
 // The actual tests
+#include "Test_Factory.cpp"
 #include "Test_Validator_Coefficients.cpp"

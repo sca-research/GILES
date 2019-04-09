@@ -29,8 +29,8 @@
 #ifndef EMULATOR_FACTORY_REGISTER_HPP
 #define EMULATOR_FACTORY_REGISTER_HPP
 
-#include "Abstract_Factory_Register.hpp" // for Abstract_Factory_Register
-#include "Emulator_Interface.hpp"        // forEmulator_Interface
+#include "Abstract_Factory_Register.hpp"  // for Abstract_Factory_Register
+#include "Emulator_Interface.hpp"         // forEmulator_Interface
 
 namespace ELMO2
 {
@@ -39,8 +39,8 @@ namespace Internal
 
 //! @class Emulator_Factory_Register
 //! @brief This class exists only to simply the usage of the
-//! Abstract_Factory_Register class. By providing an intermidiate class, the
-//! possibility of accidentally initialisating a seperate template is
+//! Abstract_Factory_Register class. By providing an intermediate class, the
+//! possibility of accidentally initialisating a separate template is
 //! eliminated. To see what is actually going on behind the scenes, refer to the
 //! Abstract_Factory_Register class.
 template <class Derived>
@@ -48,7 +48,7 @@ class Emulator_Factory_Register
     : public ELMO2::Internal::Abstract_Factory_Register<
           ELMO2::Internal::Emulator_Interface,
           Derived,
-          const std::string&> // TODO: public virtal instead?
+          const std::string&>  // TODO: public virtal instead?
 {
 
 protected:
@@ -57,7 +57,7 @@ protected:
     //! instantiated directly.
     Emulator_Factory_Register() = default;
 };
-} // namespace Internal
-} // namespace ELMO2
+}  // namespace Internal
+}  // namespace ELMO2
 
 #endif
