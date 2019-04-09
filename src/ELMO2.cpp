@@ -34,13 +34,13 @@
 #include <Traces_Serialiser.hpp>
 #include <fmt/format.h>  // for print
 
+#include "Abstract_Factory.hpp"    // for Emulator_Factory, Model_Factory
 #include "Coefficients.hpp"        // for Coefficients
-#include "Emulator_Factory.hpp"    // for Emulator_Factory
 #include "Emulator_Interface.hpp"  // for Emulator_Interface
 #include "Error.hpp"               // for Report_Error
 #include "Execution.hpp"           // for Execution
 #include "IO.hpp"                  // for IO
-#include "Model_Factory.hpp"       // for Model_Factory
+
 namespace ELMO2
 {
 // Forward Declarations

@@ -34,11 +34,16 @@
 
 #include "Error.hpp"  // for Report_Error
 
+// These are need to instantiate the templates at the bottom of the file.
+#include "Coefficients.hpp"
+#include "Emulator_Interface.hpp"
+#include "Execution.hpp"
+#include "Model.hpp"
+
 namespace ELMO2
 {
 namespace Internal
 {
-
 //! @class Abstract_Factory
 //! @brief This is a static factory class that assists in the construction of
 //! objects. By providing abstraction for the caller, it hides the exact type of
@@ -125,8 +130,8 @@ public:
     //! boolean values indicating as to whether that class is enabled by
     //! default. TODO: Change this
     //! @note This is a function wrapper around a static object using the
-    //! "Construct members on first use idiom". This is needed to guarentee that
-    //! the unordered_map is initalised whilst the factory contents are
+    //! "Construct members on first use idiom". This is needed to guarantee that
+    //! the unordered_map is initialised whilst the factory contents are
     //! registering themselves. This is a work around for the well known static
     //! initialisation order fiasco.
     //! @see https://isocpp.org/wiki/faq/ctors#static-init-order
@@ -154,6 +159,26 @@ public:
     //! @see https://en.cppreference.com/w/cpp/language/copy_assignment
     Abstract_Factory& operator=(const Abstract_Factory&) = delete;
 };
+
+//! @brief This exists only to simply the usage of the Abstract_Factory
+//! class. By providing an intermediate, the possibility of accidentally
+//! initialising a separate template is eliminated. Additionally, this
+//! provides for a more meaningful name. To see what is actually going on behind
+//! the scenes, refer to the Abstract_Factory class.
+using Model_Factory =
+    ELMO2::Internal::Abstract_Factory<ELMO2::Internal::Model,
+                                      const ELMO2::Internal::Execution&,
+                                      const ELMO2::Internal::Coefficients&>;
+
+//! @brief This exists only to simply the usage of the Abstract_Factory
+//! class. By providing an intermediate, the possibility of accidentally
+//! initialising a separate template is eliminated. Additionally, this
+//! provides for a more meaningful name. To see what is actually going on behind
+//! the scenes, refer to the Abstract_Factory class.
+using Emulator_Factory =
+    ELMO2::Internal::Abstract_Factory<ELMO2::Internal::Emulator_Interface,
+                                      const std::string&>;
+
 }  // namespace Internal
 }  // namespace ELMO2
 
