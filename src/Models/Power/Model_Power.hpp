@@ -346,8 +346,8 @@ private:
      */
 
     template <typename T>
-    const double dot_product(const std::vector<T>& p_vector_1,
-                             const std::vector<T>& p_vector_2)
+    double dot_product(const std::vector<T>& p_vector_1,
+                       const std::vector<T>& p_vector_2)
     {
         T total{0};
         for (std::size_t i{0}; i < p_vector_1.size(); ++i)
@@ -358,9 +358,9 @@ private:
     }
 
     template <std::size_t N>
-    const double calculate_term(const std::string& p_opcode,
-                                const std::string& p_term_name,
-                                const std::bitset<N>& p_instruction_term) const
+    double calculate_term(const std::string& p_opcode,
+                          const std::string& p_term_name,
+                          const std::bitset<N>& p_instruction_term) const
     // TODO: Replace bitset with vector of bools everywhere?
     {
         // This is based off of what original elmo does to calculate an
@@ -388,7 +388,7 @@ private:
         Subsequent
     };
 
-    const double calculate_hamming_weight(
+    double calculate_hamming_weight(
         const ELMO2::Internal::Model_Power::Assembly_Instruction_Power&
             p_current_instruction,
         const std::size_t p_operand_index,
