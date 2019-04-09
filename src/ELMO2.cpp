@@ -145,10 +145,10 @@ public:
                "Hamming Weight")  // TODO: Set the default using cmake
                                   // configuring a static var in an external
                                   // file.
-    : m_coefficients(
-          ELMO2::Internal::IO().Load_Coefficients(p_coefficients_path)),
-      m_program_path(p_program_path), m_traces_path(p_traces_path),
-      m_number_of_runs(p_number_of_runs), m_model_name{std::move(p_model_name)},
+    : m_coefficients{ELMO2::Internal::IO().Load_Coefficients(
+          p_coefficients_path)},
+      m_program_path{p_program_path}, m_model_name{std::move(p_model_name)},
+      m_traces_path{p_traces_path}, m_number_of_runs{p_number_of_runs},
       m_serialiser{}
     {
         // Check the supplied model name is valid
