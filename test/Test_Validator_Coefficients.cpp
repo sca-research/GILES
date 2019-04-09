@@ -23,13 +23,9 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-#define CATCH_CONFIG_MAIN
-
 #include <catch.hpp>  // for catch
 
-#include "Tests.cpp"
-
-#include <json.hpp>  // for json
+#include <nlohmann/json.hpp>  // for json
 
 #include "Validator_Coefficients.hpp"
 

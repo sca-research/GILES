@@ -38,26 +38,34 @@ if(${PROJECT_NAME}_CALCULATE_COVERAGE)
     # generate the coverage information for those tests.
     add_custom_target(coverage
         COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/coverage
-        COMMAND ${EXECUTABLE_OUTPUT_PATH}/tests
+        COMMAND ${EXECUTABLE_OUTPUT_PATH}/${PROJECT_NAME}-tests
         COMMAND gcovr ${PROJECT_BINARY_DIR} -r ${PROJECT_SOURCE_DIR} --exclude-unreachable-branches --exclude-directories=test --html --html-details -o ${PROJECT_BINARY_DIR}/coverage/coverage.html
-            DEPENDS tests
+            DEPENDS ${PROJECT_NAME}-tests
             COMMENT "Generating HTML coverage report"
     )
 endif(${PROJECT_NAME}_CALCULATE_COVERAGE)
 
-# Make test executable
-set(TEST_SOURCES Test_Validator_Coefficients.cpp)
-add_executable(tests ${TEST_SOURCES})
+# Make the test executable
+add_executable(${PROJECT_NAME}-tests
+    #Test_Validator_Coefficients.cpp
+    #Test_Factory.cpp
+    Tests.cpp
+)
+
+
+# Link to required external projects
+target_link_libraries(${PROJECT_NAME}-tests PUBLIC nlohmann_json::nlohmann_json)
 
 # Download and include required files from external projects
-target_include_external_project(tests Catch2 single_include/catch2)
-target_include_external_project(tests json single_include/nlohmann)
+target_include_external_project(${PROJECT_NAME}-tests Catch2 single_include/catch2)
 
 # Include the src being tested
-target_include_directories(tests PRIVATE ${PROJECT_SOURCE_DIR}/src ${EXECUTABLE_OUTPUT_PATH})
+target_include_directories(${PROJECT_NAME}-tests PRIVATE
+    ${PROJECT_SOURCE_DIR}/src
+    ${EXECUTABLE_OUTPUT_PATH})
 
-target_link_libraries(tests lib${PROJECT_NAME})
-target_include_directories(tests SYSTEM PRIVATE ${THIRD_PARTY_DIR})
+target_link_libraries(${PROJECT_NAME}-tests PUBLIC lib${PROJECT_NAME})
+#target_include_directories(${PROJECT_NAME}-tests SYSTEM PRIVATE ${THIRD_PARTY_DIR})
 
 enable_testing()
-add_test(NAME Run_Tests COMMAND tests)
+add_test(NAME Run_Tests COMMAND ${PROJECT_NAME}-tests)

@@ -23,8 +23,14 @@
     @copyright GNU Affero General Public License Version 3+
 */
 
-//! Required when using Catch testing framework
+//! Required when using Catch testing framework - Tells Catch to provide a
+//! main()
 //! @see https://github.com/catchorg/Catch2
+#ifndef CATCH_CONFIG_MAIN
 #define CATCH_CONFIG_MAIN
+#endif  // CATCH_CONFIG_MAIN
 
-#include <catch.hpp> // for catch
+#include <catch.hpp>  // for catch
+
+// The actual tests
+#include "Test_Validator_Coefficients.cpp"
