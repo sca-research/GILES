@@ -29,7 +29,6 @@
 #include <string>  // for string
 
 #include "Coefficients.hpp"  // for Coefficients
-#include "Traces.hpp"        // for Traces
 
 namespace ELMO2
 {

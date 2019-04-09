@@ -34,7 +34,6 @@
 
 #include "Coefficients.hpp"
 #include "Execution.hpp"
-#include "Traces.hpp"
 
 namespace ELMO2
 {
@@ -58,7 +57,8 @@ protected:
     //! background noise that would be picked up in real traces.
     //! @param p_traces The Traces to have the noise added to.
     //! @returns The Traces with the added noise.
-    const ELMO2::Internal::Traces& addNoise(ELMO2::Internal::Traces* p_traces);
+    // const ELMO2::Internal::Traces& addNoise(ELMO2::Internal::Traces*
+    // p_traces);
 
     //! @brief The constructor needs to be provided with the recorded
     //! Execution of the target program and the details from real world
