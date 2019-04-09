@@ -56,6 +56,16 @@ target_include_directories(lib${PROJECT_NAME}
         #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE
 )
 
+target_compile_options(lib${PROJECT_NAME}
+    PRIVATE
+        -Wall
+        -Wextra
+        -Wpedantic
+        -Weffc++
+        -Wno-c++98-compat
+        -Werror
+        -fdiagnostics-color
+)
 # If OpenMP is available then use it.
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
