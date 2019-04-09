@@ -34,8 +34,6 @@
 
 #include <boost/algorithm/string.hpp>  // TODO: Convert Uility.h over to boost algorithms (or the other way around?)
 
-#include "Register.hpp"
-
 namespace ELMO2
 {
 namespace Internal

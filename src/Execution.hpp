@@ -39,7 +39,6 @@
 
 #include "Assembly_Instruction.hpp"
 #include "Error.hpp"  // for Report_Error
-#include "Register.hpp"
 #include "Utility.hpp"  // for string_split
 
 #include <iostream>  // for temp debugging

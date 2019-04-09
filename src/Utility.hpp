@@ -31,7 +31,6 @@
 #include <vector>  // for vector
 
 #include "Assembly_Instruction.hpp"
-#include "Register.hpp"
 
 namespace ELMO2
 {

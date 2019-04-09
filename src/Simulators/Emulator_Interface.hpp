@@ -33,7 +33,6 @@
 
 #include "Assembly_Instruction.hpp"
 #include "Execution.hpp"
-#include "Register.hpp"
 
 namespace ELMO2
 {
