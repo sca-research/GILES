@@ -92,7 +92,7 @@ private:
     //! The state of the processor registers during each cycle of the execution
     //! of the target program.
     //! @see https://en.wikipedia.org/wiki/Processor_register
-    std::vector<std::map<std::string, size_t>> m_registers;
+    std::vector<std::map<std::string, std::size_t>> m_registers;
 
     //! @brief Retrieves the type of state of the pipeline stage given by
     //! p_pipeline_stage_name at the clock cycle given by p_cycle. This is
@@ -137,7 +137,7 @@ public:
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
     //! @see https://en.wikipedia.org/wiki/Processor_register
-    explicit Execution(const size_t p_number_of_cycles)
+    explicit Execution(const std::size_t p_number_of_cycles)
         : m_pipeline(p_number_of_cycles), m_registers(p_number_of_cycles)
     {
     }
@@ -177,10 +177,10 @@ public:
          *}
          */
 
+        const std::size_t size{p_pipeline_stage.size()};
+
         // Transpose the vector into m_pipeline.
-        for (decltype(p_pipeline_stage.size()) cycle = 0;
-             cycle < p_pipeline_stage.size();
-             ++cycle)
+        for (std::size_t cycle = 0; cycle < size; ++cycle)
         {
             // Add it to m_pipeline.
             m_pipeline[cycle][p_pipeline_stage_name] = p_pipeline_stage[cycle];
@@ -204,7 +204,7 @@ public:
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
     template <class T_Value_Type>
-    void Add_Value(const size_t p_cycle,
+    void Add_Value(const std::size_t p_cycle,
                    const std::string& p_pipeline_stage_name,
                    const T_Value_Type p_value)
     {
@@ -239,7 +239,7 @@ public:
             return std::any_cast<T_Value_Type>(
                 m_pipeline.at(p_cycle).at(p_pipeline_stage_name));
         }
-        catch (const std::bad_any_cast& exception)
+        catch (const std::bad_any_cast&)
         {
             throw std::invalid_argument("The requested pipeline state is "
                                         "not stored as the requested type");
@@ -405,9 +405,16 @@ public:
     //! name.
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
+    //! @todo Validate that the same set of registers are given for each cycle?
     void Add_Registers_All(
-        const std::vector<std::map<std::string, size_t>> p_registers)
+        const std::vector<std::map<std::string, std::size_t>> p_registers)
     {
+        if (m_registers.size() != p_registers.size())
+        {
+            throw std::range_error(
+                "Registers provided does not match up with the number of clock "
+                "cycles provided.");
+        }
         m_registers = p_registers;
     }
 
@@ -419,8 +426,10 @@ public:
     //! stored indexed by the register's name.
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
-    void Add_Registers_Cycle(const size_t p_cycle,
-                             const std::map<std::string, size_t>& p_registers)
+    //! @todo Validate that the same set of registers are given for each cycle?
+    void
+    Add_Registers_Cycle(const std::size_t p_cycle,
+                        const std::map<std::string, std::size_t>& p_registers)
     {
         m_registers[p_cycle] = p_registers;
     }
@@ -442,8 +451,8 @@ public:
     //! from.
     //! @returns The registers as they were during that cycle.
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
-    const std::map<std::string, size_t>&
-    Get_Registers(const size_t p_cycle) const
+    const std::map<std::string, std::size_t>&
+    Get_Registers(const std::size_t p_cycle) const
     {
         return m_registers.at(p_cycle);
     }
@@ -451,8 +460,8 @@ public:
     //! @todo document
     //! @note Offsets do not need to be considered as they offset the loaded
     //! value, not the address.
-    size_t Get_Register_Value(const size_t p_cycle,
-                              const std::string& p_register_name) const
+    std::size_t Get_Register_Value(const std::size_t p_cycle,
+                                   const std::string& p_register_name) const
     {
         return m_registers.at(p_cycle).at(p_register_name);
     }
@@ -510,7 +519,7 @@ public:
     //! during the running of the target program.
     //! @returns The total number of clock cycles.
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
-    size_t Get_Cycle_Count() const { return m_pipeline.size(); }
+    std::size_t Get_Cycle_Count() const { return m_pipeline.size(); }
 
     //! TODO: Future: Make use of this.
     //! TODO: Maybe move this to be under Execution instead.
