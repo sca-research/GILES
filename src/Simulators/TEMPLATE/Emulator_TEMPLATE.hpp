@@ -21,7 +21,7 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "Emulator_Factory_Register.hpp"  // for Emulator_Factory_Register
+#include "Abstract_Factory_Register.hpp"  // for Emulator_Factory_Register
 #include "Emulator_Interface.hpp"         // for Emulator_Interface
 #include "Execution.hpp"                  // for Execution
 

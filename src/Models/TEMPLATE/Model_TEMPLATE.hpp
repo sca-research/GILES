@@ -35,9 +35,9 @@
 #include <unordered_set>  // for unordered_set
 #include <vector>         // for vector
 
-#include "Model.hpp"                   // for Model
-#include "Model_Factory_Register.hpp"  // for Model_Factory_Register
-#include "Traces.hpp"                  // for Traces
+#include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
+#include "Model.hpp"                      // for Model
+#include "Traces.hpp"                     // for Traces
 
 namespace ELMO2
 {

@@ -38,7 +38,7 @@
 #include <vector>         // for vector
 
 #include "Model.hpp"                   // for Model
-#include "Model_Factory_Register.hpp"  // for Model_Factory_Register
+#include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
 #include "Traces.hpp"                  // for Traces
 
 namespace ELMO2

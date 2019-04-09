@@ -101,6 +101,29 @@ bool ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
     m_is_registered =
         ELMO2::Internal::Abstract_Factory<Base, Args...>::Register(
             Derived::Get_Name(), create);
+
+//! @brief This exists only to simply the usage of the
+//! Abstract_Factory_Register class. By providing an intermediate, the
+//! possibility of accidentally initialising a separate template is
+//! eliminated. To see what is actually going on behind the scenes, refer to the
+//! Abstract_Factory_Register class.
+template <class Derived>
+using Model_Factory_Register = ELMO2::Internal::Abstract_Factory_Register<
+    ELMO2::Internal::Model,
+    Derived,
+    const ELMO2::Internal::Execution&,
+    const ELMO2::Internal::Coefficients&>;
+
+//! @brief This exists only to simply the usage of the
+//! Abstract_Factory_Register class. By providing an intermediate, the
+//! possibility of accidentally initialising a separate template is
+//! eliminated. To see what is actually going on behind the scenes, refer to the
+//! Abstract_Factory_Register class.
+template <class Derived>
+using Emulator_Factory_Register = ELMO2::Internal::Abstract_Factory_Register<
+    ELMO2::Internal::Emulator_Interface,
+    Derived,
+    const std::string&>;
 }  // namespace Internal
 }  // namespace ELMO2
 
