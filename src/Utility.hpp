@@ -30,6 +30,8 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
+#include <boost/algorithm/string.hpp>
+
 #include "Assembly_Instruction.hpp"
 
 namespace ELMO2
@@ -43,9 +45,9 @@ class Utility
 {
 public:
     //! @brief Splits a string into a vector of strings using a string given by
-    //! p_delimiter as a delimiter for splitting. // For example: Splitting the
-    //! string "Hello!World" with the delimiter "!" would become "Hello",
-    //! "World".
+    //! p_delimiter as a delimiter for splitting.
+    //! For example: Splitting the string "Hello!World" with the delimiter "!"
+    //! would become {"Hello", "World"}.
     //! @param p_input The string to be split.
     //! @param p_delimiter The delimiting string to spilt on. This will not be
     //! present in the output.
@@ -53,32 +55,8 @@ public:
     static const std::vector<std::string>
     string_split(std::string p_input, const std::string& p_delimiter)
     {
-        // A temporary structure for storing the result.
         std::vector<std::string> split_string;
-
-        // Loop indefinitely until the end of the string if reached.
-        // This is basically a while loop with a variable declared within it.
-        std::size_t position;
-        while (std::string::npos != (position = p_input.find(p_delimiter)))
-        {
-            // Push back everything from the beginning until this point as one
-            // split.
-            split_string.push_back(p_input.substr(0, position));
-
-            // Remove what was just pushed back from the input string.
-            p_input.erase(0, position + p_delimiter.length());
-        }
-
-        split_string.push_back(p_input);
-
-        /*
-         *if (0 == split_string.size())
-         *{
-         *    throw std::invalid_argument(
-         *        "Could not split string, the delimiting value was not
-         *found.");
-         *}
-         */
+        boost::split(split_string, p_input, boost::is_any_of(p_delimiter));
         return split_string;
     }
 
