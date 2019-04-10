@@ -39,9 +39,6 @@ namespace ELMO2
 {
 namespace Internal
 {
-// Forward Declarations
-class Traces;
-
 //! @brief Loads the Coefficients from a file as specified by
 //! p_coefficients_path.
 //! @param p_coefficients_path The path where the Coefficients should be
@@ -59,7 +56,7 @@ const ELMO2::Internal::Coefficients ELMO2::Internal::IO::Load_Coefficients(
     {
         json = nlohmann::json::parse(file);
     }
-    catch (nlohmann::detail::parse_error& e)
+    catch (nlohmann::detail::parse_error&)
     {
         ELMO2::Internal::Error::Report_Error(
             "Coefficients file '{}' is not a valid JSON file",

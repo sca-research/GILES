@@ -37,15 +37,8 @@ namespace Internal
 //! @class IO
 //! @brief This contains all Input and Output functions for ELMO2. This includes
 //! loading the Coefficients file.
-class IO
+struct IO
 {
-public:
-    //! All possible output formats for the generated traces to be saved as.
-    enum class Output_Format : uint8_t
-    {
-        Riscure
-    };
-
     const ELMO2::Internal::Coefficients
     Load_Coefficients(const std::string& p_coefficients_path) const;
 };
