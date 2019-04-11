@@ -171,6 +171,8 @@ time you compile.
 This uses [CMake.](https://cmake.org/) As such, CMake needs to be
 installed first.
 
+Additionally, [Boost](https://www.boost.org/) needs to be installed manually.
+
 #### Linux
 
 The recommended way of installing CMake is through your package manager.

@@ -66,6 +66,9 @@ target_compile_options(lib${PROJECT_NAME}
         -Werror
         -fdiagnostics-color
 )
+
+find_package(Boost REQUIRED COMPONENTS system)
+
 # If OpenMP is available then use it.
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
@@ -79,6 +82,7 @@ target_link_libraries(lib${PROJECT_NAME}
         nlohmann_json::nlohmann_json
         fmt::fmt-header-only
         libthumb-sim
+        Boost::system
 )
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
