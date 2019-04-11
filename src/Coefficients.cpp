@@ -57,13 +57,17 @@ const std::string& ELMO2::Internal::Coefficients::Get_Instruction_Category(
             return p_opcode;
         }
 
-        // If the instruction is in this category, return the name of the
-        // category.
-        if (const auto& instructions = category.value().at("Instructions");
-            instructions.end() !=
-            std::find(instructions.begin(), instructions.end(), p_opcode))
+        // Ensure this category has an instruction section before accessing it.
+        if (category.value().find("Instructions") != category.value().end())
         {
-            return category.key();
+            // If the instruction is in this category, return the name of the
+            // category.
+            if (const auto& instructions = category.value().at("Instructions");
+                instructions.end() !=
+                std::find(instructions.begin(), instructions.end(), p_opcode))
+            {
+                return category.key();
+            }
         }
     }
     throw std::out_of_range("This instruction (" + p_opcode +

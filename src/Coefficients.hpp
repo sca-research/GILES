@@ -104,8 +104,11 @@ private:
             // is slightly easier to understand than a generic json type error.
             catch (const nlohmann::detail::exception& exception)
             {
-                // Make sure this is the type of exception we thought it was.
-                // If "cannot use .at() with array" exception or "key not found"
+                // TODO: Is this a valid alternative ? It works
+                // return T_return{};
+                // Make sure this is the type of exception we thought it
+                // was. If "cannot use .at() with array" exception or "key not
+                // found"
                 if (304 == exception.id || 403 == exception.id)
                 {
                     ELMO2::Internal::Error::Report_Error(
@@ -230,7 +233,7 @@ public:
     }
 
     double Get_Constant(const std::string& p_opcode) const;
-};  // namespace Internal
+};
 }  // namespace Internal
 }  // namespace ELMO2
 
