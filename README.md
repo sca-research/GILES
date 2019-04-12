@@ -292,3 +292,7 @@ This program is released under license AGPLv3+.
 
 Get a summary of this license
 [here at choosealicense.com](https://choosealicense.com/licenses/agpl-3.0/)
+
+## Acknowledgement
+This project has received funding from the European Research Council (ERC) under the European Union’s
+Horizon 2020 research and innovation programme (grant agreement No 725042).
