@@ -296,3 +296,5 @@ Get a summary of this license
 ## Acknowledgement
 This project has received funding from the European Research Council (ERC) under the European Union’s
 Horizon 2020 research and innovation programme (grant agreement No 725042).
+
+![EU Logo](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "ERC")
