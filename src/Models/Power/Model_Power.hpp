@@ -39,15 +39,14 @@
 #include "Coefficients.hpp"
 #include "Execution.hpp"
 
-#include "Model.hpp"                   // for Model
 #include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
+#include "Model.hpp"                      // for Model, Hamming_Weight
 
 namespace ELMO2
 {
 namespace Internal
 {
 //! @class Model_Power
-//! @class Model_Hamming_Weight
 //! @brief This derived class contains a specific implementation of a
 //! mathematical model to calculate the traces for a target program. It is
 //! designed as a template allowing new models to be added with ease.
@@ -409,7 +408,7 @@ private:
                                    instruction + "_Instruction",
                                p_opcode_target) *
                // hamming_weight(current_instruction.Get_Operand(p_operand_index));
-               hamming_weight(p_current_instruction.Operand_1);
+               Model_Math::Hamming_Weight(p_current_instruction.Operand_1);
     }
 
 public:

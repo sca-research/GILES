@@ -38,7 +38,7 @@
 #include <vector>         // for vector
 
 #include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
-#include "Model.hpp"                      // for Model
+#include "Model.hpp"                      // for Model, Hamming_Weight
 
 namespace ELMO2
 {

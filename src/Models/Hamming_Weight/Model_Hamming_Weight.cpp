@@ -93,8 +93,9 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
 
         // Calculates the Hamming weight of the first operand of the instruction
         // at clock cycle 'i' and appends it to the traces object.
-        traces.push_back(hamming_weight(m_execution.Get_Operand_Value(
-            i, m_execution.Get_Instruction(i, "Execute"), 1)));
+        traces.push_back(
+            Model_Math::Hamming_Weight(m_execution.Get_Operand_Value(
+                i, m_execution.Get_Instruction(i, "Execute"), 1)));
     }
     /*
      *std::cout << "Number of traces: " << traces.Get_Number_Of_Traces()

@@ -230,32 +230,32 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
                     current_opcode,
                     "Hamming_Distance_Operand1_Previous_Instruction",
                     previous_opcode) *
-                hamming_distance(current_instruction.Operand_1,
-                                 previous_instruction.Operand_1);
+                Model_Math::Hamming_Distance(current_instruction.Operand_1,
+                                             previous_instruction.Operand_1);
 
             const auto hamming_distance_subsequent_operand_1 =
                 Get_Coefficient(
                     current_opcode,
                     "Hamming_Distance_Operand1_Subsequent_Instruction",
                     previous_opcode) *
-                hamming_distance(current_instruction.Operand_1,
-                                 next_instruction.Operand_1);
+                Model_Math::Hamming_Distance(current_instruction.Operand_1,
+                                             next_instruction.Operand_1);
 
             const auto hamming_distance_previous_operand_2 =
                 Get_Coefficient(
                     current_opcode,
                     "Hamming_Distance_Operand2_Previous_Instruction",
                     previous_opcode) *
-                hamming_distance(current_instruction.Operand_2,
-                                 previous_instruction.Operand_2);
+                Model_Math::Hamming_Distance(current_instruction.Operand_2,
+                                             previous_instruction.Operand_2);
 
             const auto hamming_distance_subsequent_operand_2 =
                 Get_Coefficient(
                     current_opcode,
                     "Hamming_Distance_Operand2_Subsequent_Instruction",
                     previous_opcode) *
-                hamming_distance(current_instruction.Operand_2,
-                                 next_instruction.Operand_2);
+                Model_Math::Hamming_Distance(current_instruction.Operand_2,
+                                             next_instruction.Operand_2);
 
             constant = Get_Constant(current_opcode);
 
