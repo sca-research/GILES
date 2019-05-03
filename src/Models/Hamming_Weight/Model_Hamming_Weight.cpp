@@ -28,8 +28,6 @@
 #include <cstddef>  // for uint8_t, size_t
 #include <vector>   // for vector
 
-#include <iostream>  // for temp debugging
-
 #include "Model_Hamming_Weight.hpp"
 
 #include "Assembly_Instruction.hpp"  // for Assembly_Instruction
@@ -38,7 +36,7 @@
 //! The list of interaction terms used by this model in order to generate
 //! traces.
 const std::unordered_set<std::string>
-    ELMO2::Internal::Model_Hamming_Weight::m_required_interaction_terms = {};
+    ELMO2::Internal::Model_Hamming_Weight::m_required_interaction_terms{};
 
 //! @brief This function contains the mathematical calculations that generate
 //! the Traces.
@@ -49,47 +47,19 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
     // TODO: If traces are serialised upon generation then do we need a
     // traces object?
     std::vector<float> traces;
-    for (std::size_t i = 0; i < m_execution.Get_Cycle_Count(); ++i)
+
+    const std::size_t number_of_cycles{m_execution.Get_Cycle_Count()};
+    for (std::size_t i = 0; i < number_of_cycles; ++i)
     {
         // Prevents trying to calculate the hamming weight of stalls and
         // flushes.
         if (!m_execution.Is_Normal_State(i, "Execute"))
         {
-            // std::cout << "Abnormal state reached" << std::endl;
-            // TODO: What to do in this situation?
+            // In the case of stalls and flushes just assume these use no power
+            // for now.
             traces.push_back(0);
             continue;
         }
-
-        // ******* DEBUG ONLY: TO BE REMOVED *******************
-
-        /*
-         *        // Retrieves what is in the "Execute" pipeline stage at clock
-         * cycle "i". auto instruction = m_execution.Get_Instruction(i,
-         * "Execute");
-         *
-         *                std::cout << "Cycle: " << i << std::endl;
-         *
-         *                std::cout << instruction.Get_Opcode();
-         *
-         *                for (const auto& operand : instruction.Get_Operands())
-         *                {
-         *                    // If the operand is a register look up the value
-         * in that
-         *                    // register,
-         *                    // else treat it as a raw value.
-         *                    if (!m_execution.Is_Register(operand))
-         *                    {
-         *                        std::cout << "," << operand;
-         *                        continue;
-         *                    }
-         *                    std::cout << ",|" <<
-         * m_execution.Get_Register_Value(i, operand)
-         *                              << "|";
-         *                }
-         *                std::cout << std::endl;
-         */
-        // ******* DEBUG ONLY: TO BE REMOVED *******************
 
         // Calculates the Hamming weight of the first operand of the instruction
         // at clock cycle 'i' and appends it to the traces object.
@@ -97,11 +67,5 @@ ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
             Model_Math::Hamming_Weight(m_execution.Get_Operand_Value(
                 i, m_execution.Get_Instruction(i, "Execute"), 1)));
     }
-    /*
-     *std::cout << "Number of traces: " << traces.Get_Number_Of_Traces()
-     *          << std::endl
-     *          << "Number of samples per trace: "
-     *          << traces.Get_Number_Of_Samples_Per_Trace() << std::endl;
-     */
     return traces;
 }
