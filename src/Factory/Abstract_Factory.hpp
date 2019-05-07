@@ -58,12 +58,12 @@ class Model;
 //! fixed type.
 //! @see https://en.wikipedia.org/wiki/Factory_method_pattern
 //! @see https://www.bfilipek.com/2018/02/factory-selfregister.html
-template <typename Base, typename... Args> class Abstract_Factory
+template <typename base_t, typename... args_t> class Abstract_Factory
 {
 public:
     //! A function pointer used to point to the function that calls the
     //! constructor for objects in the factory.
-    using Create_Function = std::unique_ptr<Base> (*)(Args...);
+    using Create_Function = std::unique_ptr<base_t> (*)(args_t...);
 
     //! @brief Retrieves an object's constructor from the factory by name.
     //! If an object with the given name is not found then an error message will
@@ -79,7 +79,7 @@ public:
             // Construct and return an instance of p_type.
             return all[p_type];
         }
-        ELMO2::Internal::Error::Report_Error("Could not find '{}'.\n", p_type);
+        Error::Report_Error("Could not find '{}'.\n", p_type);
     }
 
     //! @brief This function assists with the initialisation of the objects in
@@ -95,8 +95,8 @@ public:
     //! is to the base class, given by the template Base, allowing the caller to
     //! ignore the actual type of the object and make use of the Base class
     //! interface.
-    static std::unique_ptr<Base> Construct(const std::string& p_type,
-                                           Args... p_args)
+    static std::unique_ptr<base_t> Construct(const std::string& p_type,
+                                             args_t... p_args)
     {
         return Find(p_type)(p_args...);
     }
@@ -167,9 +167,7 @@ public:
 //! provides for a more meaningful name. To see what is actually going on behind
 //! the scenes, refer to the Abstract_Factory class.
 using Model_Factory =
-    ELMO2::Internal::Abstract_Factory<ELMO2::Internal::Model,
-                                      const ELMO2::Internal::Execution&,
-                                      const ELMO2::Internal::Coefficients&>;
+    Abstract_Factory<Model, const Execution&, const Coefficients&>;
 
 //! @brief This exists only to simply the usage of the Abstract_Factory
 //! class. By providing an intermediate, the possibility of accidentally
@@ -177,8 +175,7 @@ using Model_Factory =
 //! provides for a more meaningful name. To see what is actually going on behind
 //! the scenes, refer to the Abstract_Factory class.
 using Emulator_Factory =
-    ELMO2::Internal::Abstract_Factory<ELMO2::Internal::Emulator_Interface,
-                                      const std::string&>;
+    Abstract_Factory<Emulator_Interface, const std::string&>;
 
 }  // namespace Internal
 }  // namespace ELMO2

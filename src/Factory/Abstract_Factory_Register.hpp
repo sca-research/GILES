@@ -53,7 +53,7 @@ class Emulator_Interface;
 //! The evaulation of this will call the Register function in the Factory class,
 //! registering the type given by T. i.e. The class that derived from this.
 //! @see https://www.bfilipek.com/2018/02/factory-selfregister.html
-template <class Base, class Derived, typename... Args>
+template <typename Base, typename derived_t, typename... args_t>
 class Abstract_Factory_Register
 {
 private:
@@ -64,11 +64,11 @@ private:
     //! target program.
     //! @param p_coefficients The coefficients as loaded from the Coefficients
     //! file.
-    //! @returns A unique_ptr to an object of the type given by the Derived
+    //! @returns A unique_ptr to an object of the type given by the derived_t
     //! template.
-    static std::unique_ptr<Base> create(Args... p_args)
+    static std::unique_ptr<Base> create(args_t... p_args)
     {
-        return std::make_unique<Derived>(p_args...);
+        return std::make_unique<derived_t>(p_args...);
     }
 
     //! @brief Retrieves the name of the Derived class.
@@ -79,7 +79,7 @@ private:
     //! factory registration requires this as unique identifier.
     //! @note This idiom is known as the curiously recurring template pattern.
     //! @see https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern
-    static const std::string get_name() { return Derived::Get_Name(); }
+    static const std::string get_name() { return derived_t::Get_Name(); }
 
 public:  // TODO: Should this be protected?
     //! This static variable is evaluated before main() is called. The
@@ -104,34 +104,32 @@ protected:
 //! @todo Does this inherit the doxygen comments from m_is_registered? - if not,
 //! add doxygen comments.
 //! @todo Add comment explaining why this is outside the class.
-template <class Base, class Derived, typename... Args>
-bool ELMO2::Internal::Abstract_Factory_Register<Base, Derived, Args...>::
-    m_is_registered =
-        ELMO2::Internal::Abstract_Factory<Base, Args...>::Register(
-            Derived::Get_Name(), create);
+template <typename Base, typename derived_t, typename... args_t>
+bool ELMO2::Internal::Abstract_Factory_Register<Base,
+                                                derived_t,
+                                                args_t...>::m_is_registered =
+    Abstract_Factory<Base, args_t...>::Register(derived_t::Get_Name(), create);
 
 //! @brief This exists only to simply the usage of the
 //! Abstract_Factory_Register class. By providing an intermediate, the
 //! possibility of accidentally initialising a separate template is
 //! eliminated. To see what is actually going on behind the scenes, refer to the
 //! Abstract_Factory_Register class.
-template <class Derived>
-using Model_Factory_Register = ELMO2::Internal::Abstract_Factory_Register<
-    ELMO2::Internal::Model,
-    Derived,
-    const ELMO2::Internal::Execution&,
-    const ELMO2::Internal::Coefficients&>;
+template <typename derived_t>
+using Model_Factory_Register = Abstract_Factory_Register<Model,
+                                                         derived_t,
+                                                         const Execution&,
+                                                         const Coefficients&>;
 
 //! @brief This exists only to simply the usage of the
 //! Abstract_Factory_Register class. By providing an intermediate, the
 //! possibility of accidentally initialising a separate template is
 //! eliminated. To see what is actually going on behind the scenes, refer to the
 //! Abstract_Factory_Register class.
-template <class Derived>
-using Emulator_Factory_Register = ELMO2::Internal::Abstract_Factory_Register<
-    ELMO2::Internal::Emulator_Interface,
-    Derived,
-    const std::string&>;
+template <typename derived_t>
+using Emulator_Factory_Register = Abstract_Factory_Register<Emulator_Interface,
+                                                            derived_t,
+                                                            const std::string&>;
 }  // namespace Internal
 }  // namespace ELMO2
 

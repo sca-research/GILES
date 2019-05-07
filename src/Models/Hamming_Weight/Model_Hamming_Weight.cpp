@@ -44,12 +44,10 @@ const std::unordered_set<std::string>
 const std::vector<float>
 ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
 {
-    // TODO: If traces are serialised upon generation then do we need a
-    // traces object?
     std::vector<float> traces;
 
     const std::size_t number_of_cycles{m_execution.Get_Cycle_Count()};
-    for (std::size_t i = 0; i < number_of_cycles; ++i)
+    for (std::size_t i{0}; i < number_of_cycles; ++i)
     {
         // Prevents trying to calculate the hamming weight of stalls and
         // flushes.
