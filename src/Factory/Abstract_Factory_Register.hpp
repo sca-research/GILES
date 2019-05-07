@@ -32,6 +32,7 @@
 #include <string>  // for string
 
 #include "Abstract_Factory.hpp"
+#include "Model.hpp"  // for Model
 
 namespace ELMO2
 {
@@ -74,13 +75,14 @@ private:
     //! @see https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern
     static const std::string get_name() { return Derived::Get_Name(); }
 
-protected:  // TODO: Should this be protected?
+public:  // TODO: Should this be protected?
     //! This static variable is evaluated before main() is called. The
     //! evaluation of this requires the Register function to be called,
     //! automatically registering the class defined by the template T in the
     //! factory before main() is called.
     static bool m_is_registered;
 
+protected:
     //! @brief This has been made protected to ensure the constructor and
     //! the copy constructor cannot be called directly as this class is
     //! designed to be inherited from and not instantiated directly.
