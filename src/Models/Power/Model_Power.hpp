@@ -38,9 +38,7 @@
 #include "Assembly_Instruction.hpp"
 #include "Coefficients.hpp"
 #include "Execution.hpp"
-
-#include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
-#include "Model.hpp"                      // for Model, Hamming_Weight
+#include "Model.hpp"  // for Model_Interface, Hamming_Weight
 
 namespace ELMO2
 {
@@ -52,8 +50,7 @@ namespace Internal
 //! designed as a template allowing new models to be added with ease.
 //! Deriving from Model_Factory_Register as well will automatically register
 //! this class within the factory class.
-class Model_Power : public virtual Model_Interface<Model_Power>,
-                    public Model_Factory_Register<Model_Power>
+class Model_Power : public virtual Model_Interface<Model_Power>
 {
 private:
     class Instruction_Terms_Helper

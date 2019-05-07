@@ -32,12 +32,18 @@
 #include <string>  // for string
 
 #include "Abstract_Factory.hpp"
-#include "Model.hpp"  // for Model
 
 namespace ELMO2
 {
 namespace Internal
 {
+// Forward Declarations
+// These are need to instantiate the templates at the bottom of the file.
+class Model;
+class Execution;
+class Coefficients;
+class Emulator_Interface;
+
 //! @class Abstract_Factory_Register
 //! @brief This class is used to assist with the self registration of classes
 //! within the factory.

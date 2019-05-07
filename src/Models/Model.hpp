@@ -32,7 +32,7 @@
 #include <unordered_set>  // for unordered_set
 #include <vector>         // for vector
 
-//#include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
+#include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
 #include "Coefficients.hpp"
 #include "Execution.hpp"
 #include "Model_Math.hpp"
@@ -72,7 +72,8 @@ public:
 //! to be implemented, These models will generate the traces for the given
 //! program by making use of the Coefficients and the recorded Execution of the
 //! program.
-template <typename derived_t> class Model_Interface : public Model
+template <typename derived_t>
+class Model_Interface : public Model, public Model_Factory_Register<derived_t>
 {
 protected:
     //! @brief The constructor needs to be provided with the recorded

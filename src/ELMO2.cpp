@@ -40,15 +40,10 @@
 #include "Error.hpp"               // for Report_Error
 #include "Execution.hpp"           // for Execution
 #include "IO.hpp"                  // for IO
+#include "Model.hpp"               // for Model
 
 namespace ELMO2
 {
-// Forward Declarations
-namespace Internal
-{
-class Model;
-}  // namespace Internal
-
 //! @class ELMO_2
 //! @brief This contains the operations that control the rest of the program
 //! passing data between them.

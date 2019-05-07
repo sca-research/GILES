@@ -34,16 +34,17 @@
 
 #include "Error.hpp"  // for Report_Error
 
-// These are need to instantiate the templates at the bottom of the file.
-#include "Coefficients.hpp"
-#include "Emulator_Interface.hpp"
-#include "Execution.hpp"
-#include "Model.hpp"
-
 namespace ELMO2
 {
 namespace Internal
 {
+// Forward Declarations
+// These are need to instantiate the templates at the bottom of the file.
+class Coefficients;
+class Emulator_Interface;
+class Execution;
+class Model;
+
 //! @class Abstract_Factory
 //! @brief This is a static factory class that assists in the construction of
 //! objects. By providing abstraction for the caller, it hides the exact type of

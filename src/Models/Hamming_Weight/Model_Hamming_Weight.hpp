@@ -37,8 +37,7 @@
 #include <unordered_set>  // for unordered_set
 #include <vector>         // for vector
 
-#include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
-#include "Model.hpp"                      // for Model, Hamming_Weight
+#include "Model.hpp"  // for Model_Interface, Hamming_Weight
 
 namespace ELMO2
 {
@@ -55,8 +54,7 @@ class Execution;
 //! Deriving from Model_Factory_Register as well will automatically register
 //! this class within the factory class.
 class Model_Hamming_Weight
-    : public virtual Model_Interface<Model_Hamming_Weight>,
-      public Model_Factory_Register<Model_Hamming_Weight>
+    : public virtual Model_Interface<Model_Hamming_Weight>
 {
 private:
     static const std::unordered_set<std::string> m_required_interaction_terms;
