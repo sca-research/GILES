@@ -31,6 +31,7 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
+#include "Abstract_Factory_Register.hpp"  // for Emulator_Factory_Register
 #include "Assembly_Instruction.hpp"
 #include "Execution.hpp"
 
@@ -38,27 +39,24 @@ namespace ELMO2
 {
 namespace Internal
 {
-//! @class Emulator_Interface
-//! @brief An abstract class that serves as a base class for the interface to a
-//! specific emulator. The emulator will record the Execution of the target
-//! program. This class theoretically allows multiple emulators to be utilised
-//! as per the users choice.
-// TODO: Look into gem5.
-class Emulator_Interface
+//! @class Emulator
+//! @brief An abstract class that serves as a base class for the interface
+//! to a specific emulator. The emulator will record the Execution of the
+//! target program. This class theoretically allows multiple emulators to be
+//! utilised as per the users choice.
+//! This class is not designed to be inherited from directly; instead
+//! Emulator_Interface should be inherited from. This class provides a
+//! non-templated base class to allow handling of derived objects.
+class Emulator
 {
 protected:
-    const std::string m_program_path;  // TODO: This should be optional ideally:
-                                       // Don't pass in path instead pass in
-                                       // binary loaded from IO. Can this simply
-                                       // be loaded as a string or is there a
-                                       // better way?
+    //! The path to the target program.
+    const std::string m_program_path;
 
-    // TODO: ****** GO THROUGH EVERY CLASS WITH RULE OF FIVE *******************
     //! @brief This constructor is marked as protected as it should only be
     //! called by derived classes to assist with initialisation.
-    //! @param p_program_path The path where the program is. TODO: Change this
-    //! to hold the binary instead of path.
-    explicit Emulator_Interface(const std::string& p_program_path)
+    //! @param p_program_path The path where the program is.
+    explicit Emulator(const std::string& p_program_path)
         : m_program_path(p_program_path)
     {
     }
@@ -97,19 +95,42 @@ protected:
 public:
     //! @brief Virtual destructor to ensure proper memory cleanup.
     //! @see https://stackoverflow.com/a/461224
-    virtual ~Emulator_Interface() =
-        default;  // TODO: Should this = default? Rule of
-    // ZERO? http://en.cppreference.com/w/cpp/language/rule_of_three
-    // TODO: Should many functions everywhere be noexcept?
+    virtual ~Emulator() = default;
 
     //! @brief A function to start the process of invoking the emulator and
     //! recording the results.
     //! @returns The recorded Execution of the target program as an Execution
     //! object.
-    virtual const ELMO2::Internal::Execution Run_Code() = 0;
+    virtual const Execution Run_Code() = 0;
 
     //! @todo Document
     virtual const std::string& Get_Extra_Data() = 0;
+};
+
+//! @class Emulator_Interface
+//! @brief This adds self registering factory code to the derived class, given
+//! by derived_t and delegates construction of a base class to the Emulator
+//! class.
+//! @tparam derived_t This should be the same as the derived type. This will add
+//! the self registering factory code automatically, allowing use of the
+//! derived class.
+template <typename derived_t>
+class Emulator_Interface : public Emulator,
+                           public Emulator_Factory_Register<derived_t>
+{
+protected:
+    //! @brief This constructor is marked as protected as it should only be
+    //! called by derived classes to assist with initialisation.
+    //! @param p_program_path The path where the program is.
+    explicit Emulator_Interface(const std::string& p_program_path)
+        : Emulator(p_program_path)
+    {
+    }
+
+public:
+    //! @brief Virtual destructor to ensure proper memory cleanup.
+    //! @see https://stackoverflow.com/a/461224
+    virtual ~Emulator_Interface() = default;
 };
 }  // namespace Internal
 }  // namespace ELMO2

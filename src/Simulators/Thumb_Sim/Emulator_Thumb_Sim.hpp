@@ -21,9 +21,8 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "Abstract_Factory_Register.hpp"  // for Emulator_Factory_Register
-#include "Emulator_Interface.hpp"         // for Emulator_Interface
-#include "Execution.hpp"                  // for Execution
+#include "Emulator.hpp"   // for Emulator_Interface
+#include "Execution.hpp"  // for Execution
 
 #include "simulator.cpp"  // for Simulator
 
@@ -31,10 +30,7 @@ namespace ELMO2
 {
 namespace Internal
 {
-// Doxygen comments are inherited from Emulator_Interface.hpp
-class Emulator_Thumb_Sim : public virtual ELMO2::Internal::Emulator_Interface,
-                           public ELMO2::Internal::Emulator_Factory_Register<
-                               ELMO2::Internal::Emulator_Thumb_Sim>
+class Emulator_Thumb_Sim : public virtual Emulator_Interface<Emulator_Thumb_Sim>
 {
 private:
     Thumb_Simulator::Debug m_execution_recording;
@@ -45,7 +41,7 @@ public:
     //! @param p_program_path The path to the program to be loaded into the
     //! simulator.
     explicit Emulator_Thumb_Sim(const std::string& p_program_path)
-        : ELMO2::Internal::Emulator_Interface(p_program_path)
+        : Emulator_Interface(p_program_path)
     {
     }
 

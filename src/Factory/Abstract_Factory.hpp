@@ -41,7 +41,7 @@ namespace Internal
 // Forward Declarations
 // These are need to instantiate the templates at the bottom of the file.
 class Coefficients;
-class Emulator_Interface;
+class Emulator;
 class Execution;
 class Model;
 
@@ -174,8 +174,7 @@ using Model_Factory =
 //! initialising a separate template is eliminated. Additionally, this
 //! provides for a more meaningful name. To see what is actually going on behind
 //! the scenes, refer to the Abstract_Factory class.
-using Emulator_Factory =
-    Abstract_Factory<Emulator_Interface, const std::string&>;
+using Emulator_Factory = Abstract_Factory<Emulator, const std::string&>;
 
 }  // namespace Internal
 }  // namespace ELMO2

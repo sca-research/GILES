@@ -42,7 +42,7 @@ namespace Internal
 class Model;
 class Execution;
 class Coefficients;
-class Emulator_Interface;
+class Emulator;
 
 //! @class Abstract_Factory_Register
 //! @brief This class is used to assist with the self registration of classes
@@ -143,9 +143,8 @@ using Model_Factory_Register = Abstract_Factory_Register<Model,
 //! eliminated. To see what is actually going on behind the scenes, refer to the
 //! Abstract_Factory_Register class.
 template <typename derived_t>
-using Emulator_Factory_Register = Abstract_Factory_Register<Emulator_Interface,
-                                                            derived_t,
-                                                            const std::string&>;
+using Emulator_Factory_Register =
+    Abstract_Factory_Register<Emulator, derived_t, const std::string&>;
 }  // namespace Internal
 }  // namespace ELMO2
 
