@@ -43,19 +43,6 @@ add_library(lib${PROJECT_NAME} SHARED
     #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE/Emulator_TEMPLATE.cpp
 )
 
-target_include_directories(lib${PROJECT_NAME}
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/Factory
-        ${CMAKE_CURRENT_SOURCE_DIR}/Models
-        ${CMAKE_CURRENT_SOURCE_DIR}/Models/Hamming_Weight
-        ${CMAKE_CURRENT_SOURCE_DIR}/Models/Power
-        #${CMAKE_CURRENT_SOURCE_DIR}/Model/Models/TEMPLATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/Simulators
-        ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/Thumb_Sim
-        #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE
-)
-
 target_compile_options(lib${PROJECT_NAME}
     PRIVATE
         -Wall
@@ -74,6 +61,15 @@ find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(lib${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 endif()
+
+target_include_directories(lib${PROJECT_NAME}
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/Factory
+        ${CMAKE_CURRENT_SOURCE_DIR}/Models
+        ${CMAKE_CURRENT_SOURCE_DIR}/Simulators
+        ${LIEF_INCLUDE_DIRS}
+)
 
 # Link to required external projects
 target_link_libraries(lib${PROJECT_NAME}
