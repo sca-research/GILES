@@ -31,7 +31,7 @@
 //! The list of interaction terms used by this model in order to generate
 //! traces.
 const std::unordered_set<std::string>
-    ELMO2::Internal::Model_TEMPLATE::m_required_interaction_terms = {
+    ELMO2::Internal::Model_TEMPLATE::m_required_interaction_terms{
         "Bit_Flip1",
         "Bit_Flip1_Bit_Interactions",
         "Bit_Flip2",

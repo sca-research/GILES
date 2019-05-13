@@ -35,9 +35,7 @@
 #include <unordered_set>  // for unordered_set
 #include <vector>         // for vector
 
-#include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
-#include "Model.hpp"                      // for Model
-#include "Traces.hpp"                     // for Traces
+#include "Model.hpp"  // for Model_Interface
 
 namespace ELMO2
 {
@@ -53,60 +51,30 @@ class Execution;
 //! designed as a template allowing new models to be added with ease.
 //! Deriving from Model_Factory_Register as well will automatically register
 //! this class within the factory class.
-class Model_TEMPLATE : public virtual ELMO2::Internal::Model,
-                       public ELMO2::Internal::Model_Factory_Register<
-                           ELMO2::Internal::Model_TEMPLATE>
+class Model_TEMPLATE : public virtual Model_Interface<Model_TEMPLATE>
 {
 private:
     static const std::unordered_set<std::string> m_required_interaction_terms;
-
-    //! @brief Retrieves a list of the interaction terms that are used within
-    //! the model. These must be provided by the Coefficients in order for
-    //! the model to function.
-    //! @returns The list of interaction terms used within the model.
-    //! @todo This makes sense to be static but is bad for readability - make
-    //! static in base class? - THIS CAN BE DONE USING CTRP see
-    //! http://blog.aaronballman.com/2011/08/static-polymorphism-in-c/.
-    const std::unordered_set<std::string>&
-    Get_Interaction_Terms() const override
-    // static const std::unordered_set<std::string>& get_interaction_terms()
-    {
-        return ELMO2::Internal::Model_TEMPLATE::m_required_interaction_terms;
-    }
 
 public:
     //! @brief The constructor makes use of the base Model constructor to assist
     //! with initialisation of private member variables.
     Model_TEMPLATE(const ELMO2::Internal::Execution& p_execution,
                    const ELMO2::Internal::Coefficients& p_coefficients)
-        : ELMO2::Internal::Model(p_execution, p_coefficients)
+        : Model_Interface<Model_TEMPLATE>(p_execution, p_coefficients)
     {
-        // This statement registers this class in the factory, allowing access
-        // from elsewhere. Do not delete this or else this class will not appear
-        // in the factory. If you wish to make this class inaccessible, a better
-        // method would be to remove the corresponding cpp file from the build
-        // script.
-        // This is required to be "used" somewhere in order to prevent
-        // the compiler from optimising it away, thus preventing self
-        // registration.
-        // Section 6.6.4.1, point 2 of the linked document states that this
-        // statement will not be optimised away.
-        // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
-        // The void cast does nothing functionally but prevents the compiler
-        // warning about an unused result.
-        (void)m_is_registered;
-
-        // TODO: This can be moved up into Model if CTRP is used. CTRP can work
-        // if a non template interface class is introduced.
-        if (!this->Check_Interaction_Terms())
-        {
-            throw std::logic_error(
-                "Model was not provided with correct "
-                "interaction terms by the Coefficients file.");
-        }
     }
 
     const std::vector<float> Generate_Traces() const override;
+
+    //! @brief Retrieves a list of the interaction terms that are used within
+    //! the model. These must be provided by the Coefficients in order for
+    //! the model to function.
+    //! @returns The list of interaction terms used within the model.
+    static const std::unordered_set<std::string>& get_interaction_terms()
+    {
+        return m_required_interaction_terms;
+    }
 
     //! @brief Retrieves the name of this Model.
     //! @returns The name as a string.
