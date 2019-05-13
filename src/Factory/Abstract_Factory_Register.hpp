@@ -92,7 +92,23 @@ protected:
     //! @brief This has been made protected to ensure the constructor and
     //! the copy constructor cannot be called directly as this class is
     //! designed to be inherited from and not instantiated directly.
-    Abstract_Factory_Register() = default;
+    Abstract_Factory_Register()
+    {
+        // This statement registers this class in the factory, allowing access
+        // from elsewhere. Do not delete this or else this class will not appear
+        // in the factory. If you wish to make this class inaccessible, a better
+        // method would be to remove the corresponding cpp file from the build
+        // script.
+        // This is required to be "used" somewhere in order to prevent
+        // the compiler from optimising it away, thus preventing self
+        // registration.
+        // Section 6.6.4.1, point 2 of the linked document states that this
+        // statement will not be optimised away.
+        // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/n4713.pdf
+        // The void cast does nothing functionally but prevents the compiler
+        // warning about an unused result.
+        (void)derived_t::m_is_registered;
+    }
 
     //! @brief Virtual destructor to ensure proper memory cleanup.
     //! @see https://stackoverflow.com/a/461224
