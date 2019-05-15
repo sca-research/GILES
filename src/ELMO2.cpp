@@ -183,6 +183,8 @@ public:
         // thread safe. This is.
         uint32_t steps_completed{0};
 
+        fmt::print("Starting... (0.0%)\n");
+
 #pragma omp parallel for
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
         {
