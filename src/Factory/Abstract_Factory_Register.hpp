@@ -53,7 +53,7 @@ class Emulator;
 //! The evaulation of this will call the Register function in the Factory class,
 //! registering the type given by T. i.e. The class that derived from this.
 //! @see https://www.bfilipek.com/2018/02/factory-selfregister.html
-template <typename Base, typename derived_t, typename... args_t>
+template <typename base_t, typename derived_t, typename... args_t>
 class Abstract_Factory_Register
 {
 private:
@@ -66,7 +66,7 @@ private:
     //! file.
     //! @returns A unique_ptr to an object of the type given by the derived_t
     //! template.
-    static std::unique_ptr<Base> create(args_t... p_args)
+    static std::unique_ptr<base_t> create(args_t... p_args)
     {
         return std::make_unique<derived_t>(p_args...);
     }
@@ -120,11 +120,9 @@ protected:
 //! @todo Does this inherit the doxygen comments from m_is_registered? - if not,
 //! add doxygen comments.
 //! @todo Add comment explaining why this is outside the class.
-template <typename Base, typename derived_t, typename... args_t>
-bool ELMO2::Internal::Abstract_Factory_Register<Base,
-                                                derived_t,
-                                                args_t...>::m_is_registered =
-    Abstract_Factory<Base, args_t...>::Register(derived_t::Get_Name(), create);
+template <typename base_t, typename derived_t, typename... args_t>
+bool Abstract_Factory_Register<base_t, derived_t, args_t...>::m_is_registered{
+    Abstract_Factory<base_t, args_t...>::Register(get_name(), create)};
 
 //! @brief This exists only to simply the usage of the
 //! Abstract_Factory_Register class. By providing an intermediate, the
