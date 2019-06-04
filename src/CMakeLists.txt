@@ -51,7 +51,6 @@ target_compile_options(lib${PROJECT_NAME}
         -Wpedantic
         -Weffc++
         -Wno-c++98-compat
-        -Werror
         -fdiagnostics-color
 )
 
