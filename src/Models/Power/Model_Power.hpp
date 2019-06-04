@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -40,7 +40,7 @@
 #include "Execution.hpp"
 #include "Model.hpp"  // for Model_Interface, Hamming_Weight
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
@@ -86,15 +86,15 @@ private:
     // related to a specific instruction. This exists for the simple reason of
     // saving the time recalculating the data.
     // TODO: This should inherit from Assembly_Instruction
-    struct Assembly_Instruction_Power : ELMO2::Internal::Assembly_Instruction,
+    struct Assembly_Instruction_Power : GILES::Internal::Assembly_Instruction,
                                         Instruction_Terms_Helper
     {
         Assembly_Instruction_Power(
-            const ELMO2::Internal::Assembly_Instruction& p_instruction,
+            const GILES::Internal::Assembly_Instruction& p_instruction,
             const std::size_t p_operand_1,
             const std::size_t p_operand_2)  // TODO: Encode Operand value into
                                             // Assembly_Instruction
-            : ELMO2::Internal::Assembly_Instruction(p_instruction),
+            : GILES::Internal::Assembly_Instruction(p_instruction),
               Operand_1(p_operand_1), Operand_2(p_operand_2),
               Operand_1_Bit_Interactions(calculate_interactions(p_operand_1)),
               Operand_2_Bit_Interactions(calculate_interactions(p_operand_2))
@@ -119,9 +119,9 @@ private:
     struct Instruction_Terms_Interactions : public Instruction_Terms_Helper
     {
         Instruction_Terms_Interactions(
-            const ELMO2::Internal::Model_Power::Assembly_Instruction_Power&
+            const GILES::Internal::Model_Power::Assembly_Instruction_Power&
                 p_instruction_1,
-            const ELMO2::Internal::Model_Power::Assembly_Instruction_Power&
+            const GILES::Internal::Model_Power::Assembly_Instruction_Power&
                 p_instruction_2)
             : Operand_1_Bit_Flip(calculate_bitflips(p_instruction_1.Operand_1,
                                                     p_instruction_2.Operand_2)),
@@ -260,7 +260,7 @@ private:
     //! Assembly_Instruction_Power.
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
-    const ELMO2::Internal::Model_Power::Assembly_Instruction_Power
+    const GILES::Internal::Model_Power::Assembly_Instruction_Power
     get_instruction_terms(const std::size_t& p_cycle) const
     {
         // Prevents trying to calculate the hamming weight of stalls and
@@ -270,7 +270,7 @@ private:
             // Return a fake instruction to prevent crashing
             // Currently stalls and flushes are stored as zeros in
             // calculations.
-            return ELMO2::Internal::Model_Power::Assembly_Instruction_Power(
+            return GILES::Internal::Model_Power::Assembly_Instruction_Power(
                 Assembly_Instruction("Abnormal State", {"0", "0"}), 0, 0);
         }
 
@@ -280,7 +280,7 @@ private:
             m_execution.Get_Instruction(p_cycle, "Execute");
 
         // Add the next set of operands.
-        return ELMO2::Internal::Model_Power::Assembly_Instruction_Power(
+        return GILES::Internal::Model_Power::Assembly_Instruction_Power(
             m_execution.Get_Instruction(p_cycle, "Execute"),
             m_execution.Get_Operand_Value(p_cycle, instruction, 1),
             m_execution.Get_Operand_Value(p_cycle, instruction, 2));
@@ -374,7 +374,7 @@ private:
     };
 
     double calculate_hamming_weight(
-        const ELMO2::Internal::Model_Power::Assembly_Instruction_Power&
+        const GILES::Internal::Model_Power::Assembly_Instruction_Power&
             p_current_instruction,
         const std::size_t p_operand_index,
         const Instruction p_previous_or_next_instruction,
@@ -429,6 +429,6 @@ public:
     static const std::string Get_Name() { return "Power"; }
 };  // namespace Internal
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES
 
 #endif

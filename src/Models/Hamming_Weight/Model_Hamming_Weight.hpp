@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -39,7 +39,7 @@
 
 #include "Model.hpp"  // for Model_Interface, Hamming_Weight
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
@@ -86,6 +86,6 @@ public:
     static const std::string Get_Name() { return "Hamming Weight"; }
 };
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES
 
 #endif

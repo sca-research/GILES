@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -38,7 +38,7 @@
 
 #include <iostream>
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
@@ -94,7 +94,7 @@ private:
             // understand than a generic json type error.
             catch (const nlohmann::detail::type_error&)
             {
-                ELMO2::Internal::Error::Report_Error(
+                GILES::Internal::Error::Report_Error(
                     "Cannot retrieve value: {} from Coefficients as the chosen "
                     "type: {}",
                     p_coefficients.dump(4),
@@ -111,7 +111,7 @@ private:
                 // found"
                 if (304 == exception.id || 403 == exception.id)
                 {
-                    ELMO2::Internal::Error::Report_Error(
+                    GILES::Internal::Error::Report_Error(
                         "Could not find category at the current place in "
                         "the Coefficients with the given name: \"{}\".\n"
                         "Current place in coefficients:\n{}\n ",
@@ -235,6 +235,6 @@ public:
     double Get_Constant(const std::string& p_opcode) const;
 };
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES
 
 #endif

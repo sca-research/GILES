@@ -1,23 +1,23 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
     @file Main.cpp
-    @brief This file contains a command line entry executable that invokes ELMO2
+    @brief This file contains a command line entry executable that invokes GILES
     with the correct options.
     @author Scott Egerton
     @date 2017-2019
@@ -35,7 +35,7 @@
 #include <cxxopts.hpp>   // for Options, value, OptionAdder, OptionDetails
 #include <fmt/format.h>  // for print
 
-#include "ELMO2.cpp"  // for ELMO_2
+#include "GILES.cpp"  // for GILES
 #include "Error.hpp"  // for Report_Exit
 
 //! Anonymous namespace is used as this functionality is only required when
@@ -61,7 +61,7 @@ std::uint32_t m_number_of_runs;
     {
         fmt::print("{}\n", p_message);
     }
-    ELMO2::Internal::Error::Report_Exit(
+    GILES::Internal::Error::Report_Exit(
         "Please use option --help or -h to see proper usage");
 }
 
@@ -161,7 +161,7 @@ int main(int argc, char* argv[])
 {
     parse_command_line_flags(argc, argv);
 
-    ELMO2::ELMO_2 elmo2 = ELMO2::ELMO_2(m_program_path,
+    GILES::GILES elmo2 = GILES::GILES(m_program_path,
                                         m_coefficients_path,
                                         m_traces_path,
                                         m_number_of_runs,

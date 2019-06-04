@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef EMULATOR_TEMPLATE_HPP
@@ -24,12 +24,12 @@
 #include "Emulator.hpp"   // for Emulator_Interface
 #include "Execution.hpp"  // for Execution
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
 class Emulator_TEMPLATE
-    : public virtual Emulator_Interface<ELMO2::Internal::Emulator_TEMPLATE>
+    : public virtual Emulator_Interface<GILES::Internal::Emulator_TEMPLATE>
 {
 public:
     //! @brief Constructs an Emulator that will simulate the program given by
@@ -41,7 +41,7 @@ public:
     {
     }
 
-    const ELMO2::Internal::Execution Run_Code() override;
+    const GILES::Internal::Execution Run_Code() override;
 
     const std::string& Get_Extra_Data() override;
 
@@ -52,6 +52,6 @@ public:
     static const std::string Get_Name() { return "TEMPLATE"; }
 };
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES
 
 #endif  // EMULATOR_TEMPLATE_HPP

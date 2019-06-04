@@ -1,23 +1,23 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
-    @file ELMO2.cpp
-    @brief This file contains the entry point for ELMO2 and invokes other
+    @file GILES.cpp
+    @brief This file contains the entry point for GILES and invokes other
     operations.
     @author Scott Egerton
     @date 2017-2019
@@ -42,15 +42,15 @@
 #include "IO.hpp"                // for IO
 #include "Model.hpp"             // for Model
 
-namespace ELMO2
+namespace GILES
 {
-//! @class ELMO_2
+//! @class GILES
 //! @brief This contains the operations that control the rest of the program
 //! passing data between them.
-class ELMO_2
+class GILES
 {
 private:
-    const ELMO2::Internal::Coefficients m_coefficients;
+    const Internal::Coefficients m_coefficients;
     const std::string m_program_path;
     const std::string m_model_name;
     const std::string m_simulator_name;
@@ -76,7 +76,7 @@ private:
     {
         std::unordered_set<std::string> models_in_use;
         // Create a list of models to use from a list of all models compiled
-        for (const auto& model : ELMO2::Internal::Model_Factory::Get_All())
+        for (const auto& model : GILES::Internal::Model_Factory::Get_All())
         {
             std::cout << "Found Model: " << model.first << std::endl;
             // if this model is enabled.
@@ -110,7 +110,7 @@ private:
             return false;
         }
 
-        ELMO2::Internal::Error::Report_Warning(
+        Internal::Error::Report_Warning(
             "The target program did not run in a constant number of cycles.\n"
             "If this was not an intentional countermeasure to timing attacks "
             "then this is considered insecure.\n"
@@ -124,30 +124,29 @@ private:
 
 public:
     // TODO: Separate out some of the functionality in here into an API
-    //! @brief The main entry point to the ELMO2 library. This controls the
-    //! running of ELMO2 and invokes other components.
+    //! @brief The main entry point to the GILES library. This controls the
+    //! running of GILES and invokes other components.
     //! @param p_program_path The path to the target executable to be ran in
     //! the emulator.
     //! @param p_coefficients_path The path to the Coefficients file.
     //! @param p_traces_path The path to save the Traces to. This is an
     //! optional parameter and omitting it will cause the traces to not be
     //! saved to a file.
-    ELMO_2(const std::string& p_program_path,
-           const std::string& p_coefficients_path,
-           const std::optional<std::string>& p_traces_path,
-           const std::uint32_t p_number_of_runs,
-           const std::string& p_model_name =
-               "Hamming Weight")  // TODO: Set the default using cmake
-                                  // configuring a static var in an external
-                                  // file.
-    : m_coefficients{ELMO2::Internal::IO().Load_Coefficients(
-          p_coefficients_path)},
+    GILES(const std::string& p_program_path,
+          const std::string& p_coefficients_path,
+          const std::optional<std::string>& p_traces_path,
+          const std::uint32_t p_number_of_runs,
+          const std::string& p_model_name =
+              "Hamming Weight")  // TODO: Set the default using cmake
+                                 // configuring a static var in an external
+                                 // file.
+    : m_coefficients{Internal::IO().Load_Coefficients(p_coefficients_path)},
       m_program_path{p_program_path}, m_model_name{std::move(p_model_name)},
       m_traces_path{p_traces_path}, m_number_of_runs{p_number_of_runs},
       m_serialiser{}
     {
         // Check the supplied model name is valid
-        ELMO2::Internal::Model_Factory::Find(p_model_name);
+        Internal::Model_Factory::Find(p_model_name);
     }
 
     //! @todo Document
@@ -155,7 +154,7 @@ public:
     {
         // Initialise all emulators.
         for (const auto& emulator_interface :
-             ELMO2::Internal::Emulator_Factory::Get_All())
+             Internal::Emulator_Factory::Get_All())
         {
             fmt::print("Using simulator: {}\n", emulator_interface.first);
 
@@ -189,7 +188,7 @@ public:
         for (std::size_t i = 0; i < m_number_of_runs; ++i)
         {
             // Construct the simulator, ready for use.
-            const auto simulator = ELMO2::Internal::Emulator_Factory::Construct(
+            const auto simulator = Internal::Emulator_Factory::Construct(
                 p_simulator_name, m_program_path);
 
             const auto execution = simulator->Run_Code();
@@ -201,15 +200,15 @@ public:
             // TODO: Future: Add support for using multiple models at once using
             // this code.
             /*for (const auto& model_interface :
-                 ELMO2::Internal::Model_Factory::Get_All())
+                 GILES::Internal::Model_Factory::Get_All())
             {
 
             // Construct the model, ready for use.
-            const auto model = ELMO2::Internal::Model_Factory::Construct(
+            const auto model = GILES::Internal::Model_Factory::Construct(
                 model_interface.first, execution, m_coefficients);*/
 
             // Construct the model, ready for use.
-            const auto model = ELMO2::Internal::Model_Factory::Construct(
+            const auto model = Internal::Model_Factory::Construct(
                 m_model_name, execution, m_coefficients);
 
             // If this is not the first trace gathered then ensure that all
@@ -254,4 +253,4 @@ public:
         return m_traces;
     }
 };
-}  // namespace ELMO2
+}  // namespace GILES

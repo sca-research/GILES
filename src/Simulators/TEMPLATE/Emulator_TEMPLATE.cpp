@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -26,7 +26,7 @@
 #include "Emulator_TEMPLATE.hpp"
 #include "Execution.hpp"
 
-const ELMO2::Internal::Execution ELMO2::Internal::Emulator_TEMPLATE::Run_Code()
+const GILES::Internal::Execution GILES::Internal::Emulator_TEMPLATE::Run_Code()
 {
     // *** Place your code here ***
     //! @note m_program_path Should contain the path to the target program.

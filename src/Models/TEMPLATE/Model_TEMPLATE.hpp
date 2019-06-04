@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -37,7 +37,7 @@
 
 #include "Model.hpp"  // for Model_Interface
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
@@ -59,8 +59,8 @@ private:
 public:
     //! @brief The constructor makes use of the base Model constructor to assist
     //! with initialisation of private member variables.
-    Model_TEMPLATE(const ELMO2::Internal::Execution& p_execution,
-                   const ELMO2::Internal::Coefficients& p_coefficients)
+    Model_TEMPLATE(const GILES::Internal::Execution& p_execution,
+                   const GILES::Internal::Coefficients& p_coefficients)
         : Model_Interface<Model_TEMPLATE>(p_execution, p_coefficients)
     {
     }
@@ -83,6 +83,6 @@ public:
     static const std::string Get_Name() { return "TEMPLATE"; }
 };
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES
 
 #endif

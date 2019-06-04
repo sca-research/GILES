@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -37,7 +37,7 @@
 #include "Execution.hpp"
 #include "Model_Math.hpp"
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
@@ -45,13 +45,13 @@ class Model
 {
 protected:
     //! The execution of the target program as recorded by the Emulator.
-    const ELMO2::Internal::Execution m_execution;
+    const GILES::Internal::Execution m_execution;
 
     //! The Coefficients created by measuring real hardware traces.
-    const ELMO2::Internal::Coefficients& m_coefficients;
+    const GILES::Internal::Coefficients& m_coefficients;
 
-    Model(const ELMO2::Internal::Execution& p_execution,
-          const ELMO2::Internal::Coefficients& p_coefficients)
+    Model(const GILES::Internal::Execution& p_execution,
+          const GILES::Internal::Coefficients& p_coefficients)
         : m_execution(p_execution), m_coefficients(p_coefficients)
     {
     }
@@ -85,8 +85,8 @@ protected:
     //! provided by the Emulator.
     //! @param p_coefficients The loaded Coefficients from real hardware
     //! traces.
-    Model_Interface(const ELMO2::Internal::Execution& p_execution,
-                    const ELMO2::Internal::Coefficients& p_coefficients)
+    Model_Interface(const GILES::Internal::Execution& p_execution,
+                    const GILES::Internal::Coefficients& p_coefficients)
         : Model(p_execution, p_coefficients)
     {
         if (!Check_Interaction_Terms())
@@ -137,6 +137,6 @@ public:
     }
 };
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES
 
 #endif

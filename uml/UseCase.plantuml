@@ -1,6 +1,6 @@
 @startuml
 
-title ELMO-2 - Use Case Diagram
+title GILES - Use Case Diagram
 
 
 rectangle ELMO {

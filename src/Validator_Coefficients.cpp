@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -29,7 +29,7 @@
 
 #include "Validator_Coefficients.hpp"
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
@@ -39,7 +39,7 @@ namespace Internal
 //! nlohmann::json object.
 //! returns This does not return anything as instead an exception will be
 //! thrown if a rule fails.
-void ELMO2::Internal::Validator_Coefficients::Validate_Json(
+void GILES::Internal::Validator_Coefficients::Validate_Json(
     const nlohmann::json& p_coefficients)
 {
     Validate_Not_Empty(p_coefficients, "Coefficients file must not be empty.");
@@ -118,7 +118,7 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Json(
 //! @param p_json The json to be validated
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the JSON is an empty structure.
-void ELMO2::Internal::Validator_Coefficients::Validate_Not_Empty(
+void GILES::Internal::Validator_Coefficients::Validate_Not_Empty(
     const nlohmann::json& p_json, const std::string& p_exception_message)
 {
     if (p_json.empty())
@@ -131,7 +131,7 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Not_Empty(
 //! @param p_json The json to be validated
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the JSON is an not an object.
-void ELMO2::Internal::Validator_Coefficients::Validate_Is_Object(
+void GILES::Internal::Validator_Coefficients::Validate_Is_Object(
     const nlohmann::json& p_json)
 {
     if (!p_json.is_object())
@@ -145,7 +145,7 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Is_Object(
 //! @param p_json The json to be validated
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the JSON is an not a number.
-void ELMO2::Internal::Validator_Coefficients::Validate_Is_Number(
+void GILES::Internal::Validator_Coefficients::Validate_Is_Number(
     const nlohmann::json& p_json)
 {
     if (!p_json.is_number())
@@ -159,7 +159,7 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Is_Number(
 //! @param p_json The json to be validated
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the JSON is an not an array.
-void ELMO2::Internal::Validator_Coefficients::Validate_Is_Array(
+void GILES::Internal::Validator_Coefficients::Validate_Is_Array(
     const nlohmann::json& p_json)
 {
     // TODO: Seperate newly added functionality into different methods.
@@ -186,7 +186,7 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Is_Array(
 //! @param p_json The json to be validated
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the JSON is an not a string.
-void ELMO2::Internal::Validator_Coefficients::Validate_Is_String(
+void GILES::Internal::Validator_Coefficients::Validate_Is_String(
     const nlohmann::json& p_json)
 {
     if (!p_json.is_string())
@@ -203,7 +203,7 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Is_String(
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the "Coefficients" heading was not
 //! found.
-void ELMO2::Internal::Validator_Coefficients::
+void GILES::Internal::Validator_Coefficients::
     Validate_Category_Headings_Coefficients(const nlohmann::json& p_category)
 {
     if (p_category.find("Coefficients") == p_category.end())
@@ -222,7 +222,7 @@ void ELMO2::Internal::Validator_Coefficients::
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the "Constant" heading was not
 //! found.
-void ELMO2::Internal::Validator_Coefficients::
+void GILES::Internal::Validator_Coefficients::
     Validate_Category_Headings_Constant(const nlohmann::json& p_category)
 {
     if (p_category.find("Constant") == p_category.end())
@@ -245,7 +245,7 @@ void ELMO2::Internal::Validator_Coefficients::
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, the correct interaction terms were
 //! not found.
-void ELMO2::Internal::Validator_Coefficients::
+void GILES::Internal::Validator_Coefficients::
     Validate_Category_Correct_Interaction_Terms(
         const nlohmann::json& p_category, const nlohmann::json& p_coefficients)
 {
@@ -280,7 +280,7 @@ void ELMO2::Internal::Validator_Coefficients::
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, an interaction term does not
 //! contain the correct number of values.
-void ELMO2::Internal::Validator_Coefficients::
+void GILES::Internal::Validator_Coefficients::
     Validate_Category_Interaction_Terms_Size(
         const nlohmann::json& p_category, const nlohmann::json& p_coefficients)
 {
@@ -311,7 +311,7 @@ void ELMO2::Internal::Validator_Coefficients::
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, an instruction was found to have
 //! more than one set of coefficients associated with it.
-void ELMO2::Internal::Validator_Coefficients::Validate_Category_Header_Unique(
+void GILES::Internal::Validator_Coefficients::Validate_Category_Header_Unique(
     const nlohmann::json& p_category,
     const std::string& p_category_key,
     const nlohmann::json& p_coefficients)
@@ -349,7 +349,7 @@ void ELMO2::Internal::Validator_Coefficients::Validate_Category_Header_Unique(
 //! @exception std::ios_base::failure This is thrown in the case that this
 //! validation rule fails. In this case, an instruction was found to have
 //! more than one set of coefficients associated with it.
-void ELMO2::Internal::Validator_Coefficients::
+void GILES::Internal::Validator_Coefficients::
     Validate_Category_Instructions_Unique(const nlohmann::json& p_category,
                                           const std::string& p_category_key,
                                           const nlohmann::json& p_coefficients)
@@ -396,4 +396,4 @@ void ELMO2::Internal::Validator_Coefficients::
     }
 }
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES

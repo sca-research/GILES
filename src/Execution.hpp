@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -43,7 +43,7 @@
 
 #include <iostream>  // for temp debugging
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
@@ -107,7 +107,7 @@ private:
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
     //! @see https://en.wikipedia.org/wiki/Pipeline_stall
-    ELMO2::Internal::Execution::State
+    GILES::Internal::Execution::State
     get_state(const uint32_t p_cycle,
               const std::string& p_pipeline_stage_name) const
     {
@@ -301,7 +301,7 @@ public:
         }
         catch (const std::out_of_range&)
         {
-            ELMO2::Internal::Error::Report_Error(
+            GILES::Internal::Error::Report_Error(
                 "Could not find a value in the pipeline stage \"{}\" "
                 "during clock cycle {}",
                 p_pipeline_stage_name,
@@ -323,7 +323,7 @@ public:
     bool Is_Normal_State(const std::uint32_t p_cycle,
                          const std::string& p_pipeline_stage_name) const
     {
-        return ELMO2::Internal::Execution::State::Normal ==
+        return GILES::Internal::Execution::State::Normal ==
                Get_State(p_cycle, p_pipeline_stage_name);
     }
 
@@ -343,7 +343,7 @@ public:
     bool Is_Normal_State_Unsafe(const std::uint32_t p_cycle,
                                 const std::string& p_pipeline_stage_name) const
     {
-        return ELMO2::Internal::Execution::State::Normal ==
+        return GILES::Internal::Execution::State::Normal ==
                Get_State_Unsafe(p_cycle, p_pipeline_stage_name);
     }
 
@@ -361,7 +361,7 @@ public:
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
     // TODO: Settle on using boost for all string functions or not using
     // boost.
-    const ELMO2::Internal::Assembly_Instruction
+    const GILES::Internal::Assembly_Instruction
     Get_Instruction(const uint32_t p_cycle,
                     const std::string& p_pipeline_stage_name) const
     {
@@ -373,14 +373,14 @@ public:
         // variable.
         // TODO: Some instructions don't have operands, this fails with those.
         std::string opcode =
-            ELMO2::Internal::Utility::string_split_head_pop(&instruction, " ");
+            GILES::Internal::Utility::string_split_head_pop(&instruction, " ");
 
         // Remove white space
         boost::algorithm::trim(instruction);
 
         // Convert the rest of the instruction into a list of operands
         std::vector<std::string> operands =
-            ELMO2::Internal::Utility::string_split(instruction, ",");
+            GILES::Internal::Utility::string_split(instruction, ",");
 
         /*
          *std::vector<std::uint32_t> operand_values;
@@ -500,7 +500,7 @@ public:
     //! value, not the address.
     std::size_t Get_Operand_Value(
         const std::size_t p_cycle,
-        const ELMO2::Internal::Assembly_Instruction& p_instruction,
+        const GILES::Internal::Assembly_Instruction& p_instruction,
         const std::uint8_t p_operand_number) const
     {
         try
@@ -526,7 +526,7 @@ public:
     //! instruction and their new values.
     //! @returns A vector of Registers.
     /*
-     *const std::vector<ELMO2::Internal::Register>& get_changed_registers()
+     *const std::vector<GILES::Internal::Register>& get_changed_registers()
      *const
      *{
      *    return m_changed_registers;
@@ -534,6 +534,6 @@ public:
      */
 };
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES
 
 #endif  // EXECUTION_HPP

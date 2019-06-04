@@ -11,8 +11,8 @@
   * [Running tests](#running-tests)
     + [Coverage information](#coverage-information)
 - [CMake Configuration Options](#cmake-configuration-options)
-  * [ELMO2_BUILD_DOCUMENTATION](#elmo2_build_documentation)
-  * [ELMO2_CALCULATE_COVERAGE](#elmo2_calculate_coverage)
+  * [GILES_BUILD_DOCUMENTATION](#elmo2_build_documentation)
+  * [GILES_CALCULATE_COVERAGE](#elmo2_calculate_coverage)
 
 <!-- tocstop -->
 
@@ -88,11 +88,11 @@ cmake --build . --target tests
 In order to generate code coverage information, [Gcovr](https://gcovr.com/) is
 required.
 
-1) **Regenerate the build files** using the option [shown below](#ELMO2_calculate_coverage) from the build
+1) **Regenerate the build files** using the option [shown below](#GILES_calculate_coverage) from the build
 directory. This is needed as specific compile flags need to be added in order to
 generate coverage information.
 ```
-cmake /path/to/source/directory/traces_serialiser -DELMO2_CALCULATE_COVERAGE=ON
+cmake /path/to/source/directory/traces_serialiser -DGILES_CALCULATE_COVERAGE=ON
 ```
 
 2) **Run this command.** This will tell the native build system to build the
@@ -111,15 +111,15 @@ folder `coverage` which should have been created in your *`build directory`*.
 These are all CMake options and can be appended to the CMake generate command.
 For example, from the build directory:
 ```
-cmake /path/to/source/directory/ -DELMO2_BUILD_DOCUMENTATION
+cmake /path/to/source/directory/ -DGILES_BUILD_DOCUMENTATION
 ```
 
-### ELMO2_BUILD_DOCUMENTATION
+### GILES_BUILD_DOCUMENTATION
 
 This option will always built the "doc" target when the target "all" is built.
 See [API Documentation section.](#api-documentation)
 
-### ELMO2_CALCULATE_COVERAGE
+### GILES_CALCULATE_COVERAGE
 
 This is needed to generate code coverage information.
 See [Coverage information](#coverage-information) for details on how to do this.

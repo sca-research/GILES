@@ -1,6 +1,6 @@
-# ELMO2
+# GILES
 
-ELMO2 is designed to help software engineers quickly identify
+GILES is designed to help software engineers quickly identify
 [side channel](https://en.wikipedia.org/wiki/Side-channel_attack)
 security risks during development stages.
 
@@ -57,15 +57,15 @@ ability to get random data inside the simulator.
 The target program should be edited to replace the target
 data, such as the cryptographic key, with randomly generated values.
 
-3) **Run ELMO2.**
+3) **Run GILES.**
 Here is an example of the most common usage.
 ```
-./ELMO-2 my-program-binary-from-step-2 -o output-file.trs
+./GILES my-program-binary-from-step-2 -o output-file.trs
 ```
 Note that this requires the file coeffs.json to be in the same directory.
 This can be overridden like so:
 ```
-./ELMO-2 my-program-binary-from-step-2 some-path/coeffs.json -o output-file.trs
+./GILES my-program-binary-from-step-2 some-path/coeffs.json -o output-file.trs
 ```
 
 4) Done! Perform whatever side channel attacks/analysis you want on the
@@ -74,13 +74,13 @@ This can be overridden like so:
 ## All command line options
 All command line options can be printed using the -h or --help flags shown here:
 ```
-./ELMO-2 --help
+./GILES --help
 ```
 This should produce the result below.
 ```
 Side channel leakage emulation tool
 Usage:
-  bin/ELMO-2 [OPTION...] [--input] EXECUTABLE [--file] COEFFICIENTS
+  bin/GILES [OPTION...] [--input] EXECUTABLE [--file] COEFFICIENTS
 
   -h, --help                    Print help
   -r, --runs N                  Number of traces to generate (default: 1)
@@ -121,7 +121,7 @@ There will be a document describing how to do this at some point.
 
 ## Output format
 
-ELMO2 currently saves traces in the `.trs` format.
+GILES currently saves traces in the `.trs` format.
 This format is designed for use in
 [Riscure's Inspector](https://www.riscure.com/security-tools/inspector-sca/),
 but can be interpreted in
@@ -152,7 +152,7 @@ cmake --build . --target doc
 ```
 
 Additionally, enabling the cmake configuration option
-`ELMO2_BUILD_DOCUMENTATION` will generate the documentation every
+`GILES_BUILD_DOCUMENTATION` will generate the documentation every
 time you compile.
 
 ## Building
@@ -187,4 +187,4 @@ Get a summary of this license
 This project has received funding from the European Research Council (ERC) under the European Union’s
 Horizon 2020 research and innovation programme (grant agreement No 725042).
 
-![EU Logo](https://github.com/bristol-sca/ELMO2/blob/master/LOGO_ERC-FLAG_EU.jpg "ERC")
+![EU Logo](https://github.com/bristol-sca/GILES/blob/master/LOGO_ERC-FLAG_EU.jpg "ERC")

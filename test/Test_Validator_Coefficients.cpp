@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -40,7 +40,7 @@ TEST_CASE("JSON is not blank"
         REQUIRE_NOTHROW(json = {});
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Coefficients file must not be empty."));
     }
 
@@ -50,7 +50,7 @@ TEST_CASE("JSON is not blank"
             "Invalid Coefficients")"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON object, found: "));
     }
 
@@ -62,7 +62,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON object, found: "));
     }
 
@@ -75,7 +75,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON object, found: "));
     }
 
@@ -87,7 +87,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Coefficients file must not contain "
                                       "empty coefficient categories."));
     }
@@ -103,7 +103,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each category in the Coefficients "
                                       "file must contain a Constant value."));
     }
@@ -113,7 +113,7 @@ TEST_CASE("JSON is not blank"
         json = R"({"ALU" : {"Coefficients" : {"Hello" : "World"}}})"_json;
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each category in the Coefficients "
                                       "file must contain a Constant value."));
     }
@@ -129,7 +129,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each category in the Coefficients "
                                       "file must contain a set of "
                                       "Coefficients."));
@@ -150,7 +150,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON number, found: "));
     }
 
@@ -166,7 +166,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON object, found: "));
     }
 
@@ -185,7 +185,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON array, found: "));
     }
 
@@ -204,7 +204,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each interaction term in the "
                                       "Coefficients file must contain at least "
                                       "one value."));
@@ -225,7 +225,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON number, found: "));
     }
 
@@ -245,7 +245,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Categories in the Coefficients file "
                                       "must not contain an empty list of "
                                       "instructions"));
@@ -267,7 +267,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON array, found: "));
     }
 
@@ -287,7 +287,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Expected a JSON string, found: "));
     }
 
@@ -307,7 +307,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each instruction in the Coefficients "
                                       "file must have only one set of "
                                       "Coefficients associated with it."));
@@ -338,7 +338,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each instruction in the Coefficients "
                                       "file must have only one set of "
                                       "Coefficients associated with it."));
@@ -369,7 +369,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each instruction in the Coefficients "
                                       "file must have only one set of "
                                       "Coefficients associated with it."));
@@ -400,7 +400,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each instruction in the Coefficients "
                                       "file must have only one set of "
                                       "Coefficients associated with it."));
@@ -431,7 +431,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("The same interaction terms must be "
                                       "provided for all categories in the "
                                       "Coefficients file."));
@@ -462,7 +462,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("The same interaction terms must be "
                                       "provided for all categories in the "
                                       "Coefficients file."));
@@ -491,7 +491,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("The same interaction terms must be "
                                       "provided for all categories in the "
                                       "Coefficients file."));
@@ -520,7 +520,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_THROWS_WITH(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json),
+            GILES::Internal::Validator_Coefficients::Validate_Json(json),
             Catch::Matchers::Contains("Each interaction term in the "
                                       "Coefficients file must contain the same "
                                       "amount of values for each category."));
@@ -552,7 +552,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_NOTHROW(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json));
+            GILES::Internal::Validator_Coefficients::Validate_Json(json));
     }
 
     SECTION("Valid Coefficients, one category")
@@ -579,7 +579,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_NOTHROW(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json));
+            GILES::Internal::Validator_Coefficients::Validate_Json(json));
     }
 
     SECTION("Valid Coefficients, second has category")
@@ -606,7 +606,7 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_NOTHROW(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json));
+            GILES::Internal::Validator_Coefficients::Validate_Json(json));
     }
 
     SECTION("Valid Coefficients, two categories")
@@ -634,6 +634,6 @@ TEST_CASE("JSON is not blank"
                 })"));
 
         REQUIRE_NOTHROW(
-            ELMO2::Internal::Validator_Coefficients::Validate_Json(json));
+            GILES::Internal::Validator_Coefficients::Validate_Json(json));
     }
 }

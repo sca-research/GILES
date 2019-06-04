@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -28,7 +28,7 @@
 
 #include "Coefficients.hpp"
 
-namespace ELMO2
+namespace GILES
 {
 namespace Internal
 {
@@ -45,7 +45,7 @@ namespace Internal
 //! given by p_opcode is not found within any category in the coefficients.
 //! @see https://eprint.iacr.org/2016/517 Section 4.2 for more on the
 //! categories.
-const std::string& ELMO2::Internal::Coefficients::Get_Instruction_Category(
+const std::string& GILES::Internal::Coefficients::Get_Instruction_Category(
     const std::string& p_opcode) const
 {
     for (const auto& category : m_coefficients.items())
@@ -83,7 +83,7 @@ const std::string& ELMO2::Internal::Coefficients::Get_Instruction_Category(
 //! unordered set is used as the json standard dictates that json data is
 //! unordered therefore we should not expect any particular order.
 const std::unordered_set<std::string>
-ELMO2::Internal::Coefficients::Get_Interaction_Terms() const
+GILES::Internal::Coefficients::Get_Interaction_Terms() const
 {
     std::unordered_set<std::string> interaction_terms;
     for (const auto& interaction_term :
@@ -102,7 +102,7 @@ ELMO2::Internal::Coefficients::Get_Interaction_Terms() const
 //! @param p_interaction_term The interaction term from within the model
 //! that the Coefficients are required for.
 //! @returns An ordered vector of the coefficient values.
-const std::vector<double> ELMO2::Internal::Coefficients::Get_Coefficients(
+const std::vector<double> GILES::Internal::Coefficients::Get_Coefficients(
     const std::string& p_opcode, const std::string& p_interaction_term) const
 {
     return get_coefficient<std::vector<double>>(p_opcode, p_interaction_term);
@@ -115,9 +115,9 @@ const std::vector<double> ELMO2::Internal::Coefficients::Get_Coefficients(
 //! @returns The value of the constant for the category that the
 //! instruction belongs to.
 double
-ELMO2::Internal::Coefficients::Get_Constant(const std::string& p_opcode) const
+GILES::Internal::Coefficients::Get_Constant(const std::string& p_opcode) const
 {
     return get_value_opcode<double>(p_opcode, "Constant");
 }
 }  // namespace Internal
-}  // namespace ELMO2
+}  // namespace GILES

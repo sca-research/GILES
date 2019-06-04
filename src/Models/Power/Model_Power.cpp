@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -33,7 +33,7 @@
 //! The list of interaction terms used by this model in order to generate
 //! traces.
 const std::unordered_set<std::string>
-    ELMO2::Internal::Model_Power::m_required_interaction_terms{
+    GILES::Internal::Model_Power::m_required_interaction_terms{
         "Bit_Flip1",
         "Bit_Flip1_Bit_Interactions",
         "Bit_Flip2",
@@ -57,7 +57,7 @@ const std::unordered_set<std::string>
 //! @brief This function contains the mathematical calculations that generate
 //! the Traces.
 //! @returns The generated Traces for the target program.
-const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
+const std::vector<float> GILES::Internal::Model_Power::Generate_Traces() const
 {
 
     //! A sliding window that stores information about the previous, current and
@@ -66,7 +66,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
     //! previous and current instruction in calculations.
     //! This is done in advance as the loop below only adds the next
     //! instruction.
-    std::deque<ELMO2::Internal::Model_Power::Assembly_Instruction_Power>
+    std::deque<GILES::Internal::Model_Power::Assembly_Instruction_Power>
         instructions_window{
             {get_instruction_terms(0), get_instruction_terms(1)}};
 
@@ -77,7 +77,7 @@ const std::vector<float> ELMO2::Internal::Model_Power::Generate_Traces() const
     //! The interactions between the instructions stored in instructions_window.
     //! This constructs the deque and adds one item to it, the interactions
     //! between the first and second instructions.
-    std::deque<ELMO2::Internal::Model_Power::Instruction_Terms_Interactions>
+    std::deque<GILES::Internal::Model_Power::Instruction_Terms_Interactions>
         instruction_interactions_window(
             {{previous_instruction, current_instruction}});
 

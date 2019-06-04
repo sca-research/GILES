@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -36,13 +36,13 @@
 //! The list of interaction terms used by this model in order to generate
 //! traces.
 const std::unordered_set<std::string>
-    ELMO2::Internal::Model_Hamming_Weight::m_required_interaction_terms{};
+    GILES::Internal::Model_Hamming_Weight::m_required_interaction_terms{};
 
 //! @brief This function contains the mathematical calculations that generate
 //! the Traces.
 //! @returns The generated Traces for the target program.
 const std::vector<float>
-ELMO2::Internal::Model_Hamming_Weight::Generate_Traces() const
+GILES::Internal::Model_Hamming_Weight::Generate_Traces() const
 {
     std::vector<float> traces;
 

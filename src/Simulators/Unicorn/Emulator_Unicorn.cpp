@@ -1,18 +1,18 @@
 /*
-    This file is part of ELMO-2.
+    This file is part of GILES.
 
-    ELMO-2 is free software: you can redistribute it and/or modify
+    GILES is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    ELMO-2 is distributed in the hope that it will be useful,
+    GILES is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
     You should have received a copy of the GNU Affero General Public License
-    along with ELMO-2.  If not, see <http://www.gnu.org/licenses/>.
+    along with GILES.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 /*!
@@ -105,11 +105,11 @@ static void hook_code(uc_engine* uc,
                user_data);
 }
 
-const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Unicorn::Run_Code()
+const GILES::Internal::Execution GILES::Internal::Emulator_Unicorn::Run_Code()
 {
     std::ifstream input(/*"/home/se17322/Downloads/thumb_simulator/examples/"*/
                         /*"naive-aes/naive-aes.bin"*/
-                        "/home/se17322/build/ELMO-2/bin/ELMO-2",
+                        "/home/se17322/build/GILES/bin/GILES",
                         std::ios::binary);
 
     // copies all data into buffer
@@ -152,7 +152,7 @@ const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Unicorn::Run_Code()
 
     const auto start_address =
         elf_loader("/home/se17322/projects/test-aes/naive-aes.elf");
-    //"/home/se17322/build/ELMO-2/bin/ELMO-2");
+    //"/home/se17322/build/GILES/bin/GILES");
     //
     /*
      *uc_reg_write(uc, UC_ARM_REG_SP, &sp);
@@ -243,16 +243,16 @@ const ELMO2::Internal::Execution ELMO2::Internal::Emulator_Unicorn::Run_Code()
     return Execution{5};  // TODO: Change this.
 }
 
-const std::string& ELMO2::Internal::Emulator_Unicorn::Get_Extra_Data()
+const std::string& GILES::Internal::Emulator_Unicorn::Get_Extra_Data()
 {
     const auto string = new std::string();
     return *string;
-    // return ELMO2::Internal::Emulator_Unicorn::Get_Name();
+    // return GILES::Internal::Emulator_Unicorn::Get_Name();
 }
 
 // Load an .elf file into unicorn's memory using LIEF
 std::uint64_t
-ELMO2::Internal::Emulator_Unicorn::elf_loader(const std::string& p_file)
+GILES::Internal::Emulator_Unicorn::elf_loader(const std::string& p_file)
 {
     const auto elf_file = LIEF::ELF::Parser::parse(p_file);
     std::cout << *elf_file;
@@ -327,7 +327,7 @@ ELMO2::Internal::Emulator_Unicorn::elf_loader(const std::string& p_file)
     return elf_file->entrypoint();
 }
 
-void ELMO2::Internal::Emulator_Unicorn::mem_write(
+void GILES::Internal::Emulator_Unicorn::mem_write(
     const LIEF::ELF::Section& p_section)
 {
     const auto& address = p_section.virtual_address();
@@ -338,7 +338,7 @@ void ELMO2::Internal::Emulator_Unicorn::mem_write(
     uc_mem_write(uc, address, (void*)&p_section.content().data()[0], size);
 }
 
-void ELMO2::Internal::Emulator_Unicorn::mem_write(
+void GILES::Internal::Emulator_Unicorn::mem_write(
     const LIEF::ELF::Segment& p_segment)
 {
     const auto& address = p_segment.virtual_address();
@@ -355,7 +355,7 @@ std::set<std::pair<std::uint64_t, std::uint64_t>> mapped_regions;
 // Maps area into the unicorn emulator between p_start and p_end, or nothing
 // if it was already mapped. Only completes missing portions if there is
 // overlapping with p_start previously-mapped segment
-void ELMO2::Internal::Emulator_Unicorn::map_space(const std::uint64_t p_start,
+void GILES::Internal::Emulator_Unicorn::map_space(const std::uint64_t p_start,
                                                   const std::uint64_t p_end)
 {
     // If the region given by p_start and p_end is contained within a
