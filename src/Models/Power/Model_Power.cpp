@@ -196,65 +196,13 @@ const std::vector<float> GILES::Internal::Model_Power::Generate_Traces() const
             const auto subsequent_instruction_term = Get_Coefficient(
                 current_opcode, "Subsequent_Instruction", next_opcode);
 
-            // TODO: All hamming functions can be improved.
-            const auto hamming_weight_previous_operand_1 =
-                calculate_hamming_weight(
-                    current_instruction,
-                    1,
-                    Instruction::Previous,
-                    Get_Instruction_Category(previous_opcode));
+            const auto hamming_weight_terms = calculate_hamming_weight_terms(
+                current_instruction, previous_opcode, next_opcode);
 
-            const auto hamming_weight_subsequent_operand_1 =
-                calculate_hamming_weight(current_instruction,
-                                         1,
-                                         Instruction::Subsequent,
-                                         Get_Instruction_Category(next_opcode));
-
-            const auto hamming_weight_previous_operand_2 =
-                calculate_hamming_weight(
-                    current_instruction,
-                    2,
-                    Instruction::Previous,
-                    Get_Instruction_Category(previous_opcode));
-
-            const auto hamming_weight_subsequent_operand_2 =
-                calculate_hamming_weight(current_instruction,
-                                         2,
-                                         Instruction::Subsequent,
-                                         Get_Instruction_Category(next_opcode));
-
-            // TODO: Replace this with a function.
-            const auto hamming_distance_previous_operand_1 =
-                Get_Coefficient(
-                    current_opcode,
-                    "Hamming_Distance_Operand1_Previous_Instruction",
-                    previous_opcode) *
-                Model_Math::Hamming_Distance(current_instruction.Operand_1,
-                                             previous_instruction.Operand_1);
-
-            const auto hamming_distance_subsequent_operand_1 =
-                Get_Coefficient(
-                    current_opcode,
-                    "Hamming_Distance_Operand1_Subsequent_Instruction",
-                    previous_opcode) *
-                Model_Math::Hamming_Distance(current_instruction.Operand_1,
-                                             next_instruction.Operand_1);
-
-            const auto hamming_distance_previous_operand_2 =
-                Get_Coefficient(
-                    current_opcode,
-                    "Hamming_Distance_Operand2_Previous_Instruction",
-                    previous_opcode) *
-                Model_Math::Hamming_Distance(current_instruction.Operand_2,
-                                             previous_instruction.Operand_2);
-
-            const auto hamming_distance_subsequent_operand_2 =
-                Get_Coefficient(
-                    current_opcode,
-                    "Hamming_Distance_Operand2_Subsequent_Instruction",
-                    previous_opcode) *
-                Model_Math::Hamming_Distance(current_instruction.Operand_2,
-                                             next_instruction.Operand_2);
+            const auto hamming_distance_terms =
+                calculate_hamming_distance_terms(current_instruction,
+                                                 previous_instruction,
+                                                 next_instruction);
 
             constant = Get_Constant(current_opcode);
 
@@ -270,16 +218,11 @@ const std::vector<float> GILES::Internal::Model_Power::Generate_Traces() const
                                 bit_flip_2 +
                                 bit_flip_interactions_1 +
                                 bit_flip_interactions_2 +
-                                hamming_weight_previous_operand_1 +
-                                hamming_weight_previous_operand_2 +
-                                hamming_weight_subsequent_operand_1 +
-                                hamming_weight_subsequent_operand_2 +
-                                hamming_distance_previous_operand_1 +
-                                hamming_distance_previous_operand_2 +
-                                hamming_distance_subsequent_operand_1 +
-                                hamming_distance_subsequent_operand_2));
+                                hamming_weight_terms +
+                                hamming_distance_terms));
             // clang-format on
 
+            // fmt::print("{}: {}\n", i, traces.back());
             // Get rid of the now unneeded instruction 2 cycles before.
             instructions_window.pop_front();
             instruction_interactions_window.pop_front();

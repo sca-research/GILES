@@ -365,6 +365,57 @@ private:
         Subsequent
     };
 
+    double calculate_hamming_weight_terms(
+        const Assembly_Instruction_Power& p_current_instruction,
+        const std::string& p_opcode_previous,
+        const std::string& p_opcode_next) const
+    {
+        const auto category_previous =
+            Get_Instruction_Category(p_opcode_previous);
+
+        const auto category_next = Get_Instruction_Category(p_opcode_next);
+
+        return calculate_hamming_weight(p_current_instruction,
+                                        1,
+                                        Instruction::Previous,
+                                        category_previous) +
+               calculate_hamming_weight(p_current_instruction,
+                                        2,
+                                        Instruction::Previous,
+                                        category_previous) +
+               calculate_hamming_weight(p_current_instruction,
+                                        1,
+                                        Instruction::Subsequent,
+                                        category_next) +
+               calculate_hamming_weight(p_current_instruction,
+                                        2,
+                                        Instruction::Subsequent,
+                                        category_next);
+    }
+
+    double calculate_hamming_distance_terms(
+        const Assembly_Instruction_Power& p_current_instruction,
+        const Assembly_Instruction_Power& p_previous_instruction,
+        const Assembly_Instruction_Power& p_next_instruction) const
+    {
+        return calculate_hamming_distance(p_current_instruction,
+                                          p_previous_instruction,
+                                          1,
+                                          Instruction::Previous) +
+               calculate_hamming_distance(p_current_instruction,
+                                          p_previous_instruction,
+                                          2,
+                                          Instruction::Previous) +
+               calculate_hamming_distance(p_current_instruction,
+                                          p_next_instruction,
+                                          1,
+                                          Instruction::Subsequent) +
+               calculate_hamming_distance(p_current_instruction,
+                                          p_next_instruction,
+                                          2,
+                                          Instruction::Subsequent);
+    }
+
     double calculate_hamming_weight(
         const Assembly_Instruction_Power& p_current_instruction,
         const std::size_t p_operand_index,
@@ -388,12 +439,46 @@ private:
                Model_Math::Hamming_Weight(p_current_instruction.Operand_1);
     }
 
+    double calculate_hamming_distance(
+        const Assembly_Instruction_Power& p_current_instruction,
+        const Assembly_Instruction_Power& p_target_instruction,
+        const std::size_t p_operand_index,
+        const Instruction p_previous_or_next_instruction)
+        const  // TODO: Why is this type
+               // double?? What should it be?
+    {
+        const std::string_view instruction{
+            Instruction::Previous == p_previous_or_next_instruction
+                ? "Previous"
+                : "Subsequent"};
+
+        // This is based off of what original elmo does to calculate an
+        // individual term
+        return Get_Coefficient(
+                   p_current_instruction.Get_Opcode(),
+                   fmt::format("Hamming_Distance_Operand{}_{}_Instruction",
+                               p_operand_index,
+                               instruction),
+                   p_target_instruction.Get_Opcode()) *
+               Model_Math::Hamming_Distance(p_current_instruction.Operand_1,
+                                            p_target_instruction.Operand_1);
+    }
+
 public:
     //! @brief The constructor makes use of the base Model constructor to
     //! assist with initialisation of private member variables.
     Model_Power(const Execution& p_execution,
                 const Coefficients& p_coefficients)
-        : Model_Interface<Model_Power>(p_execution, p_coefficients)
+        : Model_Interface<Model_Power>{p_execution, p_coefficients},
+          instructions_window{
+              {get_instruction_terms(0), get_instruction_terms(1)}},
+          previous_instruction{instructions_window.front()},
+          current_instruction{instructions_window[1]},
+          next_instruction{instructions_window.back()}
+    /*
+     *instruction_interactions_window{
+     *    {previous_instruction, current_instruction}}
+     */
     {
     }
 
