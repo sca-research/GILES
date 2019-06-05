@@ -77,9 +77,8 @@ const std::vector<float> GILES::Internal::Model_Power::Generate_Traces() const
     //! The interactions between the instructions stored in instructions_window.
     //! This constructs the deque and adds one item to it, the interactions
     //! between the first and second instructions.
-    std::deque<GILES::Internal::Model_Power::Instruction_Terms_Interactions>
-        instruction_interactions_window(
-            {{previous_instruction, current_instruction}});
+    std::deque<Instruction_Terms_Interactions> instruction_interactions_window(
+        {{previous_instruction, current_instruction}});
 
     std::vector<float> traces;
 

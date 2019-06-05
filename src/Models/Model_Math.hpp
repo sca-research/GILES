@@ -127,7 +127,6 @@ public:
         return result;
     }
 
-public:
     //! @brief Calculates the hamming distance between the two given inputs.
     //! @param p_input_1 The value to find the hamming distance from.
     //! @param p_input_2 The value to find the hamming distance to.
@@ -154,7 +153,7 @@ public:
     //! @see https://en.cppreference.com/w/cpp/language/rule_of_three
     //! @see https://en.cppreference.com/w/cpp/language/copy_assignment
     Model_Math& operator=(const Model_Math&) = delete;
-};  // namespace Internal
+};
 }  // namespace Internal
 }  // namespace GILES
 

@@ -86,7 +86,7 @@ private:
     // related to a specific instruction. This exists for the simple reason of
     // saving the time recalculating the data.
     // TODO: This should inherit from Assembly_Instruction
-    struct Assembly_Instruction_Power : GILES::Internal::Assembly_Instruction,
+    struct Assembly_Instruction_Power : Assembly_Instruction,
                                         Instruction_Terms_Helper
     {
         Assembly_Instruction_Power(
@@ -119,10 +119,8 @@ private:
     struct Instruction_Terms_Interactions : public Instruction_Terms_Helper
     {
         Instruction_Terms_Interactions(
-            const GILES::Internal::Model_Power::Assembly_Instruction_Power&
-                p_instruction_1,
-            const GILES::Internal::Model_Power::Assembly_Instruction_Power&
-                p_instruction_2)
+            const Assembly_Instruction_Power& p_instruction_1,
+            const Assembly_Instruction_Power& p_instruction_2)
             : Operand_1_Bit_Flip(calculate_bitflips(p_instruction_1.Operand_1,
                                                     p_instruction_2.Operand_2)),
               Operand_2_Bit_Flip(calculate_bitflips(p_instruction_1.Operand_1,
@@ -260,7 +258,7 @@ private:
     //! Assembly_Instruction_Power.
     //! @see https://en.wikipedia.org/wiki/Instruction_pipelining
     //! @see https://en.wikipedia.org/wiki/Clock_cycle
-    const GILES::Internal::Model_Power::Assembly_Instruction_Power
+    const Assembly_Instruction_Power
     get_instruction_terms(const std::size_t& p_cycle) const
     {
         // Prevents trying to calculate the hamming weight of stalls and
@@ -270,7 +268,7 @@ private:
             // Return a fake instruction to prevent crashing
             // Currently stalls and flushes are stored as zeros in
             // calculations.
-            return GILES::Internal::Model_Power::Assembly_Instruction_Power(
+            return Assembly_Instruction_Power(
                 Assembly_Instruction("Abnormal State", {"0", "0"}), 0, 0);
         }
 
@@ -280,7 +278,7 @@ private:
             m_execution.Get_Instruction(p_cycle, "Execute");
 
         // Add the next set of operands.
-        return GILES::Internal::Model_Power::Assembly_Instruction_Power(
+        return Assembly_Instruction_Power(
             m_execution.Get_Instruction(p_cycle, "Execute"),
             m_execution.Get_Operand_Value(p_cycle, instruction, 1),
             m_execution.Get_Operand_Value(p_cycle, instruction, 2));
@@ -348,20 +346,14 @@ private:
                           const std::bitset<N>& p_instruction_term) const
     // TODO: Replace bitset with vector of bools everywhere?
     {
-        // This is based off of what original elmo does to calculate an
+        // This is based off of what original Elmo does to calculate an
         // individual term
         const auto coefficients = Get_Coefficients(p_opcode, p_term_name);
         double total{0};
         for (std::size_t i{0}; i < N; ++i)
         {
-            // bit = (p_instruction_term >> i) && bool(1);
             total += p_instruction_term[i] * coefficients[i];
         }
-        /*
-         *return sum_of_scalar_multiply(p_instruction_term,
-         *                              Get_Coefficients(p_opcode,
-         *p_term_name));
-         */
         return total;
     }
 
@@ -374,8 +366,7 @@ private:
     };
 
     double calculate_hamming_weight(
-        const GILES::Internal::Model_Power::Assembly_Instruction_Power&
-            p_current_instruction,
+        const Assembly_Instruction_Power& p_current_instruction,
         const std::size_t p_operand_index,
         const Instruction p_previous_or_next_instruction,
         const std::string& p_opcode_target)
