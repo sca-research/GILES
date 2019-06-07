@@ -73,3 +73,24 @@ add_subdirectory(${EXTERNAL_PROJECT_DIR})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Custom_Flags}")
 add_subdirectory(src)
+
+
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "General Instruction Leakage Simulator")
+set(CPACK_PACKAGE_DESCRIPTION "A tool for simulating side-channel analysis traces")
+set(CMAKE_PROJECT_HOMEPAGE_URL "https://github.com/bristol-sca/GILES")
+set(CPACK_PACKAGE_CONTACT "scott.egerton@bristol.ac.uk")
+
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
+
+set(CPACK_PACKAGE_VERSION_MAJOR "${${PROJECT_NAME}_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${${PROJECT_NAME}_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${${PROJECT_NAME}_VERSION_PATCH}")
+
+if(APPLE)
+    set(CPACK_GENERATOR "productbuild" ${CPACK_GENERATOR})
+endif()
+
+set(CPACK_BINARY_DEB ON)
+set(CPACK_BINARY_RPM ON)
+
+include(CPack)

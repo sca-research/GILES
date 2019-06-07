@@ -27,7 +27,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add library that is built from the source files
-add_library(lib${PROJECT_NAME} SHARED
+add_library(lib${PROJECT_NAME}
     GILES.cpp
     Coefficients.cpp
     IO.cpp
