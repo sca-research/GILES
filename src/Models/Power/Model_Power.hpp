@@ -469,16 +469,7 @@ public:
     //! assist with initialisation of private member variables.
     Model_Power(const Execution& p_execution,
                 const Coefficients& p_coefficients)
-        : Model_Interface<Model_Power>{p_execution, p_coefficients},
-          instructions_window{
-              {get_instruction_terms(0), get_instruction_terms(1)}},
-          previous_instruction{instructions_window.front()},
-          current_instruction{instructions_window[1]},
-          next_instruction{instructions_window.back()}
-    /*
-     *instruction_interactions_window{
-     *    {previous_instruction, current_instruction}}
-     */
+        : Model_Interface<Model_Power>{p_execution, p_coefficients}
     {
     }
 
