@@ -40,7 +40,6 @@ add_library(lib${PROJECT_NAME}
 
     # Simulator files
     ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/Thumb_Sim/Emulator_Thumb_Sim.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Simulators/Unicorn/Emulator_Unicorn.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/Simulators/TEMPLATE/Emulator_TEMPLATE.cpp
 )
 
@@ -68,7 +67,6 @@ target_include_directories(lib${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/Factory
         ${CMAKE_CURRENT_SOURCE_DIR}/Models
         ${CMAKE_CURRENT_SOURCE_DIR}/Simulators
-        ${LIEF_INCLUDE_DIRS}
 )
 
 # Link to required external projects
