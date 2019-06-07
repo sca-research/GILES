@@ -84,6 +84,9 @@ target_link_libraries(lib${PROJECT_NAME}
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 set_target_properties(lib${PROJECT_NAME} PROPERTIES PREFIX "")
 
+
+install(TARGETS lib${PROJECT_NAME} DESTINATION lib)
+
 if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     # Add executable that is a command line wrapper around the library
     add_executable(${PROJECT_NAME} Main.cpp)
@@ -93,5 +96,7 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
             lib${PROJECT_NAME}
             cxxopts
     )
+
+    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 endif()
 
