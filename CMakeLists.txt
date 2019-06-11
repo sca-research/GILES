@@ -91,6 +91,11 @@ if(APPLE)
 endif()
 
 set(CPACK_BINARY_DEB ON)
-set(CPACK_BINARY_RPM ON)
+
+# There is a depenecy bug here "Nothing provides libGILES"
+set(CPACK_BINARY_RPM OFF)
+
+set(CPACK_RPM_PACKAGE_PROVIDES lib${PROJECT_NAME})
+set(CPACK_DEBIAN_PACKAGE_PROVIDES ${CPACK_RPM_PACKAGE_PROVIDES})
 
 include(CPack)

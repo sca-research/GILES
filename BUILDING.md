@@ -11,8 +11,9 @@
   * [Running tests](#running-tests)
     + [Coverage information](#coverage-information)
 - [CMake Configuration Options](#cmake-configuration-options)
-  * [GILES_BUILD_DOCUMENTATION](#elmo2_build_documentation)
-  * [GILES_CALCULATE_COVERAGE](#elmo2_calculate_coverage)
+  * [GILES_BUILD_DOCUMENTATION](#giles_build_documentation)
+  * [GILES_CALCULATE_COVERAGE](#giles_calculate_coverage)
+- [Packaging](#packaging)
 
 <!-- tocstop -->
 
@@ -127,3 +128,15 @@ See [Coverage information](#coverage-information) for details on how to do this.
 **⚠️ Warning ⚠️
 This will enable compile flags that are not recommended for normal
 purposes. Set this to OFF after you are done generating coverage information.**
+
+## Packaging
+
+CMake's CPack is used for packaging.
+
+The command to build and package for your current operating system is
+```
+cmake --build . --target package --config release
+```
+
+Packaging as an [RPM](https://en.wikipedia.org/wiki/RPM_Package_Manager)
+package requires rpmbuild to be installed.
