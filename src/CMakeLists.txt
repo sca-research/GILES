@@ -20,12 +20,6 @@ option(${PROJECT_NAME}_BUILD_EXECUTABLE
     ON
 )
 
-# C++17 is required for std::optional and init if statements
-# C++14 is required for unique pointers
-# C++11 is required for nlohmann_json
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 # Add library that is built from the source files
 add_library(lib${PROJECT_NAME}
     GILES.cpp
@@ -81,6 +75,14 @@ target_link_libraries(lib${PROJECT_NAME}
 
 # Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
 set_target_properties(lib${PROJECT_NAME} PROPERTIES PREFIX "")
+set_target_properties(lib${PROJECT_NAME} PROPERTIES
+    OUTPUT_NAME ${PROJECT_NAME}
+    # C++17 is required for std::optional and init if statements
+    # C++14 is required for unique pointers
+    # C++11 is required for nlohmann_json
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+)
 
 
 install(TARGETS lib${PROJECT_NAME} DESTINATION lib)
@@ -93,6 +95,12 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
         PUBLIC
             lib${PROJECT_NAME}
             cxxopts
+    )
+
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        # C++17 is required for std::optional and init if statements
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON
     )
 
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
