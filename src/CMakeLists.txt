@@ -21,7 +21,7 @@ option(${PROJECT_NAME}_BUILD_EXECUTABLE
 )
 
 # Add library that is built from the source files
-add_library(lib${PROJECT_NAME}
+add_library(lib${PROJECT_NAME} SHARED
     GILES.cpp
     Coefficients.cpp
     IO.cpp
