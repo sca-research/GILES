@@ -39,8 +39,8 @@ There will be documents describing how to do this at some point.
 
 ## Usage
 
-1) **[Download from the releases page](#releases)**
- 🏗️  Coming soon! You'll have to [build it yourself](#building) for now, sorry.
+1) **[Download from the releases page](https://github.com/bristol-sca/GILES/releases)**
+Alternatively, [build it yourself](#building).
 
 2) **Compile your target program for your chosen simulator.**
 Currently only one simulator is supported,
@@ -51,7 +51,8 @@ to help you get started.
 
 It is heavily recommended (but not essential) that you make use of the
 `elmo-funcs.h` file to provide useful functions, such as trigger points and the
-ability to get random data inside the simulator.
+ability to get random data inside the simulator. This can be 
+[found on the releases page.](https://github.com/bristol-sca/GILES/releases)
 
 
 The target program should be edited to replace the target
