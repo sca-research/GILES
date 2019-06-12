@@ -24,6 +24,7 @@
 */
 
 #include "Emulator_TEMPLATE.hpp"
+#include "Error.hpp"
 #include "Execution.hpp"
 
 const GILES::Internal::Execution GILES::Internal::Emulator_TEMPLATE::Run_Code()
@@ -32,4 +33,6 @@ const GILES::Internal::Execution GILES::Internal::Emulator_TEMPLATE::Run_Code()
     //! @note m_program_path Should contain the path to the target program.
     //! @note invoke_emulator(...) will return the output of a binary as a
     //! string. This can be used if the emulator is a binary.
+    Error::Report_Error("Not yet implemented");
 }
+
