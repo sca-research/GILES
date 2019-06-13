@@ -57,6 +57,12 @@ private:
     const std::optional<std::string>& m_traces_path;
     const std::uint32_t m_number_of_runs;
 
+    // These options are related to fault injection.
+    bool fault;
+    std::uint32_t m_fault_cycle;
+    std::string m_fault_register;
+    std::uint8_t m_fault_bit;
+
     // Future: This data is stored here as well as in Traces_Serialiser as it
     // should be able to be accessed programmatically in the future.
     // TODO: Add getter.
@@ -143,7 +149,7 @@ public:
     : m_coefficients{Internal::IO().Load_Coefficients(p_coefficients_path)},
       m_program_path{p_program_path}, m_model_name{std::move(p_model_name)},
       m_traces_path{p_traces_path}, m_number_of_runs{p_number_of_runs},
-      m_serialiser{}
+      m_serialiser{}, fault{false}
     {
         // Check the supplied model name is valid
         Internal::Model_Factory::Find(p_model_name);
@@ -170,12 +176,22 @@ public:
         }
     }
 
+    void Inject_Fault(const std::uint32_t p_cycle_to_fault,
+                      const std::string& p_register_to_fault,
+                      const std::uint8_t p_bit_to_fault)
+    {
+        fault            = true;
+        m_fault_cycle    = p_cycle_to_fault;
+        m_fault_register = p_register_to_fault;
+        m_fault_bit      = p_bit_to_fault;
+    }
+
     //! @brief Runs the simulator given by p_simulator_name and TODO:
     decltype(m_traces) Run_Simulator(const std::string& p_simulator_name)
     {
         fmt::print("Using model: {}\n", m_model_name);
 
-        // Enusres that the constant time warning is not printed over and over.
+        // Ensures that the constant time warning is not printed over and over.
         bool warning_printed{false};
 
         // Used to indicate progress to the user. 'i' is not used as it is not
@@ -190,6 +206,12 @@ public:
             // Construct the simulator, ready for use.
             const auto simulator = Internal::Emulator_Factory::Construct(
                 p_simulator_name, m_program_path);
+
+            if (fault)
+            {
+                simulator->Inject_Fault(
+                    m_fault_cycle, m_fault_register, m_fault_bit);
+            }
 
             const auto execution = simulator->Run_Code();
 

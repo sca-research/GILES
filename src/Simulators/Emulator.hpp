@@ -103,6 +103,17 @@ public:
     //! object.
     virtual const Execution Run_Code() = 0;
 
+    //! @brief A function to request to inject a fault in the simulator.
+    //! @param p_cycle_to_fault The clock cycle indicating when to inject the
+    //! fault.
+    //! @param p_register_to_fault The name of the register to inject the fault
+    //! into.
+    //! @param p_bit_to_fault The index of the bit to be faulted.
+    //! @see https://en.wikipedia.org/wiki/Fault_injection
+    virtual void Inject_Fault(const std::uint32_t p_cycle_to_fault,
+                              const std::string& p_register_to_fault,
+                              const std::uint8_t p_bit_to_fault) = 0;
+
     //! @todo Document
     virtual const std::string& Get_Extra_Data() = 0;
 };

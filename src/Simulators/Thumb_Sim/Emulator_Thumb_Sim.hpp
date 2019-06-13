@@ -33,6 +33,7 @@ namespace Internal
 class Emulator_Thumb_Sim : public virtual Emulator_Interface<Emulator_Thumb_Sim>
 {
 private:
+    Simulator m_simulator;
     Thumb_Simulator::Debug m_execution_recording;
 
 public:
@@ -41,13 +42,17 @@ public:
     //! @param p_program_path The path to the program to be loaded into the
     //! simulator.
     explicit Emulator_Thumb_Sim(const std::string& p_program_path)
-        : Emulator_Interface(p_program_path)
+        : Emulator_Interface{p_program_path}, m_simulator{}
     {
     }
 
     const GILES::Internal::Execution Run_Code() override;
 
     const std::string& Get_Extra_Data() override;
+
+    void Inject_Fault(const std::uint32_t p_cycle_to_fault,
+                      const std::string& p_register_to_fault,
+                      const std::uint8_t p_bit_to_fault) override;
 
     //! @brief Retrieves the name of this Emulator.
     //! @returns The name as a string.

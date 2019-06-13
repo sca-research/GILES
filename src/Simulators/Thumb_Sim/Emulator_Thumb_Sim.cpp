@@ -28,15 +28,16 @@
 
 #include <iostream>  // for temp debugging
 
+#include "simulator/regfile.h"  // for Reg
+
 #include "Emulator_Thumb_Sim.hpp"
 #include "Execution.hpp"
 
 const GILES::Internal::Execution GILES::Internal::Emulator_Thumb_Sim::Run_Code()
 {
-    Simulator simulator;
-    simulator.run(m_program_path);
+    m_simulator.run(m_program_path);
 
-    m_execution_recording = simulator.Get_Cycle_Recorder();
+    m_execution_recording = m_simulator.Get_Cycle_Recorder();
 
     // Retrieve the results from the simulator
     const auto& fetch   = m_execution_recording.Get_Fetch();
@@ -70,4 +71,94 @@ const GILES::Internal::Execution GILES::Internal::Emulator_Thumb_Sim::Run_Code()
 const std::string& GILES::Internal::Emulator_Thumb_Sim::Get_Extra_Data()
 {
     return m_execution_recording.Get_Extra_Data();
+}
+
+void GILES::Internal::Emulator_Thumb_Sim::Inject_Fault(
+    const std::uint32_t p_cycle_to_fault,
+    const std::string& p_register_to_fault,
+    const std::uint8_t p_bit_to_fault)
+{
+    const Reg register_to_fault{[&p_register_to_fault] {
+        if ("R0" == p_register_to_fault)
+        {
+            return Reg::R0;
+        }
+        if ("R1" == p_register_to_fault)
+        {
+            return Reg::R1;
+        }
+        if ("R2" == p_register_to_fault)
+        {
+            return Reg::R2;
+        }
+        if ("R3" == p_register_to_fault)
+        {
+            return Reg::R3;
+        }
+        if ("R4" == p_register_to_fault)
+        {
+            return Reg::R4;
+        }
+        if ("R5" == p_register_to_fault)
+        {
+            return Reg::R5;
+        }
+        if ("R6" == p_register_to_fault)
+        {
+            return Reg::R6;
+        }
+        if ("R7" == p_register_to_fault)
+        {
+            return Reg::R7;
+        }
+        if ("R8" == p_register_to_fault)
+        {
+            return Reg::R8;
+        }
+        if ("R9" == p_register_to_fault)
+        {
+            return Reg::R9;
+        }
+        if ("R10" == p_register_to_fault)
+        {
+            return Reg::R10;
+        }
+        if ("R11" == p_register_to_fault)
+        {
+            return Reg::R11;
+        }
+        if ("R12" == p_register_to_fault)
+        {
+            return Reg::R12;
+        }
+        if ("R13" == p_register_to_fault || "MSP" == p_register_to_fault)
+        {
+            return Reg::MSP;
+        }
+        if ("R14" == p_register_to_fault || "LR" == p_register_to_fault)
+        {
+            return Reg::LR;
+        }
+        if ("R15" == p_register_to_fault || "PC" == p_register_to_fault)
+        {
+            return Reg::PC;
+        }
+        if ("PSP" == p_register_to_fault)
+        {
+            return Reg::PSP;
+        }
+        if ("XPSR" == p_register_to_fault)
+        {
+            return Reg::XPSR;
+        }
+        if ("CONTROL" == p_register_to_fault)
+        {
+            return Reg::CONTROL;
+        }
+        Error::Report_Error("Could not find register with the name \"{}\"",
+                            p_register_to_fault);
+    }()};
+
+    m_simulator.injectFault(
+        p_cycle_to_fault, register_to_fault, p_bit_to_fault);
 }

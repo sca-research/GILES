@@ -36,3 +36,10 @@ const GILES::Internal::Execution GILES::Internal::Emulator_TEMPLATE::Run_Code()
     Error::Report_Error("Not yet implemented");
 }
 
+void ELMO2::Internal::Emulator_TEMPLATE::Inject_Fault(
+    const std::uint32_t p_cycle_to_fault,
+    const std::string& p_register_to_fault,
+    const std::uint8_t p_bit_to_fault)
+{
+    Error::Report_Error("This feature is not supported by this simulator");
+}
