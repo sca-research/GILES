@@ -42,7 +42,7 @@
 //! building not as a library.
 namespace
 {
-// TODO: Put this all in a class?
+// TODO: Put this all in a class? - Probably should
 std::string m_program_path;
 std::string m_coefficients_path;
 std::string m_model_name;
@@ -50,12 +50,18 @@ std::string m_simulator_name;
 std::optional<std::string> m_traces_path;
 std::uint32_t m_number_of_runs;
 
+// These options are related to fault injection.
+bool m_fault{false};
+std::uint32_t m_fault_cycle;
+std::string m_fault_register;
+std::uint8_t m_fault_bit;
+
 //! @brief Prints an error message and exits. This is to be called when the
 //! program cannot run given the supplied command line arguments.
-//! @note This function is marked as noreturn as it is guaranteed to always halt
-//! the program. (Through std::exit())
-//! @param p_message An error message can optionally be provided. This will be
-//! printed first on a separate line if provided.
+//! @note This function is marked as noreturn as it is guaranteed to always
+//! halt the program. (Through std::exit())
+//! @param p_message An error message can optionally be provided. This will
+//! be printed first on a separate line if provided.
 [[noreturn]] void bad_options(const std::string& p_message = "") {
     if (!p_message.empty())
     {
@@ -97,7 +103,12 @@ void parse_command_line_flags(int& argc, char**& argv)
         ("m,model", "The name of the mathematical model that should be used to "
                     "generate traces",
              cxxopts::value<std::string>()->default_value("Hamming Weight"),
-             "MODEL NAME");
+             "MODEL NAME")
+        ("x,fault_cycle", "", cxxopts::value<std::uint32_t>(),
+         "Number of clock cycles.")
+        ("y,fault_register", "", cxxopts::value<std::string>(),
+         "Name of the register")
+        ("z,fault_bit", "", cxxopts::value<std::uint8_t>(), "Index");
     // clang-format on
 
     const auto& result = [&] {
@@ -141,6 +152,21 @@ void parse_command_line_flags(int& argc, char**& argv)
         m_traces_path = result["output"].as<std::string>();
     }
 
+    // Fault injection options TODO: Change UX
+    if (0 != result.count("fault_cycle"))
+    {
+        m_fault_cycle = result["fault_cycle"].as<std::uint32_t>();
+    }
+    if (0 != result.count("fault_register"))
+    {
+        m_fault_register = result["fault_register"].as<std::string>();
+    }
+    if (0 != result.count("fault_bit"))
+    {
+        m_fault_bit = result["fault_bit"].as<std::uint8_t>();
+        m_fault     = true;
+    }
+
     // default "./coeffs.json" is used if flag is not passed
     m_coefficients_path = result["file"].as<std::string>();
 
@@ -166,6 +192,11 @@ int main(int argc, char* argv[])
                                         m_traces_path,
                                         m_number_of_runs,
                                         m_model_name);
+
+    if (m_fault)
+    {
+        elmo2.Inject_Fault(m_fault_cycle, m_fault_register, m_fault_bit);
+    }
 
     elmo2.Run();
     return 0;
