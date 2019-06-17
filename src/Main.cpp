@@ -35,8 +35,8 @@
 #include <cxxopts.hpp>   // for Options, value, OptionAdder, OptionDetails
 #include <fmt/format.h>  // for print
 
-#include "GILES.cpp"  // for GILES
 #include "Error.hpp"  // for Report_Exit
+#include "GILES.cpp"  // for GILES
 
 //! Anonymous namespace is used as this functionality is only required when
 //! building not as a library.
@@ -187,17 +187,17 @@ int main(int argc, char* argv[])
 {
     parse_command_line_flags(argc, argv);
 
-    GILES::GILES elmo2 = GILES::GILES(m_program_path,
-                                        m_coefficients_path,
-                                        m_traces_path,
-                                        m_number_of_runs,
-                                        m_model_name);
+    GILES::GILES giles = GILES::GILES(m_program_path,
+                                      m_coefficients_path,
+                                      m_traces_path,
+                                      m_number_of_runs,
+                                      m_model_name);
 
     if (m_fault)
     {
-        elmo2.Inject_Fault(m_fault_cycle, m_fault_register, m_fault_bit);
+        giles.Inject_Fault(m_fault_cycle, m_fault_register, m_fault_bit);
     }
 
-    elmo2.Run();
+    giles.Run();
     return 0;
 }
