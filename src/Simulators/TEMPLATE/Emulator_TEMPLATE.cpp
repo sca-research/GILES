@@ -43,3 +43,9 @@ void GILES::Internal::Emulator_TEMPLATE::Inject_Fault(
 {
     Error::Report_Error("This feature is not supported by this simulator");
 }
+
+void GILES::Internal::Emulator_TEMPLATE::Add_Timeout(
+    const std::uint32_t p_number_of_cyclest)
+{
+    Error::Report_Error("This feature is not supported by this simulator");
+}

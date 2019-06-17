@@ -162,3 +162,9 @@ void GILES::Internal::Emulator_Thumb_Sim::Inject_Fault(
     m_simulator.injectFault(
         p_cycle_to_fault, register_to_fault, p_bit_to_fault);
 }
+
+void GILES::Internal::Emulator_Thumb_Sim::Add_Timeout(
+    const std::uint32_t p_number_of_cyclest)
+{
+    Error::Report_Warning("This feature is not yet implemented.");
+}

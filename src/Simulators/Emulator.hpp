@@ -114,6 +114,8 @@ public:
                               const std::string& p_register_to_fault,
                               const std::uint8_t p_bit_to_fault) = 0;
 
+    virtual void Add_Timeout(const std::uint32_t p_number_of_cycles) = 0;
+
     //! @todo Document
     virtual const std::string& Get_Extra_Data() = 0;
 };

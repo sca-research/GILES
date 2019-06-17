@@ -49,6 +49,8 @@ public:
                       const std::string& p_register_to_fault,
                       const std::uint8_t p_bit_to_fault) override;
 
+    void Add_Timeout(const std::uint32_t p_number_of_cyclest) override;
+
     //! @brief Retrieves the name of this Emulator.
     //! @returns The name as a string.
     //! @note This is needed to ensure self registration in the factory works.

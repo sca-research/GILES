@@ -57,6 +57,10 @@ private:
     const std::optional<std::string>& m_traces_path;
     const std::uint32_t m_number_of_runs;
 
+    // A timeout to stop execution after a set number of cycles.
+    bool m_timeout;
+    std::uint32_t m_timeout_cycles;
+
     // These options are related to fault injection.
     bool m_fault;
     std::uint32_t m_fault_cycle;
@@ -212,6 +216,11 @@ public:
             // Construct the simulator, ready for use.
             const auto simulator = Internal::Emulator_Factory::Construct(
                 p_simulator_name, m_program_path);
+
+            if (m_timeout)
+            {
+                simulator->Add_Timeout(m_timeout_cycles);
+            }
 
             if (m_fault)
             {
