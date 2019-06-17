@@ -58,7 +58,7 @@ private:
     const std::uint32_t m_number_of_runs;
 
     // These options are related to fault injection.
-    bool fault;
+    bool m_fault;
     std::uint32_t m_fault_cycle;
     std::string m_fault_register;
     std::uint8_t m_fault_bit;
@@ -148,8 +148,8 @@ public:
                                  // file.
     : m_coefficients{Internal::IO().Load_Coefficients(p_coefficients_path)},
       m_program_path{p_program_path}, m_model_name{std::move(p_model_name)},
-      m_traces_path{p_traces_path}, m_number_of_runs{p_number_of_runs},
-      m_serialiser{}, fault{false}
+      m_traces_path{p_traces_path},
+      m_number_of_runs{p_number_of_runs}, m_fault{false}, m_serialiser{}
     {
         // Check the supplied model name is valid
         Internal::Model_Factory::Find(p_model_name);
@@ -180,10 +180,16 @@ public:
                       const std::string& p_register_to_fault,
                       const std::uint8_t p_bit_to_fault)
     {
-        fault            = true;
+        m_fault          = true;
         m_fault_cycle    = p_cycle_to_fault;
         m_fault_register = p_register_to_fault;
         m_fault_bit      = p_bit_to_fault;
+    }
+
+    void Add_Timeout(const std::uint32_t p_number_of_cycles)
+    {
+        m_timeout        = true;
+        m_timeout_cycles = p_number_of_cycles;
     }
 
     //! @brief Runs the simulator given by p_simulator_name and TODO:
@@ -207,7 +213,7 @@ public:
             const auto simulator = Internal::Emulator_Factory::Construct(
                 p_simulator_name, m_program_path);
 
-            if (fault)
+            if (m_fault)
             {
                 simulator->Inject_Fault(
                     m_fault_cycle, m_fault_register, m_fault_bit);
