@@ -27,6 +27,7 @@
 #ifndef EXECUTION_HPP
 #define EXECUTION_HPP
 
+#include <algorithm>  // for min
 #include <any>        // for any, any_cast, bad_any_cast
 #include <deque>      // for deque
 #include <map>        // for map
@@ -38,7 +39,7 @@
 #include <boost/algorithm/string.hpp>  // TODO: Convert Uility.h over to boost algorithms (or the other way around?)
 
 #include "Assembly_Instruction.hpp"
-#include "Error.hpp"  // for Report_Error
+#include "Error.hpp"    // for Report_Error
 #include "Utility.hpp"  // for string_split
 
 #include <iostream>  // for temp debugging
@@ -176,7 +177,11 @@ public:
          *}
          */
 
-        const std::size_t size{p_pipeline_stage.size()};
+        // std::min to account for different length pipeline stages.
+        // Pipeline stages should all be the same length but may not be in the
+        // case of errors.
+        const std::size_t size{
+            std::min(p_pipeline_stage.size(), m_pipeline.size())};
 
         // Transpose the vector into m_pipeline.
         for (std::size_t cycle = 0; cycle < size; ++cycle)
@@ -408,12 +413,6 @@ public:
     void Add_Registers_All(
         const std::vector<std::map<std::string, std::size_t>> p_registers)
     {
-        if (m_registers.size() != p_registers.size())
-        {
-            throw std::range_error(
-                "Registers provided does not match up with the number of clock "
-                "cycles provided.");
-        }
         m_registers = p_registers;
     }
 
@@ -478,9 +477,18 @@ public:
     std::size_t Get_Operand_Value(const std::size_t p_cycle,
                                   const std::string& p_operand) const
     {
-        return Is_Register(p_operand)
-                   ? Get_Register_Value(p_cycle, p_operand)
-                   : static_cast<std::size_t>(std::stoi(p_operand));
+        try
+        {
+            return Is_Register(p_operand)
+                       ? Get_Register_Value(p_cycle, p_operand)
+                       : static_cast<std::size_t>(std::stoi(p_operand));
+        }
+        // If p_operand is not numeric, i.e. corrupted data, try to recover by
+        // clearing that value.
+        catch (const std::invalid_argument&)
+        {
+            return 0;
+        }
     }
 
     //! @brief Retrieves the value of an operand in numerical form. If that
