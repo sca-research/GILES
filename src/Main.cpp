@@ -124,6 +124,10 @@ void parse_command_line_flags(int argc, char* argv[])
             "The number of clock cycles to force stop execution after");
     // clang-format on
 
+    boost::program_options::positional_options_description
+        positional_options_description;
+    // Input can be specified without -i/--input flag.
+    positional_options_description.add("input", 1);
 
     boost::program_options::variables_map options;
     try
@@ -132,6 +136,7 @@ void parse_command_line_flags(int argc, char* argv[])
         boost::program_options::store(
             boost::program_options::command_line_parser(argc, argv)
                 .options(options_description)
+                .positional(positional_options_description)
                 .run(),
             options);
         boost::program_options::notify(options);
@@ -189,7 +194,6 @@ void parse_command_line_flags(int argc, char* argv[])
         {
             bad_options("Fault injection options could not be interpreted");
         }
-
         m_fault = true;
     }
 
