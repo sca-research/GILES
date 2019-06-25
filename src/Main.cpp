@@ -67,10 +67,7 @@ std::optional<std::uint32_t> m_timeout;
 //! be printed first on a separate line if provided.
 template <typename... args_t>
 [[noreturn]] void bad_options(const args_t&... p_message) {
-    if (0 < sizeof...(p_message))
-    {
-        fmt::print(p_message...);
-    }
+    fmt::print(p_message...);
     GILES::Internal::Error::Report_Exit(
         "\nPlease use option --help or -h to see proper usage");
 }
