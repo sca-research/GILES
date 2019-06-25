@@ -63,13 +63,14 @@ std::uint8_t m_fault_bit;
 //! halt the program. (Through std::exit())
 //! @param p_message An error message can optionally be provided. This will
 //! be printed first on a separate line if provided.
-[[noreturn]] void bad_options(const std::string& p_message = "") {
-    if (!p_message.empty())
+template <typename... args_t>
+[[noreturn]] void bad_options(const args_t&... p_message) {
+    if (0 < sizeof...(p_message))
     {
-        fmt::print("{}\n", p_message);
+        fmt::print(p_message...);
     }
     GILES::Internal::Error::Report_Exit(
-        "Please use option --help or -h to see proper usage");
+        "\nPlease use option --help or -h to see proper usage");
 }
 
 //! @brief Interprets the command line flags.
