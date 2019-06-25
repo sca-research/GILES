@@ -58,8 +58,7 @@ private:
     const std::uint32_t m_number_of_runs;
 
     // A timeout to stop execution after a set number of cycles.
-    bool m_timeout;
-    std::uint32_t m_timeout_cycles;
+    std::optional<std::uint32_t> m_timeout;
 
     // These options are related to fault injection.
     bool m_fault;
@@ -190,10 +189,9 @@ public:
         m_fault_bit      = p_bit_to_fault;
     }
 
-    void Add_Timeout(const std::uint32_t p_number_of_cycles)
+    void Set_Timeout(const std::uint32_t p_number_of_cycles)
     {
-        m_timeout        = true;
-        m_timeout_cycles = p_number_of_cycles;
+        m_timeout = p_number_of_cycles;
     }
 
     //! @brief Runs the simulator given by p_simulator_name and TODO:
@@ -219,7 +217,7 @@ public:
 
             if (m_timeout)
             {
-                simulator->Add_Timeout(m_timeout_cycles);
+                simulator->Add_Timeout(m_timeout.value());
             }
 
             if (m_fault)

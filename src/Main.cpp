@@ -57,6 +57,8 @@ std::uint32_t m_fault_cycle;
 std::string m_fault_register;
 std::uint8_t m_fault_bit;
 
+std::optional<std::uint32_t> m_timeout;
+
 //! @brief Prints an error message and exits. This is to be called when the
 //! program cannot run given the supplied command line arguments.
 //! @note This function is marked as noreturn as it is guaranteed to always
@@ -193,7 +195,9 @@ void parse_command_line_flags(int argc, char* argv[])
         m_fault = true;
     }
 
+    if (options.count("timeout"))
     {
+        m_timeout = options["timeout"].as<std::uint32_t>();
     }
 
     // default "./coeffs.json" is used if flag is not passed
@@ -226,6 +230,12 @@ int main(int argc, char* argv[])
     if (m_fault)
     {
         giles.Inject_Fault(m_fault_cycle, m_fault_register, m_fault_bit);
+    }
+
+    // If the timeout option is provided then send it to GILES,
+    if (m_timeout)
+    {
+        giles.Set_Timeout(m_timeout.value());
     }
 
     giles.Run();
