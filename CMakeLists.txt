@@ -92,7 +92,7 @@ endif()
 
 set(CPACK_BINARY_DEB ON)
 
-# There is a depenecy bug here "Nothing provides libGILES"
+# There is a dependency bug here "Nothing provides libGILES"
 set(CPACK_BINARY_RPM OFF)
 
 set(CPACK_RPM_PACKAGE_PROVIDES lib${PROJECT_NAME})

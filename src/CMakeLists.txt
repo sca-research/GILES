@@ -47,7 +47,7 @@ target_compile_options(lib${PROJECT_NAME}
         -fdiagnostics-color
 )
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system program_options)
 
 # If OpenMP is available then use it.
 find_package(OpenMP)
@@ -71,10 +71,9 @@ target_link_libraries(lib${PROJECT_NAME}
         fmt::fmt-header-only
         libthumb-sim
         Boost::system
+        Boost::program_options
 )
 
-# Removes lib prefix that is auto added, to stop it being called liblibEMLO-2
-set_target_properties(lib${PROJECT_NAME} PROPERTIES PREFIX "")
 set_target_properties(lib${PROJECT_NAME} PROPERTIES
     OUTPUT_NAME ${PROJECT_NAME}
     # C++17 is required for std::optional and init if statements
@@ -83,7 +82,6 @@ set_target_properties(lib${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
-
 
 install(TARGETS lib${PROJECT_NAME} DESTINATION lib)
 
@@ -102,6 +100,8 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
     )
+
+    add_dependencies(${PROJECT_NAME} lib${PROJECT_NAME} libthumb-sim)
 
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 endif()
