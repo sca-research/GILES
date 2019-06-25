@@ -48,25 +48,32 @@ const GILES::Internal::Coefficients GILES::Internal::IO::Load_Coefficients(
     const std::string& p_coefficients_path) const
 {
     // read the Coefficients file into a JSON object
-    std::ifstream file(p_coefficients_path);
+    std::ifstream file{p_coefficients_path};
+
     nlohmann::json json;
 
-    // Ensure the file contains valid JSON
-    try
+    // If the file doesn't exist then don't validate it.
+    if (file.is_open())
     {
-        json = nlohmann::json::parse(file);
-    }
-    catch (nlohmann::detail::parse_error&)
-    {
-        GILES::Internal::Error::Report_Error(
-            "Coefficients file '{}' is not a valid JSON file",
-            p_coefficients_path);
-    }
+        // Ensure the file contains valid JSON
+        try
+        {
+            json = nlohmann::json::parse(file);
+        }
+        catch (nlohmann::detail::parse_error&)
+        {
+            // Do nothing as the model may not need any Coefficients.
+            // If the model does need Coefficients then it will throw it's own
+            // error.
+            GILES::Internal::Error::Report_Error(
+                "Coefficients file '{}' is not a valid JSON file",
+                p_coefficients_path);
+        }
 
-    // This will throw an exception if validation fails.
-    GILES::Internal::Validator_Coefficients::Validate_Json(json);
-
-    return GILES::Internal::Coefficients(json);
+        // This will throw an exception if validation fails.
+        GILES::Internal::Validator_Coefficients::Validate_Json(json);
+    }
+    return GILES::Internal::Coefficients{json};
 }
 }  // namespace Internal
 }  // namespace GILES

@@ -85,6 +85,11 @@ const std::string& GILES::Internal::Coefficients::Get_Instruction_Category(
 const std::unordered_set<std::string>
 GILES::Internal::Coefficients::Get_Interaction_Terms() const
 {
+    // Coefficients are optional, this handles that case.
+    if (m_coefficients.empty())
+    {
+        return {};
+    }
     std::unordered_set<std::string> interaction_terms;
     for (const auto& interaction_term :
          m_coefficients.front()["Coefficients"].items())

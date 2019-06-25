@@ -34,6 +34,7 @@
 
 #include "Abstract_Factory_Register.hpp"  // for Model_Factory_Register
 #include "Coefficients.hpp"
+#include "Error.hpp"  // for Report_Error
 #include "Execution.hpp"
 #include "Model_Math.hpp"
 
@@ -41,6 +42,13 @@ namespace GILES
 {
 namespace Internal
 {
+//! @brief An abstract class that serves as a base class for mathematical models
+//! to be implemented, These models will generate the traces for the given
+//! program by making use of the Coefficients and the recorded Execution of the
+//! program.
+//! This class is not designed to be inherited from directly; instead
+//! Emulator_Interface should be inherited from. This class provides a
+//! non-templated base class to allow handling of derived objects.
 class Model
 {
 protected:
@@ -68,10 +76,14 @@ public:
 };
 
 //! @class Model
-//! @brief An abstract class that serves as a base class for mathematical models
-//! to be implemented, These models will generate the traces for the given
-//! program by making use of the Coefficients and the recorded Execution of the
-//! program.
+//! @brief This adds self registering factory code to the derived class, given
+//! by derived_t and delegates construction of a base class to the Model
+//! class. Additionally this class will automatically check if the derived class
+//! has the required interaction terms using Check_Interaction_Terms during
+//! construction.
+//! @tparam derived_t This should be the same as the derived type. This will add
+//! the self registering factory code automatically, allowing use of the
+//! derived class.
 template <typename derived_t>
 class Model_Interface : public Model, public Model_Factory_Register<derived_t>
 {
@@ -91,9 +103,8 @@ protected:
     {
         if (!Check_Interaction_Terms())
         {
-            throw std::logic_error(
-                "Model was not provided with correct "
-                "interaction terms by the Coefficients file.");
+            Error::Report_Error("Model was not provided with correct "
+                                "interaction terms by the Coefficients file.");
         }
     }
 
