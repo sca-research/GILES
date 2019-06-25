@@ -174,6 +174,7 @@ Refer to [BUILDING.md](BUILDING.md) for developer specific information.
 - [Gcovr](https://gcovr.com/)
 - [Doxygen](http://www.doxygen.nl/)
 - [markdown-toc](https://github.com/jonschlinkert/markdown-toc)
+- [LinuxDeploy](https://github.com/linuxdeploy/linuxdeploy)
 
 Thank you to the creators of all these.
 Without these, this would not have been possible.
