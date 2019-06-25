@@ -32,8 +32,9 @@
 #include <string>     // for string, operator<<
 #include <vector>     // for vector
 
-#include <cxxopts.hpp>   // for Options, value, OptionAdder, OptionDetails
-#include <fmt/format.h>  // for print
+#include <boost/program_options.hpp>  // for options_description, value...
+#include <fmt/format.h>               // for format
+#include <fmt/ostream.h>              // for operator<<
 
 #include "Error.hpp"  // for Report_Exit
 #include "GILES.cpp"  // for GILES
@@ -74,111 +75,138 @@ std::uint8_t m_fault_bit;
 //! @brief Interprets the command line flags.
 //! @param p_options The options as contained within a string.
 // TODO: Returns tag?
-void parse_command_line_flags(int& argc, char**& argv)
+void parse_command_line_flags(int argc, char* argv[])
 {
-    cxxopts::Options options(argv[0], "Side channel leakage emulation tool");
+    boost::program_options::options_description options_description{fmt::format(
+        "General instruction leakage simulator\n"
+        "Usage: {} [--input] EXECUTABLE [--coefficients] COEFFICIENTS\n",
+        argv[0])};
+
+    std::vector<std::string> fault_options{};
 
     // clang-format off
-    options.positional_help("[--input] EXECUTABLE "
-                            "[--file] COEFFICIENTS");
 
     // Adds the command line options.
-    options.add_options()
-        ("h,help", "Print help")
-        ("r,runs", "Number of traces to generate",
-             cxxopts::value<std::uint32_t>()->default_value("1"),
-             "N")
-        ("f,file", "Coefficients file",
-             cxxopts::value<std::string>()->default_value("./coeffs.json"),
-             "COEFFICIENTS")
-        ("i,input", "Executable to be ran in the simulator",
-             cxxopts::value<std::string>(),
-             "EXECUTABLE")
-        ("o,output", "Generated traces output file",
-             cxxopts::value<std::string>(),
-             "FILE")
-        ("s,simulator", "The name of the simulator that should be used",
-             cxxopts::value<std::string>()->default_value("Thumb Sim"),
-             "SIMULATOR NAME")
-        ("m,model", "The name of the mathematical model that should be used to "
-                    "generate traces",
-             cxxopts::value<std::string>()->default_value("Hamming Weight"),
-             "MODEL NAME")
-        ("x,fault_cycle", "", cxxopts::value<std::uint32_t>(),
-         "Number of clock cycles.")
-        ("y,fault_register", "", cxxopts::value<std::string>(),
-         "Name of the register")
-        ("z,fault_bit", "", cxxopts::value<std::uint8_t>(), "Index");
+    options_description.add_options()
+        ("help,h", "Print help")
+        ("runs,r",
+            boost::program_options::value<std::uint32_t>()->default_value(1),
+            "Number of traces to generate")
+        ("coefficients,c",
+            boost::program_options::value<std::string>()->default_value(
+            "./coeffs.json"),
+            "Coefficients file")
+        ("input,i",
+            boost::program_options::value<std::string>(),
+            "Executable to be ran in the simulator")
+        ("output,o",
+            boost::program_options::value<std::string>(),
+            "Generated traces output file")
+        ("simulator,s",
+            boost::program_options::value<std::string>()->default_value(
+            "Thumb Sim"),
+            "The name of the simulator that should be used")
+        ("model,m",
+            boost::program_options::value<std::string>()->default_value(
+            "Hamming Weight"),
+            "The name of the mathematical model that should be used to "
+            "generate traces")
+        ("fault,f",
+             boost::program_options::value<std::vector<std::string>>(
+             &fault_options)
+             ->multitoken(),
+            "Where to inject a fault. e.g. \"--fault 10 R0 2\" is inject a "
+            "fault "
+            "before the 10th clock cycle, by flipping the second least "
+            "significant bit in the register R0");
     // clang-format on
 
-    const auto& result = [&] {
-        try
-        {
-            // Input can be specified without -i/--input flag
-            // Coefficients File can be specified without -f/--file flag
-            options.parse_positional(std::vector<std::string>{"input", "file"});
 
-            return options.parse(argc, argv);
-        }
-        catch (const cxxopts::OptionParseException& exception)
-        {
-            bad_options(exception.what());
-        }
-    }();
-
-    if (0 != result.count("help"))  // if help flag is passed
+    boost::program_options::variables_map options;
+    try
     {
-        fmt::print("{}\n", options.help());
+        // Parse the provided arguments.
+        boost::program_options::store(
+            boost::program_options::command_line_parser(argc, argv)
+                .options(options_description)
+                .style(boost::program_options::command_line_style::unix_style ^
+                       boost::program_options::command_line_style::allow_short)
+                .run(),
+            options);
+        boost::program_options::notify(options);
+    }
+    catch (const std::exception& exception)
+    {
+        bad_options(exception.what());
+    }
+
+    if (options.count("help"))  // if help flag is passed
+    {
+        fmt::print("{}\n", options_description);
         std::exit(EXIT_SUCCESS);
     }
 
-    if (0 != result.count("output"))  // if output flag is passed
+    if (options.count("output"))  // if output flag is passed
     {
-        m_traces_path = result["output"].as<std::string>();
+        m_traces_path = options["output"].as<std::string>();
     }
 
-    if (0 != result.count("input"))  // if input flag is passed
+    if (options.count("input"))  // if input flag is passed
     {
-        m_program_path = result["input"].as<std::string>();
+        m_program_path = options["input"].as<std::string>();
     }
     else
     {
-        bad_options(
-            "Input option is required.(-i / --input \"Path to Executable\")");
+        bad_options("Input option is required.(-i / --input \"Path to "
+                    "Executable\")");
     }
 
-    if (0 != result.count("output"))  // if output flag is passed
+    if (options.count("output"))  // if output flag is passed
     {
-        m_traces_path = result["output"].as<std::string>();
+        m_traces_path = options["output"].as<std::string>();
     }
 
-    // Fault injection options TODO: Change UX
-    if (0 != result.count("fault_cycle"))
+    // Fault injection options
+    if (options.count("fault"))
     {
-        m_fault_cycle = result["fault_cycle"].as<std::uint32_t>();
+        try
+        {
+            constexpr std::uint8_t number_of_fault_options{3};
+            if (const std::size_t size{fault_options.size()};
+                size != number_of_fault_options)
+            {
+                bad_options("Incorrect number of fault injection options "
+                            "provided.\nExpected: {}\nGot: {}",
+                            number_of_fault_options,
+                            size);
+            }
+            m_fault_cycle    = std::stoi(fault_options[0]);
+            m_fault_register = fault_options[1];
+            m_fault_bit      = std::stoi(fault_options[2]);
+        }
+        catch (const std::exception&)
+        {
+            bad_options("Fault injection options could not be interpreted");
+        }
+
+        m_fault = true;
     }
-    if (0 != result.count("fault_register"))
+
     {
-        m_fault_register = result["fault_register"].as<std::string>();
-    }
-    if (0 != result.count("fault_bit"))
-    {
-        m_fault_bit = result["fault_bit"].as<std::uint8_t>();
-        m_fault     = true;
     }
 
     // default "./coeffs.json" is used if flag is not passed
-    m_coefficients_path = result["file"].as<std::string>();
+    m_coefficients_path = options["coefficients"].as<std::string>();
 
     // default "Thumb Sim" is used if flag is not passed
-    m_simulator_name = result["simulator"].as<std::string>();
+    m_simulator_name = options["simulator"].as<std::string>();
 
     // default "Hamming Weight" is used if flag is not passed
-    m_model_name = result["model"].as<std::string>();
+    m_model_name = options["model"].as<std::string>();
 
     // default 1 is used if flag is not passed
     // TODO: Remove this default?
-    m_number_of_runs = result["runs"].as<std::uint32_t>();
+    m_number_of_runs = options["runs"].as<std::uint32_t>();
 }
 }  // namespace
 
@@ -193,6 +221,7 @@ int main(int argc, char* argv[])
                                       m_number_of_runs,
                                       m_model_name);
 
+    // If fault inject options are provided then send them to GILES,
     if (m_fault)
     {
         giles.Inject_Fault(m_fault_cycle, m_fault_register, m_fault_bit);
