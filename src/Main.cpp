@@ -118,7 +118,10 @@ void parse_command_line_flags(int argc, char* argv[])
             "Where to inject a fault. e.g. \"--fault 10 R0 2\" is inject a "
             "fault "
             "before the 10th clock cycle, by flipping the second least "
-            "significant bit in the register R0");
+            "significant bit in the register R0")
+        ("timeout,t",
+            boost::program_options::value<std::uint32_t>(),
+            "The number of clock cycles to force stop execution after");
     // clang-format on
 
 
@@ -129,8 +132,6 @@ void parse_command_line_flags(int argc, char* argv[])
         boost::program_options::store(
             boost::program_options::command_line_parser(argc, argv)
                 .options(options_description)
-                .style(boost::program_options::command_line_style::unix_style ^
-                       boost::program_options::command_line_style::allow_short)
                 .run(),
             options);
         boost::program_options::notify(options);
