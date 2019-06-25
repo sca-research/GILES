@@ -26,8 +26,6 @@
 #include <string>   // for string
 #include <utility>  // for pair
 
-#include <iostream>  // for temp debugging
-
 #include "simulator/regfile.h"  // for Reg
 
 #include "Emulator_Thumb_Sim.hpp"
@@ -159,12 +157,12 @@ void GILES::Internal::Emulator_Thumb_Sim::Inject_Fault(
                             p_register_to_fault);
     }()};
 
-    m_simulator.injectFault(
+    m_simulator.InjectFault(
         p_cycle_to_fault, register_to_fault, p_bit_to_fault);
 }
 
 void GILES::Internal::Emulator_Thumb_Sim::Add_Timeout(
-    const std::uint32_t p_number_of_cyclest)
+    const std::uint32_t p_number_of_cycles)
 {
-    Error::Report_Warning("This feature is not yet implemented.");
+    m_simulator.AddTimeout(p_number_of_cycles);
 }
