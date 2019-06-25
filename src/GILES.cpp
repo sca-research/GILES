@@ -131,6 +131,20 @@ private:
         return true;
     }
 
+    //! @brief Prints a warning it traces will not be saved after the program
+    //! stops.
+    //! This is to prevent long running operations resulting in no output
+    //! accidentally.
+    void warn_if_not_saving() const
+    {
+        // If no path has been specified to save traces to.
+        if (!m_traces_path)
+        {
+            Internal::Error::Report_Warning(
+                "Trace(s) will not be saved to disk");
+        }
+    }
+
 public:
     // TODO: Separate out some of the functionality in here into an API
     //! @brief The main entry point to the GILES library. This controls the
@@ -161,6 +175,7 @@ public:
     //! @todo Document
     void Run()
     {
+        warn_if_not_saving();
         // Initialise all emulators.
         for (const auto& emulator_interface :
              Internal::Emulator_Factory::Get_All())
