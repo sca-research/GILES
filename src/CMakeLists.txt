@@ -92,7 +92,6 @@ if(${PROJECT_NAME}_BUILD_EXECUTABLE)
     target_link_libraries(${PROJECT_NAME}
         PUBLIC
             lib${PROJECT_NAME}
-            cxxopts
     )
 
     set_target_properties(${PROJECT_NAME} PROPERTIES
