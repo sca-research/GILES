@@ -53,13 +53,12 @@ class Model
 {
 protected:
     //! The execution of the target program as recorded by the Emulator.
-    const GILES::Internal::Execution m_execution;
+    const Execution m_execution;
 
     //! The Coefficients created by measuring real hardware traces.
-    const GILES::Internal::Coefficients& m_coefficients;
+    const Coefficients& m_coefficients;
 
-    Model(const GILES::Internal::Execution& p_execution,
-          const GILES::Internal::Coefficients& p_coefficients)
+    Model(const Execution& p_execution, const Coefficients& p_coefficients)
         : m_execution(p_execution), m_coefficients(p_coefficients)
     {
     }
@@ -68,7 +67,7 @@ public:
     //! @brief In derived classes, this function should contain the
     //! mathematical calculations that generate the Traces.
     //! @returns The generated Traces for the target program.
-    virtual const std::vector<float> Generate_Traces() const = 0;
+    virtual const std::vector<float> Generate_Traces() = 0;
 
     //! @brief Virtual destructor to ensure proper memory cleanup.
     //! @see https://stackoverflow.com/a/461224
@@ -97,14 +96,15 @@ protected:
     //! provided by the Emulator.
     //! @param p_coefficients The loaded Coefficients from real hardware
     //! traces.
-    Model_Interface(const GILES::Internal::Execution& p_execution,
-                    const GILES::Internal::Coefficients& p_coefficients)
+    Model_Interface(const Execution& p_execution,
+                    const Coefficients& p_coefficients)
         : Model(p_execution, p_coefficients)
     {
         if (!Check_Interaction_Terms())
         {
-            Error::Report_Error("Model was not provided with correct "
-                                "interaction terms by the Coefficients file.");
+            Error::Report_Error("{} Model was not provided with correct "
+                                "interaction terms by the Coefficients file.",
+                                derived_t::Get_Name());
         }
     }
 
