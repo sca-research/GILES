@@ -57,17 +57,6 @@ TEST_CASE("Execution class testing"
         REQUIRE_NOTHROW(execution.Add_Registers_All(registers));
     }
 
-    SECTION("Add_Registers_All wrong size")
-    {
-        std::vector<std::map<std::string, std::size_t>> registers{
-            {{"1", 1}, {"2", 0}, {"SP", 9}, {"A0", 1}},
-            {{"1", 4}, {"2", 10}, {"SP", 0xB}, {"A0", 7}}};
-
-        REQUIRE_THROWS_WITH(execution.Add_Registers_All(registers),
-                            "Registers provided does not match up with the "
-                            "number of clock cycles provided.");
-    }
-
     SECTION("Add_Registers_Cycle & Check Registers")
     {
         REQUIRE_NOTHROW(execution.Add_Registers_Cycle(
