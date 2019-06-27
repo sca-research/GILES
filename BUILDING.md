@@ -9,7 +9,7 @@
     + [Windows](#windows)
   * [Get the code](#get-the-code)
   * [Building](#building)
-  * [Running tests](#running-tests)
+  * [Running unit tests](#running-unit-tests)
     + [Coverage information](#coverage-information)
 - [CMake Configuration Options](#cmake-configuration-options)
   * [GILES_BUILD_DOCUMENTATION](#giles_build_documentation)
@@ -74,12 +74,13 @@ can be used to speed this process up.
 
 1) **Create an empty build directory.**
 
-2) **From the build directory run this command.** This will generate native
-build files for your platform. A specific generator can be specified using the
+2) **From the build directory you just created, run this command.**
+This will generate native build files for your platform. 
+A specific generator can be specified using the
 `-G *generator*` flag.
 A [list of generators is available here.](https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html)
 ```
-cmake /path/to/source/directory/
+cmake /path-to-source-directory
 ```
 
 3) **Run this command to compile the code.** This will compile the program using
@@ -89,19 +90,19 @@ used manually from this point on.
 cmake --build .
 ```
 
-### Running tests
+### Running unit tests
 
 1) Firstly follow the instructions in the
 [**Getting started for Development section.**](#getting-started-for-development)
 
 2) **Build the tests with this command.** This will tell the native build system
-to build the target called tests.
+to build the target called GILES-tests.
 ```
-cmake --build . --target tests
+cmake --build . --target GILES-tests
 ```
 3) **Run the tests**
 ```
-/path/to/build/directory/output/tests
+/path-to-build-directory/bin/tests
 ```
 
 #### Coverage information
@@ -113,7 +114,7 @@ required.
 directory. This is needed as specific compile flags need to be added in order to
 generate coverage information.
 ```
-cmake /path/to/source/directory/traces_serialiser -DGILES_CALCULATE_COVERAGE=ON
+cmake /path-to-source-directory -DGILES_CALCULATE_COVERAGE=ON
 ```
 
 2) **Run this command.** This will tell the native build system to build the
@@ -124,7 +125,7 @@ cmake --build . --target coverage
 Coverage information can be found by opening the file `coverage.html` in the
 folder `coverage` which should have been created in your *`build directory`*.
 ```
-/path/to/build/directory/coverage/coverage.html
+/path-to-build-directory/coverage/coverage.html
 ```
 
 ## CMake Configuration Options
@@ -132,7 +133,7 @@ folder `coverage` which should have been created in your *`build directory`*.
 These are all CMake options and can be appended to the CMake generate command.
 For example, from the build directory:
 ```
-cmake /path/to/source/directory/ -DGILES_BUILD_DOCUMENTATION
+cmake /path-to-source-directory -DGILES_BUILD_DOCUMENTATION
 ```
 
 ### GILES_BUILD_DOCUMENTATION
