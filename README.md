@@ -61,12 +61,14 @@ data, such as the cryptographic key, with randomly generated values.
 3) **Run GILES.**
 Here is an example of the most common usage.
 ```
-./GILES my-program-binary-from-step-2 -o output-file.trs
+GILES my-program-binary-from-step-2 -o output-file.trs
 ```
-Note that this requires the file coeffs.json to be in the same directory.
-This can be overridden like so:
+This will use the Hamming weight model.
+[See here for more on models.](#leakage-generation-models)
+The ELMO power model requires the file coeffs.json to be in the same directory 
+or specified like so:
 ```
-./GILES my-program-binary-from-step-2 some-path/coeffs.json -o output-file.trs
+GILES my-program-binary-from-step-2 --coefficients some-path/coeffs.json -o output-file.trs
 ```
 
 4) Done! Perform whatever side channel attacks/analysis you want on the
@@ -79,21 +81,26 @@ All command line options can be printed using the -h or --help flags shown here:
 ```
 This should produce the result below.
 ```
-Side channel leakage emulation tool
-Usage:
-  bin/GILES [OPTION...] [--input] EXECUTABLE [--file] COEFFICIENTS
-
-  -h, --help                    Print help
-  -r, --runs N                  Number of traces to generate (default: 1)
-  -f, --file COEFFICIENTS       Coefficients file (default: ./coeffs.json)
-  -i, --input EXECUTABLE        Executable to be ran in the simulator
-  -o, --output FILE             Generated traces output file
-  -s, --simulator SIMULATOR NAME
-                                The name of the simulator that should be used
-                                (default: Andres)
-  -m, --model MODEL NAME        The name of the mathematical model that
-                                should be used to generate traces (default: Hamming
-                                Weight)
+General instruction leakage simulator
+Usage: bin/GILES [--input] EXECUTABLE [--coefficients] COEFFICIENTS
+:
+  -h [ --help ]                         Print help
+  -r [ --runs ] arg (=1)                Number of traces to generate
+  -c [ --coefficients ] arg (=./coeffs.json)
+                                        Coefficients file
+  -i [ --input ] arg                    Executable to be ran in the simulator
+  -o [ --output ] arg                   Generated traces output file
+  -s [ --simulator ] arg (=Thumb Sim)   The name of the simulator that should 
+                                        be used
+  -m [ --model ] arg (=Hamming Weight)  The name of the mathematical model that
+                                        should be used to generate traces
+  -f [ --fault ] arg                    Where to inject a fault. e.g. "--fault 
+                                        10 R0 2" is inject a fault before the 
+                                        10th clock cycle, by flipping the 
+                                        second least significant bit in the 
+                                        register R0
+  -t [ --timeout ] arg                  The number of clock cycles to force 
+                                        stop execution after
 ```
 
 ## Leakage generation models
