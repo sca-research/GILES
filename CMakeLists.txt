@@ -64,7 +64,7 @@ set(EXTERNAL_PROJECT_DIR ${PROJECT_SOURCE_DIR}/external)
 # the project's entire directory structure.
 # The "test" directory is added before "src" so that compile flags can be added
 # if coverage is enabled.
-add_subdirectory(test)
+add_subdirectory(test EXCLUDE_FROM_ALL)
 
 add_subdirectory(doc)
 
