@@ -55,7 +55,7 @@ const std::unordered_set<std::string>
 //! the Traces.
 //! @returns The generated Traces for the target program.
 const std::vector<float>
-GILES::Internal::Model_TEMPLATE::Generate_Traces() const
+GILES::Internal::Model_TEMPLATE::Generate_Traces()
 {
     // *** Place your code here ***
     //! @note m_coefficients and m_execution can be made use of to generate the

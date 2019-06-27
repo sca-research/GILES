@@ -57,7 +57,7 @@ const std::unordered_set<std::string>
 //! @brief This function contains the mathematical calculations that generate
 //! the Traces.
 //! @returns The generated Traces for the target program.
-const std::vector<float> GILES::Internal::Model_Power::Generate_Traces() const
+const std::vector<float> GILES::Internal::Model_Power::Generate_Traces()
 {
 
     //! A sliding window that stores information about the previous, current and

@@ -478,7 +478,7 @@ public:
     //! TODO: Improve this description with details of how elmo power model
     //! works.
     //! @returns The generated Traces for the target program
-    const std::vector<float> Generate_Traces() const override;
+    const std::vector<float> Generate_Traces() override;
 
     //! @brief Retrieves a list of the interaction terms that are used within
     //! the model. These must be provided by the Coefficients in order for
