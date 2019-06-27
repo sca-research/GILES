@@ -39,12 +39,17 @@ add_library(lib${PROJECT_NAME} SHARED
 
 target_compile_options(lib${PROJECT_NAME}
     PRIVATE
-        -Wall
-        -Wextra
-        -Wpedantic
-        -Weffc++
-        -Wno-c++98-compat
-        -fdiagnostics-color
+        $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+            -Wall
+            -Wextra
+            -Wpedantic
+            -Weffc++
+            -fdiagnostics-color>
+        # Enable -Weverything when using clang
+        $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:
+            -Weverything
+            -Wno-c++98-compat
+            -Wno-c++98-compat-pedantic>
 )
 
 find_package(Boost REQUIRED COMPONENTS system program_options)
