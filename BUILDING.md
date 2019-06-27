@@ -7,6 +7,7 @@
     + [Linux](#linux)
     + [MacOS](#macos)
     + [Windows](#windows)
+  * [Get the code](#get-the-code)
   * [Building](#building)
   * [Running tests](#running-tests)
     + [Coverage information](#coverage-information)
@@ -49,6 +50,25 @@ and the [official boost instructions.](https://www.boost.org/users/download/)
 
 Follow the [official CMake install instructions](https://cmake.org/install/)
 and the [official boost instructions.](https://www.boost.org/users/download/)
+
+### Get the code
+
+It is highly recommended, but not essential, to use git to get the code.
+**Use this command** to get a copy:
+```
+git clone --recurse-submodules https://github.com/bristol-sca/GILES
+```
+**Note that the
+[--recurse-submodules flag](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---recurse-submodulesltpathspec)
+is needed.**
+
+If downloading manually or without this flag, you will also need to download the 
+projects
+[in the external directory.](https://github.com/bristol-sca/GILES/tree/master/external)
+
+Additionally the
+[--jobs flag](https://www.git-scm.com/docs/git-clone#Documentation/git-clone.txt---jobsltngt)
+can be used to speed this process up.
 
 ### Building
 
