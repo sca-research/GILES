@@ -1,27 +1,14 @@
 # GILES
 
 GILES is designed to help software engineers quickly identify
-[side channel](https://en.wikipedia.org/wiki/Side-channel_attack)
+[side channel](https://en.wikipedia.org/wiki/Side-channel_attack) and
+[fault injection](https://en.wikipedia.org/wiki/Fault_injection)
 security risks during development stages.
-
-This tool simulates instruction-level
-[side channel analysis](https://en.wikipedia.org/wiki/Side-channel_attack)
-leakage without the need for anything other that a target program by simulating
-a processor and gathering leakage traces from this simulated processor.
-
-It can support multiple different processors and multiple different methods of 
-generating leakage from these.
-Currently the only supported simulator is the
-[Thumb Timing Simulator](https://github.com/bristol-sca/thumb-sim).
-This will simulate an
-[ARM Cortex M0 processor.](https://developer.arm.com/products/processors/cortex-m/cortex-m0)
-The [supported leakage models can be found here.](#leakage-generation-models)
-
-Please feel free to add more simulators and models!
-There will be documents describing how to do this at some point.
 
 <!-- toc -->
 
+- [Motivation](#motivation)
+- [Description](#description)
 - [Usage](#usage)
 - [All command line options](#all-command-line-options)
 - [Leakage generation models](#leakage-generation-models)
@@ -36,6 +23,35 @@ There will be documents describing how to do this at some point.
 - [Acknowledgement](#acknowledgement)
 
 <!-- tocstop -->
+
+## Motivation
+
+Developing software for leaky processors is not straightforward and even
+experienced developers need to check if the measures that they put in place 
+actually work. Rather than having to go through the onerous task of a fully
+blown lab evaluation, it would be great if a "push button" solution could be
+run over the code that identifies leaks and maybe even helps fix them.
+GILES includes instruction level power profiles
+(taken on our high lab equipment) and "plugs them into" a simulator,
+thereby providing an instruction accurate leakage emulator.
+
+## Description
+
+This tool simulates instruction-level
+[side channel analysis](https://en.wikipedia.org/wiki/Side-channel_attack)
+leakage without the need for anything other that a target program.
+Additionally it allows for fault injection attacks to be performed concurrently.
+
+It can support multiple different processors and multiple different methods of 
+generating leakage from these.
+Currently the only supported simulator is the
+[Thumb Timing Simulator](https://github.com/bristol-sca/thumb-sim).
+This will simulate an
+[ARM Cortex M0 processor.](https://developer.arm.com/products/processors/cortex-m/cortex-m0)
+The [supported leakage models can be found here.](#leakage-generation-models)
+
+Please feel free to add more simulators and models!
+There will be documents describing how to do this at some point.
 
 ## Usage
 
