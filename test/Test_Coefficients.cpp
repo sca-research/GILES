@@ -35,7 +35,7 @@ TEST_CASE("Coefficients"
 {
     // A test Coefficients class is used for testing purposes.
     // This is its contents.
-    const nlohmann::json json{R"(
+    const nlohmann::json json = R"(
                 {
                     "ALU" :
                     {
@@ -81,7 +81,7 @@ TEST_CASE("Coefficients"
                             }
                         }
                     }
-                })"_json};
+                })"_json;
 
     // Ensure that this is valid JSON before using it to test the Coefficients
     // class.
