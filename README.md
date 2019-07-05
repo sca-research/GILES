@@ -119,6 +119,8 @@ Usage: bin/GILES [--input] EXECUTABLE [--coefficients] COEFFICIENTS
                                         stop execution after
 ```
 
+[See here](OPTIONS.md) for a more in depth description of the available flags.
+
 ## Leakage generation models
 
 There are currently two methods supported for generating leakage supported.
@@ -127,12 +129,16 @@ There are currently two methods supported for generating leakage supported.
 
 This is the recommend model for generating high quality leakage.
 
+This can be used by specifying --model Power.
+
 [Details of how it works can be found here.](https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/mccann)
 
 ### Hamming weight model
 
 This is the default model and will generate leakage much faster but the
 leakage may not be as high quality.
+
+This is the default model that will be used if none as specified.
 
 This works by taking the
 [Hamming weight](https://en.wikipedia.org/wiki/Hamming_weight)
