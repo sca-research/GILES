@@ -93,7 +93,7 @@ GILES my-program-binary-from-step-2 --coefficients some-path/coeffs.json -o outp
 ## All command line options
 All command line options can be printed using the -h or --help flags shown here:
 ```
-./GILES --help
+GILES --help
 ```
 This should produce the result below.
 ```
