@@ -51,7 +51,7 @@ This will simulate an
 The [supported leakage models can be found here.](#leakage-generation-models)
 
 Please feel free to add more simulators and models!
-There will be documents describing how to do this at some point.
+[Here is a guide](Adding_Models_and_Simulators.md) on how to do this.
 
 ## Usage
 
