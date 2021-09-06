@@ -57,7 +57,7 @@ find_package(Boost REQUIRED COMPONENTS system program_options)
 # If OpenMP is available then use it.
 find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
-    target_link_libraries(lib${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
+    #target_link_libraries(lib${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 endif()
 
 target_include_directories(lib${PROJECT_NAME}
@@ -69,6 +69,7 @@ target_include_directories(lib${PROJECT_NAME}
 )
 
 # Link to required external projects
+link_directories(${LOCALPATH}/lib/)
 target_link_libraries(lib${PROJECT_NAME}
     PUBLIC
         Traces-Serialiser
@@ -77,6 +78,8 @@ target_link_libraries(lib${PROJECT_NAME}
         libthumb-sim
         Boost::system
         Boost::program_options
+        smurf
+        smurfemulator
 )
 
 set_target_properties(lib${PROJECT_NAME} PROPERTIES

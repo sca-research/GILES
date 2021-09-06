@@ -1,0 +1,1 @@
+/usr/bin/c++   -fdiagnostics-color  -g  -rdynamic CMakeFiles/GILES.dir/Main.cpp.o  -o ../bin/GILES  -Wl,-rpath,/home/saltiny/git/GILES/lib: ../lib/libGILES.so ../external/thumb-sim/lib/libthumb-sim.a /usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0 /usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.71.0 -lsmurf -lsmurfemulator 

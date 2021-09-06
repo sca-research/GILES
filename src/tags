@@ -1,0 +1,170 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ASSEMBLY_INSTRUCTION_HPP	Assembly_Instruction.hpp	27;"	d
+Add_Pipeline_Stage	Execution.hpp	/^    void Add_Pipeline_Stage(const std::string& p_pipeline_stage_name,$/;"	f	class:GILES::Internal::Execution
+Add_Registers_All	Execution.hpp	/^    void Add_Registers_All($/;"	f	class:GILES::Internal::Execution
+Add_Registers_Cycle	Execution.hpp	/^    Add_Registers_Cycle(const std::size_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Add_Value	Execution.hpp	/^    void Add_Value(const std::size_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Assembly_Instruction	Assembly_Instruction.hpp	/^    Assembly_Instruction(const std::string& p_opcode,  \/\/ TODO: Maybe refactor?$/;"	f	class:GILES::Internal::Assembly_Instruction
+Assembly_Instruction	Assembly_Instruction.hpp	/^class Assembly_Instruction$/;"	c	namespace:GILES::Internal
+CMAKE_BINARY_DIR	Makefile	/^CMAKE_BINARY_DIR = \/home\/saltiny\/git\/GILES$/;"	m
+CMAKE_COMMAND	Makefile	/^CMAKE_COMMAND = \/usr\/bin\/cmake$/;"	m
+CMAKE_SOURCE_DIR	Makefile	/^CMAKE_SOURCE_DIR = \/home\/saltiny\/git\/GILES$/;"	m
+COEFFICIENTS_HPP	Coefficients.hpp	27;"	d
+Coefficients	Coefficients.hpp	/^    explicit Coefficients(const nlohmann::json& p_coefficients)$/;"	f	class:GILES::Internal::Coefficients
+Coefficients	Coefficients.hpp	/^class Coefficients$/;"	c	namespace:GILES::Internal
+EQUALS	Makefile	/^EQUALS = =$/;"	m
+ERROR_HPP	Error.hpp	27;"	d
+EXECUTION_HPP	Execution.hpp	28;"	d
+Error	Error.hpp	/^struct Error$/;"	s	namespace:GILES::Internal
+Execution	Execution.hpp	/^    explicit Execution(const std::size_t p_number_of_cycles)$/;"	f	class:GILES::Internal::Execution
+Execution	Execution.hpp	/^class Execution$/;"	c	namespace:GILES::Internal
+GILES	Assembly_Instruction.hpp	/^namespace GILES$/;"	n
+GILES	Coefficients.cpp	/^namespace GILES$/;"	n	file:
+GILES	Coefficients.hpp	/^namespace GILES$/;"	n
+GILES	Error.hpp	/^namespace GILES$/;"	n
+GILES	Execution.hpp	/^namespace GILES$/;"	n
+GILES	GILES.cpp	/^    GILES(const std::string& p_program_path,$/;"	f	class:GILES::GILES
+GILES	GILES.cpp	/^class GILES$/;"	c	namespace:GILES	file:
+GILES	GILES.cpp	/^namespace GILES$/;"	n	file:
+GILES	IO.cpp	/^namespace GILES$/;"	n	file:
+GILES	IO.hpp	/^namespace GILES$/;"	n
+GILES	Utility.hpp	/^namespace GILES$/;"	n
+GILES	Validator_Coefficients.cpp	/^namespace GILES$/;"	n	file:
+GILES	Validator_Coefficients.hpp	/^namespace GILES$/;"	n
+GILES_IO_INMEMADDR	gilesconfig.h	4;"	d
+GILES_IO_OUTMEMADDR	gilesconfig.h	5;"	d
+Get_Coefficient	Coefficients.hpp	/^    double Get_Coefficient(const std::string& p_opcode,$/;"	f	class:GILES::Internal::Coefficients
+Get_Coefficients	Coefficients.cpp	/^const std::vector<double> GILES::Internal::Coefficients::Get_Coefficients($/;"	f	class:GILES::Internal::GILES::Internal::Coefficients
+Get_Constant	Coefficients.cpp	/^GILES::Internal::Coefficients::Get_Constant(const std::string& p_opcode) const$/;"	f	class:GILES::Internal::GILES::Internal::Coefficients
+Get_Cycle_Count	Execution.hpp	/^    std::size_t Get_Cycle_Count() const { return m_pipeline.size(); }$/;"	f	class:GILES::Internal::Execution
+Get_Instruction	Execution.hpp	/^    Get_Instruction(const uint32_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Get_Instruction_Category	Coefficients.cpp	/^const std::string& GILES::Internal::Coefficients::Get_Instruction_Category($/;"	f	class:GILES::Internal::GILES::Internal::Coefficients
+Get_Interaction_Terms	Coefficients.cpp	/^GILES::Internal::Coefficients::Get_Interaction_Terms() const$/;"	f	class:GILES::Internal::GILES::Internal::Coefficients
+Get_Number_of_Operands	Assembly_Instruction.hpp	/^    std::size_t Get_Number_of_Operands() const { return m_operands.size(); }$/;"	f	class:GILES::Internal::Assembly_Instruction
+Get_Operand	Assembly_Instruction.hpp	/^    const std::string& Get_Operand(const uint8_t p_operand_index) const$/;"	f	class:GILES::Internal::Assembly_Instruction
+Get_Operand_Value	Execution.hpp	/^    std::size_t Get_Operand_Value($/;"	f	class:GILES::Internal::Execution
+Get_Operand_Value	Execution.hpp	/^    std::size_t Get_Operand_Value(const std::size_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Get_Operands	Assembly_Instruction.hpp	/^    const std::vector<std::string>& Get_Operands() const { return m_operands; }$/;"	f	class:GILES::Internal::Assembly_Instruction
+Get_Register_Value	Execution.hpp	/^    std::size_t Get_Register_Value(const std::size_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Get_Registers	Execution.hpp	/^    Get_Registers(const std::size_t p_cycle) const$/;"	f	class:GILES::Internal::Execution
+Get_State	Execution.hpp	/^    State Get_State(const uint32_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Get_State_Unsafe	Execution.hpp	/^    State Get_State_Unsafe(const uint32_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Get_Value	Execution.hpp	/^    const T_Value_Type Get_Value(const uint32_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Ggetchar	giles.h	/^uint32_t Ggetchar()$/;"	f
+Gputchar	giles.h	/^void Gputchar(uint8_t p_data) {$/;"	f
+IO	IO.hpp	/^struct IO$/;"	s	namespace:GILES::Internal
+IO_HPP	IO.hpp	27;"	d
+Inject_Fault	GILES.cpp	/^    void Inject_Fault(const std::uint32_t p_cycle_to_fault,$/;"	f	class:GILES::GILES
+Internal	Assembly_Instruction.hpp	/^namespace Internal$/;"	n	namespace:GILES
+Internal	Coefficients.cpp	/^namespace Internal$/;"	n	namespace:GILES	file:
+Internal	Coefficients.hpp	/^namespace Internal$/;"	n	namespace:GILES
+Internal	Error.hpp	/^namespace Internal$/;"	n	namespace:GILES
+Internal	Execution.hpp	/^namespace Internal$/;"	n	namespace:GILES
+Internal	IO.cpp	/^namespace Internal$/;"	n	namespace:GILES	file:
+Internal	IO.hpp	/^namespace Internal$/;"	n	namespace:GILES
+Internal	Utility.hpp	/^namespace Internal$/;"	n	namespace:GILES
+Internal	Validator_Coefficients.cpp	/^namespace Internal$/;"	n	namespace:GILES	file:
+Internal	Validator_Coefficients.hpp	/^namespace Internal$/;"	n	namespace:GILES
+Is_Normal_State	Execution.hpp	/^    bool Is_Normal_State(const std::uint32_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Is_Normal_State_Unsafe	Execution.hpp	/^    bool Is_Normal_State_Unsafe(const std::uint32_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+Is_Register	Execution.hpp	/^    bool Is_Register(const std::string& p_value) const$/;"	f	class:GILES::Internal::Execution
+Load_Coefficients	IO.cpp	/^const GILES::Internal::Coefficients GILES::Internal::IO::Load_Coefficients($/;"	f	class:GILES::Internal::GILES::Internal::IO
+Normal	Execution.hpp	/^        Normal,$/;"	m	class:GILES::Internal::Execution::State
+RM	Makefile	/^RM = \/usr\/bin\/cmake -E remove -f$/;"	m
+Report_Error	Error.hpp	/^    [[noreturn]] static constexpr void Report_Error(const char* p_format,$/;"	f	struct:GILES::Internal::Error
+Report_Exit	Error.hpp	/^    [[noreturn]] static constexpr void Report_Exit(const char* p_format,$/;"	f	struct:GILES::Internal::Error
+Report_Warning	Error.hpp	/^    static constexpr void Report_Warning(const char* p_format,$/;"	f	struct:GILES::Internal::Error
+Run	GILES.cpp	/^    void Run()$/;"	f	class:GILES::GILES
+Run_Simulator	GILES.cpp	/^    decltype(m_traces) Run_Simulator(const std::string& p_simulator_name)$/;"	f	class:GILES::GILES
+SHELL	Makefile	/^SHELL = \/bin\/sh$/;"	m
+SUFFIXES	Makefile	/^SUFFIXES =$/;"	m
+Set_Timeout	GILES.cpp	/^    void Set_Timeout(const std::uint32_t p_number_of_cycles)$/;"	f	class:GILES::GILES
+Stalled	Execution.hpp	/^        Stalled,$/;"	m	class:GILES::Internal::Execution::State
+State	Execution.hpp	/^    enum class State$/;"	c	class:GILES::Internal::Execution
+UTILITY_HPP	Utility.hpp	28;"	d
+Utility	Utility.hpp	/^class Utility$/;"	c	namespace:GILES::Internal
+VALIDATOR_COEFFICIENTS_HPP	Validator_Coefficients.hpp	27;"	d
+Validate_Category_Correct_Interaction_Terms	Validator_Coefficients.cpp	/^    Validate_Category_Correct_Interaction_Terms($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Category_Header_Unique	Validator_Coefficients.cpp	/^void GILES::Internal::Validator_Coefficients::Validate_Category_Header_Unique($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Category_Headings_Coefficients	Validator_Coefficients.cpp	/^    Validate_Category_Headings_Coefficients(const nlohmann::json& p_category)$/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Category_Headings_Constant	Validator_Coefficients.cpp	/^    Validate_Category_Headings_Constant(const nlohmann::json& p_category)$/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Category_Instructions_Unique	Validator_Coefficients.cpp	/^    Validate_Category_Instructions_Unique(const nlohmann::json& p_category,$/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Category_Interaction_Terms_Size	Validator_Coefficients.cpp	/^    Validate_Category_Interaction_Terms_Size($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Is_Array	Validator_Coefficients.cpp	/^void GILES::Internal::Validator_Coefficients::Validate_Is_Array($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Is_Number	Validator_Coefficients.cpp	/^void GILES::Internal::Validator_Coefficients::Validate_Is_Number($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Is_Object	Validator_Coefficients.cpp	/^void GILES::Internal::Validator_Coefficients::Validate_Is_Object($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Is_String	Validator_Coefficients.cpp	/^void GILES::Internal::Validator_Coefficients::Validate_Is_String($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Json	Validator_Coefficients.cpp	/^void GILES::Internal::Validator_Coefficients::Validate_Json($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validate_Not_Empty	Validator_Coefficients.cpp	/^void GILES::Internal::Validator_Coefficients::Validate_Not_Empty($/;"	f	class:GILES::Internal::GILES::Internal::Validator_Coefficients
+Validator_Coefficients	Validator_Coefficients.hpp	/^class Validator_Coefficients$/;"	c	namespace:GILES::Internal
+_GILESCONFIG_H	gilesconfig.h	2;"	d
+_GILES_H	giles.h	2;"	d
+__anon1::bad_options	/home/saltiny/git/GILES/src/Main.cpp	/^[[noreturn]] void bad_options(const args_t&... p_message) {$/;"	f	namespace:__anon1	signature:(const args_t&.... p_message)
+__anon1::m_coefficients_path	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_coefficients_path;$/;"	m	namespace:__anon1	file:
+__anon1::m_fault_bit	/home/saltiny/git/GILES/src/Main.cpp	/^std::uint8_t m_fault_bit;$/;"	m	namespace:__anon1	file:
+__anon1::m_fault_cycle	/home/saltiny/git/GILES/src/Main.cpp	/^std::uint32_t m_fault_cycle;$/;"	m	namespace:__anon1	file:
+__anon1::m_fault_register	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_fault_register;$/;"	m	namespace:__anon1	file:
+__anon1::m_model_name	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_model_name;$/;"	m	namespace:__anon1	file:
+__anon1::m_number_of_runs	/home/saltiny/git/GILES/src/Main.cpp	/^std::uint32_t m_number_of_runs;$/;"	m	namespace:__anon1	file:
+__anon1::m_program_path	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_program_path;$/;"	m	namespace:__anon1	file:
+__anon1::m_simulator_name	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_simulator_name;$/;"	m	namespace:__anon1	file:
+__anon1::m_timeout	/home/saltiny/git/GILES/src/Main.cpp	/^std::optional<std::uint32_t> m_timeout;$/;"	m	namespace:__anon1	file:
+__anon1::m_traces_path	/home/saltiny/git/GILES/src/Main.cpp	/^std::optional<std::string> m_traces_path;$/;"	m	namespace:__anon1	file:
+__anon1::parse_command_line_flags	/home/saltiny/git/GILES/src/Main.cpp	/^void parse_command_line_flags(int argc, char* argv[])$/;"	f	namespace:__anon1	signature:(int argc, char* argv[])
+add_byte_to_trace	giles.h	/^void add_byte_to_trace(uint8_t p_data) {$/;"	f
+add_to_trace	giles.h	/^void add_to_trace(uint8_t p_data[], uint8_t p_length) {$/;"	f
+bad_options	/home/saltiny/git/GILES/src/Main.cpp	/^[[noreturn]] void bad_options(const args_t&... p_message) {$/;"	f	namespace:__anon1	signature:(const args_t&.... p_message)
+get_coefficient	Coefficients.hpp	/^    T_return get_coefficient(const std::string& p_opcode,$/;"	f	class:GILES::Internal::Coefficients
+get_rand	giles.h	/^uint32_t get_rand() {$/;"	f
+get_state	Execution.hpp	/^    get_state(const uint32_t p_cycle,$/;"	f	class:GILES::Internal::Execution
+get_value	Coefficients.hpp	/^    T_return get_value(const T_categories&... p_categories) const$/;"	f	class:GILES::Internal::Coefficients
+get_value	Coefficients.hpp	/^    T_return static get_value(const nlohmann::json& p_coefficients,$/;"	f	class:GILES::Internal::Coefficients
+get_value_opcode	Coefficients.hpp	/^    T_return get_value_opcode(const std::string& p_opcode,$/;"	f	class:GILES::Internal::Coefficients
+m_coefficients	Coefficients.hpp	/^    const nlohmann::json m_coefficients;$/;"	m	class:GILES::Internal::Coefficients
+m_coefficients	GILES.cpp	/^    const Internal::Coefficients m_coefficients;$/;"	m	class:GILES::GILES	file:
+m_coefficients_path	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_coefficients_path;$/;"	m	namespace:__anon1	file:
+m_extra_data	GILES.cpp	/^    std::vector<std::string> m_extra_data;$/;"	m	class:GILES::GILES	file:
+m_fault	GILES.cpp	/^    bool m_fault;$/;"	m	class:GILES::GILES	file:
+m_fault_bit	/home/saltiny/git/GILES/src/Main.cpp	/^std::uint8_t m_fault_bit;$/;"	m	namespace:__anon1	file:
+m_fault_bit	GILES.cpp	/^    std::uint8_t m_fault_bit;$/;"	m	class:GILES::GILES	file:
+m_fault_cycle	/home/saltiny/git/GILES/src/Main.cpp	/^std::uint32_t m_fault_cycle;$/;"	m	namespace:__anon1	file:
+m_fault_cycle	GILES.cpp	/^    std::uint32_t m_fault_cycle;$/;"	m	class:GILES::GILES	file:
+m_fault_register	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_fault_register;$/;"	m	namespace:__anon1	file:
+m_fault_register	GILES.cpp	/^    std::string m_fault_register;$/;"	m	class:GILES::GILES	file:
+m_model_name	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_model_name;$/;"	m	namespace:__anon1	file:
+m_model_name	GILES.cpp	/^    const std::string m_model_name;$/;"	m	class:GILES::GILES	file:
+m_number_of_runs	/home/saltiny/git/GILES/src/Main.cpp	/^std::uint32_t m_number_of_runs;$/;"	m	namespace:__anon1	file:
+m_number_of_runs	GILES.cpp	/^    const std::uint32_t m_number_of_runs;$/;"	m	class:GILES::GILES	file:
+m_opcode	Assembly_Instruction.hpp	/^    std::string m_opcode;$/;"	m	class:GILES::Internal::Assembly_Instruction
+m_operands	Assembly_Instruction.hpp	/^        : m_opcode(other.m_opcode), m_operands(other.m_operands)$/;"	f	class:GILES::Internal::Assembly_Instruction
+m_operands	Assembly_Instruction.hpp	/^        : m_opcode(std::move(other.m_opcode)), m_operands(other.m_operands)$/;"	f	class:GILES::Internal::Assembly_Instruction
+m_operands	Assembly_Instruction.hpp	/^    std::vector<std::string> m_operands;$/;"	m	class:GILES::Internal::Assembly_Instruction
+m_pipeline	Execution.hpp	/^    std::vector<std::map<const std::string, std::any>> m_pipeline;$/;"	m	class:GILES::Internal::Execution
+m_program_path	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_program_path;$/;"	m	namespace:__anon1	file:
+m_program_path	GILES.cpp	/^    const std::string m_program_path;$/;"	m	class:GILES::GILES	file:
+m_registers	Execution.hpp	/^    std::vector<std::map<std::string, std::size_t>> m_registers;$/;"	m	class:GILES::Internal::Execution
+m_serialiser	GILES.cpp	/^    Traces_Serialiser::Serialiser<float> m_serialiser;$/;"	m	class:GILES::GILES	file:
+m_simulator_name	/home/saltiny/git/GILES/src/Main.cpp	/^std::string m_simulator_name;$/;"	m	namespace:__anon1	file:
+m_simulator_name	GILES.cpp	/^    const std::string m_simulator_name;$/;"	m	class:GILES::GILES	file:
+m_timeout	/home/saltiny/git/GILES/src/Main.cpp	/^std::optional<std::uint32_t> m_timeout;$/;"	m	namespace:__anon1	file:
+m_timeout	GILES.cpp	/^    std::optional<std::uint32_t> m_timeout;$/;"	m	class:GILES::GILES	file:
+m_traces	GILES.cpp	/^    std::vector<std::vector<float>> m_traces;$/;"	m	class:GILES::GILES	file:
+m_traces_path	/home/saltiny/git/GILES/src/Main.cpp	/^std::optional<std::string> m_traces_path;$/;"	m	namespace:__anon1	file:
+m_traces_path	GILES.cpp	/^    const std::optional<std::string>& m_traces_path;$/;"	m	class:GILES::GILES	file:
+main	/home/saltiny/git/GILES/src/Main.cpp	/^int main(int argc, char* argv[])$/;"	f	signature:(int argc, char* argv[])
+parse_command_line_flags	/home/saltiny/git/GILES/src/Main.cpp	/^void parse_command_line_flags(int argc, char* argv[])$/;"	f	namespace:__anon1	signature:(int argc, char* argv[])
+pause_trigger	giles.h	/^inline void pause_trigger() { asm volatile("SVC 0"); }$/;"	f
+start_trigger	giles.h	/^inline void start_trigger() { asm volatile("SVC 1"); }$/;"	f
+string_split	Utility.hpp	/^    string_split(std::string p_input, const std::string& p_delimiter)$/;"	f	class:GILES::Internal::Utility
+string_split_head_pop	Utility.hpp	/^    string_split_head_pop(std::string* const p_input,$/;"	f	class:GILES::Internal::Utility
+vreport	Error.hpp	/^    static void vreport(const char* p_format, fmt::format_args p_args)$/;"	f	struct:GILES::Internal::Error
+vreport_error	Error.hpp	/^    [[noreturn]] static void vreport_error(const char* p_format,$/;"	f	struct:GILES::Internal::Error
+vreport_exit	Error.hpp	/^    [[noreturn]] static void vreport_exit(const char* p_format,$/;"	f	struct:GILES::Internal::Error
+vreport_warning	Error.hpp	/^    static void vreport_warning(const char* p_format, fmt::format_args p_args)$/;"	f	struct:GILES::Internal::Error
+warn_if_not_constant_time	GILES.cpp	/^    bool warn_if_not_constant_time() const$/;"	f	class:GILES::GILES	file:
+warn_if_not_saving	GILES.cpp	/^    void warn_if_not_saving() const$/;"	f	class:GILES::GILES	file:

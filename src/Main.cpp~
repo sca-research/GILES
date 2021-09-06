@@ -39,8 +39,6 @@
 #include "Error.hpp"  // for Report_Exit
 #include "GILES.cpp"  // for GILES
 
-#include "smurf/smurf.h"
-
 //! Anonymous namespace is used as this functionality is only required when
 //! building not as a library.
 namespace
@@ -222,9 +220,7 @@ void parse_command_line_flags(int argc, char* argv[])
 //! @brief The entry point of the program.
 int main(int argc, char* argv[])
 {
-    INFO("Smurf linked.\n");
     parse_command_line_flags(argc, argv);
-
 
     GILES::GILES giles = GILES::GILES(m_program_path,
                                       m_coefficients_path,
